@@ -4,7 +4,7 @@
 <div style="padding: 10px">
 
   <div class="example-container mat-elevation-z8">
-  <mat-card>  
+  <mat-card style="padding: 10px">  
     <mat-card-title>
       Pedido
     </mat-card-title>
@@ -14,7 +14,15 @@
 </mat-card>
 </div>
 
-  <div class="example-container mat-elevation-z8">
+
+  <div class="example-container mat-elevation-z8" style="padding: 10px">
+      <mat-card> 
+      <div fxLayout fxLayoutAlign="center center" style="padding: 10px">
+          <mat-form-field fxFlex="40%">
+            <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+        </div>
+      </mat-card> 
     <mat-table #table [dataSource]="dataSource">
 
       <!-- Name Column -->

@@ -12,6 +12,7 @@ export class Tabla2Component {
 
   displayedColumns = ['codigo','name', 'symbol', 'comment', 'actionsColumn'];
   dataSource = new ExampleDataSource(initialData);
+  entireDataSource = new ExampleDataSource(initialData);
 
   idPedido: string;
   routingSubscription: any;
@@ -31,9 +32,11 @@ export class Tabla2Component {
   update(el: Element, comment: string) {
     if (comment == null) { return; }
     // copy and mutate
-    const copy = this.dataSource.data().slice()
+    //const copy = this.dataSource.data().slice()
+    const copy = this.entireDataSource.data().slice()
     el.comment = comment;
-    this.dataSource.update(copy);
+   // this.dataSource.update(copy);
+    this.entireDataSource.update(copy);
   }
   remove (el: Element ) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
@@ -41,6 +44,7 @@ export class Tabla2Component {
     //console.log("copy="+JSON.stringify(copy)) ;
     
     this.dataSource.update(copy);
+    this.entireDataSource.update(copy);
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
   }
@@ -56,9 +60,16 @@ export class Tabla2Component {
     });
     const copy = this.dataSource.data().filter( row => row );
     this.dataSource.update(copy);
+    this.entireDataSource.update(copy);
 
   }
 
+  public doFilter = (value: string) => {
+    console.log (this.entireDataSource.data());
+    this.dataSource.update(this.entireDataSource.data().filter( row => row ));
+    const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) );
+    this.dataSource.update(copy);
+  }
   
   goBack() {
     this.router.navigate(['']);
