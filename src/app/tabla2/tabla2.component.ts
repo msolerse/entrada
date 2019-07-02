@@ -40,7 +40,7 @@ export class Tabla2Component {
   }
   remove (el: Element ) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
-    const copy =  this.dataSource.data().filter( row => row != el );
+    const copy =  this.entireDataSource.data().filter( row => row != el );
     //console.log("copy="+JSON.stringify(copy)) ;
     
     this.dataSource.update(copy);
