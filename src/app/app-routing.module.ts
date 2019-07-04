@@ -6,8 +6,8 @@ import { Tabla2Component } from './tabla2/tabla2.component';
 
 const routes: Routes = [
   { path: '', component: SeleccionComponent},
-  { path: 'tabla/:idPedido', component: TablaComponent},
-  { path: 'tabla2/:idPedido', component: Tabla2Component},
+  //{ path: 'tabla/:idPedido', component: TablaComponent},
+  { path: 'tabla2/:idPedido/:codCentro', component: Tabla2Component},
 ];
 
 @NgModule({

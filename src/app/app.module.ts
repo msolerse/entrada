@@ -28,7 +28,17 @@ import { AppMaterialModules } from './material.module';
 
 
 import { Tabla2Component } from './tabla2/tabla2.component';
+import { Tabla2Service } from './tabla2.service';
 import { HeaderComponent } from './header/header.component';
+
+//import { AuthGuard } from './_guards/auth.guard';
+
+//import { SapService } from './_services/sap.service';
+import { AlertService } from './_services/alert.service';
+import { CredentialsService } from './_services/credentials.service'
+import { httpInterceptorProviders } from './_interceptors';
+import { LoaderService } from './_services/loader.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -54,9 +64,18 @@ import { HeaderComponent } from './header/header.component';
     FormsModule,
     MatTableModule,
    MatIconModule,
-   SatPopoverModule
+   SatPopoverModule,
+   HttpClientModule
   ],
-  providers: [],
+  providers: [
+   // AuthGuard,
+   // SapService,
+    AlertService,
+    httpInterceptorProviders,
+   // DatePipe,
+    LoaderService,
+    CredentialsService,
+    Tabla2Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

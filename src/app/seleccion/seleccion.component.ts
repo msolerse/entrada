@@ -31,7 +31,9 @@ export class SeleccionComponent implements OnInit {
     {value: 'Plataforma', viewValue: 'Distribución Plataforma'}
   ];
   
-  documento: string = '1234567890';
+  codCentro: string = '0058';
+  descCentro: string =  'GROS MERCAT FIGUERES';
+  documento: string = '10131261';
   albaran: string = '12345-ABC';
   observaciones: string = "hola que tal";
   tipoDoc: string = 'Pedido-0';
@@ -45,7 +47,7 @@ export class SeleccionComponent implements OnInit {
 
   
 goValidacion() {
-  this.router.navigate(['tabla2',  this.documento]);
+  this.router.navigate(['tabla2',  this.documento,  this.codCentro, { albaran: this.albaran} ]);
 }
 
 }

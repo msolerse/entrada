@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable, BehaviorSubject, of} from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Tabla2Service} from '../tabla2.service';
+import { Element } from '../Element';
+import { AlertService } from '../_services/alert.service';
+import { AlertType } from '../_entities/Alert';
 
 @Component({
   selector: 'app-tabla2',
@@ -10,23 +14,48 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class Tabla2Component {
 
+  posiciones: Element[];
   displayedColumns = ['codigo','name', 'symbol', 'comment', 'actionsColumn'];
-  dataSource = new ExampleDataSource(initialData);
-  entireDataSource = new ExampleDataSource(initialData);
+   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
+   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 
   idPedido: string;
+  albaran: string;
+  codCentro: string;
   routingSubscription: any;
 
   constructor(private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router, private service: Tabla2Service,  private alert: AlertService) { }
 
 
   ngOnInit() {
 
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
+      this.codCentro = params["codCentro"];
+      this.albaran = params["albaran"];
+      
       console.log("idPedido=" + this.idPedido );
-    })
+      console.log("codCentro=" + this.codCentro );
+      console.log("albaran=" + this.albaran );
+    });
+
+
+    this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
+      switch (+data.codigo) {
+        case 0:
+          this.posiciones = data.posiciones;
+          this.dataSource = new ExampleDataSource(this.posiciones);
+          this.entireDataSource = new ExampleDataSource(this.posiciones);
+        
+
+          break;
+        default:
+          this.alert.sendAlert('Error al obtener los tipos de embalajes.', AlertType.Error);
+          break;
+      }
+    });
+
   }
 
   update(el: Element, comment: string) {
@@ -80,20 +109,14 @@ export class Tabla2Component {
   }
 }
 
-export interface Element {
-  id: number;
-  codigo: string;
-  name: string;
-  symbol: string;
-  comment?: string;
-}
 
-const initialData: Element[] = [
-  {id: 1,codigo: '30458',name: 'Coca Cola Lata 33 Cl', symbol: 'CJ', comment: '12'},
-  {id: 2,codigo:'30000',name:'Agua Font Vella 1,5 L', symbol: 'UN',  comment: '24'},
-  {id: 3,codigo:'49000',name:'Leche Pascual Semi 1 L', symbol: 'CJ', comment: '10'},
-  {id: 4, codigo:'21106',name: 'Azucar Blanco Refinado 1 Kg', symbol: 'CJ',  comment: '15'},
-];
+//initialData: Element[] = this.posiciones;
+/*const initialData: Element[] = [
+  { id: 1, codigo: '30458', name: 'Coca Cola Lata 33 Cl', symbol: 'CJ', comment: '12' },
+  { id: 2, codigo: '30000', name: 'Agua Font Vella 1,5 L', symbol: 'UN', comment: '24' },
+  { id: 3, codigo: '49000', name: 'Leche Pascual Semi 1 L', symbol: 'CJ', comment: '10' },
+  { id: 4, codigo: '21106', name: 'Azucar Blanco Refinado 1 Kg', symbol: 'CJ', comment: '15' },
+];*/
 
 /**
  * Data source to provide what data should be rendered in the table. The observable provided
