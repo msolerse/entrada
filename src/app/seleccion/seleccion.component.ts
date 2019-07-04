@@ -31,9 +31,9 @@ export class SeleccionComponent implements OnInit {
     {value: 'Plataforma', viewValue: 'Distribución Plataforma'}
   ];
   
-  codCentro: string = '0058';
+  codCentro: string = '0208';
   descCentro: string =  'GROS MERCAT FIGUERES';
-  documento: string = '10131261';
+  documento: string = '0010153849';
   albaran: string = '12345-ABC';
   observaciones: string = "hola que tal";
   tipoDoc: string = 'Pedido-0';

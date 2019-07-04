@@ -11,6 +11,8 @@ import { Element } from './Element';
 })
 export class Tabla2Service {
 
+  codigo: string;
+
   constructor(private http: HttpClient) { }
 
  obtenerPosiciones (idPedido: string ,  albaran: string , 
@@ -162,7 +164,7 @@ export class Tabla2Service {
           let x2js = new X2JS();
           let dom = x2js.xml2dom(data);
   
-          let codigo = dom.getElementsByTagName('ToReturn')[0].innerHTML;
+      
           let itemsDOM = Array.from(dom.getElementsByTagName('TPos')[0].children);
   
           let posiciones: Element[] = [];
@@ -176,9 +178,16 @@ export class Tabla2Service {
               detalle[3].innerHTML,
             ));
           });
-  
+
+          
+          let itemsDOM2 = Array.from(dom.getElementsByTagName('ToReturn')[0].children);
+          itemsDOM2.forEach(item => {
+            let detalle2 = Array.from(item.children);
+           this.codigo =  detalle2[2].innerHTML;
+          });
+        
           return {
-            codigo: codigo,
+            codigo: this.codigo,
             posiciones: posiciones
           };
         })

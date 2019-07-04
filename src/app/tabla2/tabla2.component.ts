@@ -42,18 +42,19 @@ export class Tabla2Component {
 
 
     this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
+      console.log( "ja he cridat");
+      console.log( "codigo= "+data.codigo);
       switch (+data.codigo) {
         case 0:
-          this.posiciones = data.posiciones;
+            this.posiciones = data.posiciones;
           this.dataSource = new ExampleDataSource(this.posiciones);
           this.entireDataSource = new ExampleDataSource(this.posiciones);
-        
+      default:
+            this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
+            break;
+        }
 
-          break;
-        default:
-          this.alert.sendAlert('Error al obtener los tipos de embalajes.', AlertType.Error);
-          break;
-      }
+         
     });
 
   }
