@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+/*import { Injectable } from "@angular/core";
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { environment } from '../../environments/environment';
@@ -11,7 +11,7 @@ export class HeadersInterceptor implements HttpInterceptor {
         public credentials:CredentialsService
     ){ }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler):  Observable<HttpEvent<any>> {
+   /*  intercept(req: HttpRequest<any>, next: HttpHandler):  Observable<HttpEvent<any>> {
         let newReq;
         if(!req.url.includes(environment.authUrl)){
             let user = this.credentials.user;
@@ -31,5 +31,5 @@ export class HeadersInterceptor implements HttpInterceptor {
             newReq = req;
         }
         return next.handle(newReq);
-    }
-}
+    } 
+} */

@@ -36,7 +36,7 @@ import { HeaderComponent } from './header/header.component';
 //import { SapService } from './_services/sap.service';
 import { AlertService } from './_services/alert.service';
 import { CredentialsService } from './_services/credentials.service'
-import { httpInterceptorProviders } from './_interceptors';
+//import { httpInterceptorProviders } from './_interceptors';
 import { LoaderService } from './_services/loader.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -71,7 +71,7 @@ import { HttpClientModule } from '@angular/common/http';
    // AuthGuard,
    // SapService,
     AlertService,
-    httpInterceptorProviders,
+   // httpInterceptorProviders,
    // DatePipe,
     LoaderService,
     CredentialsService,
