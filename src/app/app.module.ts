@@ -12,6 +12,7 @@ import { SeleccionComponent } from './seleccion/seleccion.component';
 import {MatInputModule} from '@angular/material/input';
  import {MatCardModule} from '@angular/material/card';
  import {MatTableModule} from '@angular/material/table';
+ import { MatProgressBarModule } from '@angular/material/progress-bar';
  
  import {MatToolbarModule} from '@angular/material/toolbar';
 import {FormsModule} from '@angular/forms';
@@ -28,6 +29,7 @@ import { AppMaterialModules } from './material.module';
 
 
 import { Tabla2Component } from './tabla2/tabla2.component';
+import { LoaderComponent } from './loader/loader.component';
 import { Tabla2Service } from './tabla2.service';
 import { HeaderComponent } from './header/header.component';
 
@@ -36,10 +38,11 @@ import { HeaderComponent } from './header/header.component';
 //import { SapService } from './_services/sap.service';
 import { AlertService } from './_services/alert.service';
 import { CredentialsService } from './_services/credentials.service'
-//import { httpInterceptorProviders } from './_interceptors';
+import { httpInterceptorProviders } from './_interceptors';
 import { LoaderService } from './_services/loader.service';
 import { HttpClientModule } from '@angular/common/http';
-
+import {MatDialogModule} from '@angular/material/dialog';
+import {AddRowDialog} from './tabla2/tabla2.component';
 
 @NgModule({
   declarations: [
@@ -47,8 +50,10 @@ import { HttpClientModule } from '@angular/common/http';
     TablaComponent,
     SeleccionComponent,
     Tabla2Component,
+    LoaderComponent,
     HeaderComponent,
-    InlineEditComponent
+    InlineEditComponent,
+    AddRowDialog 
   ],
   imports: [
     BrowserModule,
@@ -57,6 +62,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatProgressBarModule,
      MatCardModule,
      MatInputModule,
      MatButtonModule,
@@ -64,14 +70,16 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     MatTableModule,
    MatIconModule,
+   MatDialogModule,
    SatPopoverModule,
    HttpClientModule
   ],
+entryComponents: [AddRowDialog],
   providers: [
    // AuthGuard,
    // SapService,
     AlertService,
-   // httpInterceptorProviders,
+   httpInterceptorProviders,
    // DatePipe,
     LoaderService,
     CredentialsService,

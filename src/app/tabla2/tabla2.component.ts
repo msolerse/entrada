@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable, BehaviorSubject, of} from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,6 +6,8 @@ import { Tabla2Service} from '../tabla2.service';
 import { Element } from '../Element';
 import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-tabla2',
@@ -23,9 +25,11 @@ export class Tabla2Component {
   albaran: string;
   codCentro: string;
   routingSubscription: any;
+ 
 
   constructor(private route: ActivatedRoute,
-    private router: Router, private service: Tabla2Service,  private alert: AlertService) { }
+    private router: Router, private service: Tabla2Service, 
+     private alert: AlertService, public dialog: MatDialog) { }
 
 
   ngOnInit() {
@@ -40,8 +44,7 @@ export class Tabla2Component {
       console.log("albaran=" + this.albaran );
     });
 
-
-    this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
+     this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
       console.log( "ja he cridat");
       console.log( "codigo= "+data.codigo);
       switch (+data.codigo) {
@@ -52,7 +55,8 @@ export class Tabla2Component {
       default:
             this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
             break;
-        }
+      };    
+    
 
          
     });
@@ -79,18 +83,39 @@ export class Tabla2Component {
     //console.log( "adeu");
   }
 
-  addRow() {
+  addRow():void {
     
-    this.dataSource.data().push({
+      const dialogRef = this.dialog.open(AddRowDialog, {
+        width: '400px',
+        data: {codCentro: this.codCentro}
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        //this.animal = result;
+
+        this.dataSource.data().push({
+          id: result.id,
+          codigo: result.codigo,
+          name: result.name,
+          symbol: result.symbol,
+          comment: result.comment
+        });
+
+        const copy = this.dataSource.data().filter( row => row );
+    this.dataSource.update(copy);
+    this.entireDataSource.update(copy);
+      });
+    
+
+   /*  this.dataSource.data().push({
       id: 1,
       codigo: '30025',
       name: "Hydrogen",
       symbol: "CJ",
       comment: '20'
-    });
-    const copy = this.dataSource.data().filter( row => row );
-    this.dataSource.update(copy);
-    this.entireDataSource.update(copy);
+    }); */
+    
 
   }
 
@@ -100,6 +125,7 @@ export class Tabla2Component {
     const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) );
     this.dataSource.update(copy);
   }
+ 
   
   goBack() {
     this.router.navigate(['']);
@@ -148,4 +174,46 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   disconnect() {}
+}
+
+export interface DialogData {
+  codCentro: string;
+  codigo: string;
+  name: string;
+  symbol: string;
+  comment: string;
+}
+
+export interface Uni {
+  value: string;
+  viewValue: string;
+}
+
+@Component({
+  selector: 'add-row-dialog',
+  templateUrl: 'add-row-dialog.html',
+  styleUrls: ['./add-row-dialog.scss']
+})
+export class AddRowDialog {
+
+  countChange: number = 0;
+
+  unis: Uni[] = [
+    {value: 'UN', viewValue: 'UN'},
+    {value: 'CJ', viewValue: 'CJ'},
+    {value: 'PAL', viewValue: 'PAL'},
+  ];
+
+  constructor(
+    public dialogRef: MatDialogRef<AddRowDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  public changeCodigo() {
+    this.countChange = this.countChange + 1;
+  }
+
 }

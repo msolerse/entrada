@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 import * as X2JS from 'x2js';
 import { Element } from './Element';
+import 'rxjs/add/operator/timeout'
 
 @Injectable({
   providedIn: 'root'
@@ -158,7 +159,7 @@ export class Tabla2Service {
       `;
   
       return this.http.post(url, body, { responseType: 'text' })
-      .map(data => {
+     .map( data => {
         console.log(data);
         //let x2js = require('x2js');
           let x2js = new X2JS();

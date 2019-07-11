@@ -1,0 +1,30 @@
+// .seleccion-container {
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   .seleccion-container > * {
+//     width: 100%;
+//   }
+  
+  .example-form {
+    margin: 20px;
+    // margin-left: 20px;
+    // margin-right: 20px;
+    // min-width: 150px;
+    // max-width: 500px;
+    width: 100%;
+  }
+  
+   mat-card {
+    margin: 20px;
+    // width: 100%;
+  }
+
+  mat-card-title {
+    font-size: larger
+  }
+  .example-full-width {
+   // margin: 20px;
+    width: 100%;
+   }

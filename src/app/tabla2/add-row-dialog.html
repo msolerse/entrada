@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Añadir posición</h1>
+<div mat-dialog-content>
+   
+  <mat-form-field appearance="fill" class="example-full-width" >
+      <mat-label>Código</mat-label>
+     
+    <input matInput placeholder="código material" name="codigo" [(ngModel)]="data.codigo"
+    (change)= "changeCodigo()">
+  </mat-form-field>  
+  <!-- <mat-form-field>
+    <input matInput placeholder="countChange" name="countChange" [(ngModel)]="countChange">
+  </mat-form-field>  -->
+  <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>Descripción</mat-label>
+    <input matInput readonly placeholder=""   [(ngModel)]="data.name">
+  </mat-form-field>  
+   <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>Unidad</mat-label>
+      <mat-select name="Unidad" [(ngModel)]=data.symbol>
+        <mat-option *ngFor="let uni of unis" [value]="uni.value">
+          {{uni.viewValue}}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>  -
+  <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>Cantidad</mat-label>
+    <input matInput placeholder="cantidad"   [(ngModel)]="data.comment">
+  </mat-form-field>   
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>
