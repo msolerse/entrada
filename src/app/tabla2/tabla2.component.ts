@@ -206,7 +206,9 @@ export class AddRowDialog {
 
   constructor(
     public dialogRef: MatDialogRef<AddRowDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+     private service: Tabla2Service, 
+    private alert: AlertService ) {}
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -214,6 +216,20 @@ export class AddRowDialog {
 
   public changeCodigo() {
     this.countChange = this.countChange + 1;
+
+    this.service.obtenerArticulo(this.data.codigo, this.data.codCentro).subscribe(reply => {
+      switch (reply.codError) {
+        case 0:
+          this.alert.sendAlert(reply.mensaje, AlertType.Success);
+          this.data.name = reply.descripcion;
+          break;
+        default:
+          this.alert.sendAlert(reply.mensaje, AlertType.Error);
+          break;
+      }
+      
+    });
+
   }
 
 }
