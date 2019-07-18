@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import * as X2JS from 'x2js';
 import { Element } from './Element';
 import 'rxjs/add/operator/timeout'
-import { DatosArticulo } from '../_entities/DatosArticulo';
+import { DatosArticulo } from './_entities/DatosArticulo';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,139 +21,139 @@ export class Tabla2Service {
      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
-      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
    <soapenv:Body>
-      <urn:ZwdGetPosicionesEntrada>
-         <ECabecera>
-            <Centro>?</Centro>
-            <DesCentro>?</DesCentro>
-            <Almacen>?</Almacen>
-            <FechaContab>?</FechaContab>
-            <ClaseMovimiento>?</ClaseMovimiento>
-            <DesTipomov>?</DesTipomov>
-            <Proveedor>?</Proveedor>
-            <DescProveedor>?</DescProveedor>
-            <NotaEntrega>?</NotaEntrega>
-            <TipoDocRefer>?</TipoDocRefer>
-            <DesTipoDocRef>?</DesTipoDocRef>
-            <DocumentoRefer>?</DocumentoRefer>
-            <MotivoPed>?</MotivoPed>
-            <MotivoMov>?</MotivoMov>
-            <DesMotivoMov>?</DesMotivoMov>
-            <Observaciones>?</Observaciones>
-            <CentroDes>?</CentroDes>
-            <DesCentroDes>?</DesCentroDes>
-            <AlmacenDes>?</AlmacenDes>
-            <DocumentoMat>?</DocumentoMat>
-            <DocumentoMatAux>?</DocumentoMatAux>
-            <Year>?</Year>
-            <Nombre>?</Nombre>
-            <Matricula>?</Matricula>
-            <DocumentoReferOrig>?</DocumentoReferOrig>
-            <TipoDocReferOrig>?</TipoDocReferOrig>
-            <Positivo>?</Positivo>
-            <EsSinCargo>?</EsSinCargo>
-            <Usuario>?</Usuario>
-            <Merma>?</Merma>
-            <EsEntregaParc>?</EsEntregaParc>
-            <DocumentoReferParent>?</DocumentoReferParent>
-            <TipoDocReferParent>?</TipoDocReferParent>
-            <Tiped>?</Tiped>
-            <RefVta>?</RefVta>
-            <DocReferInternal>?</DocReferInternal>
-            <DocumentoReferReal>?</DocumentoReferReal>
-            <TipoDocReferReal>?</TipoDocReferReal>
-            <Valoracion>?</Valoracion>
-         </ECabecera>
+      <urn:ZWD_GET_POSICIONES_ENTRADA>
+         <E_CABECERA>
+            <CENTRO>0051</CENTRO>
+            <DES_CENTRO>?</DES_CENTRO>
+            <ALMACEN>?</ALMACEN>
+            <FECHA_CONTAB>?</FECHA_CONTAB>
+            <CLASE_MOVIMIENTO>?</CLASE_MOVIMIENTO>
+            <DES_TIPOMOV>?</DES_TIPOMOV>
+            <PROVEEDOR>?</PROVEEDOR>
+            <DESC_PROVEEDOR>?</DESC_PROVEEDOR>
+            <NOTA_ENTREGA>?</NOTA_ENTREGA>
+            <TIPO_DOC_REFER>?</TIPO_DOC_REFER>
+            <DES_TIPO_DOC_REF>?</DES_TIPO_DOC_REF>
+            <DOCUMENTO_REFER>?</DOCUMENTO_REFER>
+            <MOTIVO_PED>?</MOTIVO_PED>
+            <MOTIVO_MOV>?</MOTIVO_MOV>
+            <DES_MOTIVO_MOV>?</DES_MOTIVO_MOV>
+            <OBSERVACIONES>?</OBSERVACIONES>
+            <CENTRO_DES>?</CENTRO_DES>
+            <DES_CENTRO_DES>?</DES_CENTRO_DES>
+            <ALMACEN_DES>?</ALMACEN_DES>
+            <DOCUMENTO_MAT>?</DOCUMENTO_MAT>
+            <DOCUMENTO_MAT_AUX>?</DOCUMENTO_MAT_AUX>
+            <YEAR>?</YEAR>
+            <NOMBRE>?</NOMBRE>
+            <MATRICULA>?</MATRICULA>
+            <DOCUMENTO_REFER_ORIG>?</DOCUMENTO_REFER_ORIG>
+            <TIPO_DOC_REFER_ORIG>?</TIPO_DOC_REFER_ORIG>
+            <POSITIVO>?</POSITIVO>
+            <ES_SIN_CARGO>?</ES_SIN_CARGO>
+            <USUARIO>?</USUARIO>
+            <MERMA>?</MERMA>
+            <ES_ENTREGA_PARC>?</ES_ENTREGA_PARC>
+            <DOCUMENTO_REFER_PARENT>?</DOCUMENTO_REFER_PARENT>
+            <TIPO_DOC_REFER_PARENT>?</TIPO_DOC_REFER_PARENT>
+            <TIPED>?</TIPED>
+            <REF_VTA>?</REF_VTA>
+            <DOC_REFER_INTERNAL>?</DOC_REFER_INTERNAL>
+            <DOCUMENTO_REFER_REAL>?</DOCUMENTO_REFER_REAL>
+            <TIPO_DOC_REFER_REAL>?</TIPO_DOC_REFER_REAL>
+            <VALORACION>?</VALORACION>
+         </E_CABECERA>
          <!--Optional:-->
-         <IValidacionAlt>?</IValidacionAlt>
+         <I_VALIDACION_ALT>?</I_VALIDACION_ALT>
          <!--Optional:-->
-         <TLotes>
+         <TO_RETURN>
             <!--Zero or more repetitions:-->
             <item>
-               <Posicion>?</Posicion>
-               <Material>?</Material>
-               <Cantidad>?</Cantidad>
-               <Lote>?</Lote>
-               <Unidad>?</Unidad>
-               <FechaCad>?</FechaCad>
-               <FechaEnv>?</FechaEnv>
-               <Peso>?</Peso>
-               <UnidadPeso>?</UnidadPeso>
-               <LotesAuto>?</LotesAuto>
-               <ConvUnBase>?</ConvUnBase>
+               <TYPE>?</TYPE>
+               <ID>?</ID>
+               <NUMBER>?</NUMBER>
+               <MESSAGE>?</MESSAGE>
+               <LOG_NO>?</LOG_NO>
+               <LOG_MSG_NO>?</LOG_MSG_NO>
+               <MESSAGE_V1>?</MESSAGE_V1>
+               <MESSAGE_V2>?</MESSAGE_V2>
+               <MESSAGE_V3>?</MESSAGE_V3>
+               <MESSAGE_V4>?</MESSAGE_V4>
+               <PARAMETER>?</PARAMETER>
+               <ROW>?</ROW>
+               <FIELD>?</FIELD>
+               <SYSTEM>?</SYSTEM>
             </item>
-         </TLotes>
-         <TPos>
-            <!--Zero or more repetitions:-->
-            <item>
-               <Posicion>?</Posicion>
-               <Material>?</Material>
-               <DescMaterial>?</DescMaterial>
-               <Cantidad>?</Cantidad>
-               <UnidadMedida>?</UnidadMedida>
-               <CantSinCargo>?</CantSinCargo>
-               <Lote>?</Lote>
-               <CantidadRefer>?</CantidadRefer>
-               <UnMedidaEnt>?</UnMedidaEnt>
-               <CantReferUmb>?</CantReferUmb>
-               <Uxc>?</Uxc>
-               <Fraccion>?</Fraccion>
-               <Total>?</Total>
-               <Umb>?</Umb>
-               <Diferencia>?</Diferencia>
-               <MotivoPed>?</MotivoPed>
-               <DesMotivoPed>?</DesMotivoPed>
-               <Solicitante>?</Solicitante>
-               <PosPedSc>?</PosPedSc>
-               <PosPedFrac>?</PosPedFrac>
-               <EsCantNula>?</EsCantNula>
-               <BotonXLotes>?</BotonXLotes>
-               <IconXLotes>?</IconXLotes>
-               <FactConv>?</FactConv>
-               <Acumulado>?</Acumulado>
-               <Anula>?</Anula>
-               <Extra>?</Extra>
-               <Nextra>?</Nextra>
-               <Disable>?</Disable>
-               <PosMvt>?</PosMvt>
-               <MotivoMov>?</MotivoMov>
-               <DesMotivoMov>?</DesMotivoMov>
-               <Color>?</Color>
-               <EsSincargo>?</EsSincargo>
-               <NtrgaPosterior>?</NtrgaPosterior>
-               <PosEntrDistb>?</PosEntrDistb>
-               <EanAlt>?</EanAlt>
-               <Ean11>?</Ean11>
-               <PrecioUni>?</PrecioUni>
-               <Mon>?</Mon>
-               <Positivo>?</Positivo>
-               <TotalPrecio>?</TotalPrecio>
-               <PmpCesion>?</PmpCesion>
-            </item>
-         </TPos>
+         </TO_RETURN>
          <!--Optional:-->
-         <ToReturn>
+         <T_LOTES>
             <!--Zero or more repetitions:-->
             <item>
-               <Type>?</Type>
-               <Id>?</Id>
-               <Number>?</Number>
-               <Message>?</Message>
-               <LogNo>?</LogNo>
-               <LogMsgNo>?</LogMsgNo>
-               <MessageV1>?</MessageV1>
-               <MessageV2>?</MessageV2>
-               <MessageV3>?</MessageV3>
-               <MessageV4>?</MessageV4>
-               <Parameter>?</Parameter>
-               <Row>?</Row>
-               <Field>?</Field>
-               <System>?</System>
+               <POSICION>?</POSICION>
+               <MATERIAL>?</MATERIAL>
+               <CANTIDAD>?</CANTIDAD>
+               <LOTE>?</LOTE>
+               <UNIDAD>?</UNIDAD>
+               <FECHA_CAD>?</FECHA_CAD>
+               <FECHA_ENV>?</FECHA_ENV>
+               <PESO>?</PESO>
+               <UNIDAD_PESO>?</UNIDAD_PESO>
+               <LOTES_AUTO>?</LOTES_AUTO>
+               <CONV_UN_BASE>?</CONV_UN_BASE>
             </item>
-         </ToReturn>
-      </urn:ZwdGetPosicionesEntrada>
+         </T_LOTES>
+         <T_POS>
+            <!--Zero or more repetitions:-->
+            <item>
+               <POSICION>?</POSICION>
+               <MATERIAL>?</MATERIAL>
+               <DESC_MATERIAL>?</DESC_MATERIAL>
+               <CANTIDAD>?</CANTIDAD>
+               <UNIDAD_MEDIDA>?</UNIDAD_MEDIDA>
+               <CANT_SIN_CARGO>?</CANT_SIN_CARGO>
+               <LOTE>?</LOTE>
+               <CANTIDAD_REFER>?</CANTIDAD_REFER>
+               <UN_MEDIDA_ENT>?</UN_MEDIDA_ENT>
+               <CANT_REFER_UMB>?</CANT_REFER_UMB>
+               <UXC>?</UXC>
+               <FRACCION>?</FRACCION>
+               <TOTAL>?</TOTAL>
+               <UMB>?</UMB>
+               <DIFERENCIA>?</DIFERENCIA>
+               <MOTIVO_PED>?</MOTIVO_PED>
+               <DES_MOTIVO_PED>?</DES_MOTIVO_PED>
+               <SOLICITANTE>?</SOLICITANTE>
+               <POS_PED_SC>?</POS_PED_SC>
+               <POS_PED_FRAC>?</POS_PED_FRAC>
+               <ES_CANT_NULA>?</ES_CANT_NULA>
+               <BOTON_X_LOTES>?</BOTON_X_LOTES>
+               <ICON_X_LOTES>?</ICON_X_LOTES>
+               <FACT_CONV>?</FACT_CONV>
+               <ACUMULADO>?</ACUMULADO>
+               <ANULA>?</ANULA>
+               <EXTRA>?</EXTRA>
+               <NEXTRA>?</NEXTRA>
+               <DISABLE>?</DISABLE>
+               <POS_MVT>?</POS_MVT>
+               <MOTIVO_MOV>?</MOTIVO_MOV>
+               <DES_MOTIVO_MOV>?</DES_MOTIVO_MOV>
+               <COLOR>?</COLOR>
+               <ES_SINCARGO>?</ES_SINCARGO>
+               <NTRGA_POSTERIOR>?</NTRGA_POSTERIOR>
+               <POS_ENTR_DISTB>?</POS_ENTR_DISTB>
+               <EAN_ALT>?</EAN_ALT>
+               <EAN11>?</EAN11>
+               <PRECIO_UNI>?</PRECIO_UNI>
+               <MON>?</MON>
+               <POSITIVO>?</POSITIVO>
+               <TOTAL_PRECIO>?</TOTAL_PRECIO>
+               <PMP_CESION>?</PMP_CESION>
+            </item>
+         </T_POS>
+      </urn:ZWD_GET_POSICIONES_ENTRADA>
    </soapenv:Body>
 </soapenv:Envelope>
       `;
@@ -239,7 +239,7 @@ export class Tabla2Service {
             let dom = x2js.xml2dom(data);
     
             let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
-            if(mensajeError != null && !mensajeError.length == 0 )
+            if ( mensajeError != null && !(mensajeError.length == 0) )
                    codError = 4;
              else
                    codError = 0;

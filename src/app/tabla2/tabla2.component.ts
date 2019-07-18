@@ -120,7 +120,7 @@ export class Tabla2Component {
   }
 
   public doFilter = (value: string) => {
-    console.log (this.entireDataSource.data());
+   // console.log (this.entireDataSource.data());
     this.dataSource.update(this.entireDataSource.data().filter( row => row ));
     const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) );
     this.dataSource.update(copy);

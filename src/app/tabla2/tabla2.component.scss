@@ -24,8 +24,16 @@
       display: flex;
       align-items: center;
     }
+
+   
   }
   
+  .mat-header-cell {
+    //font-weight: 900; 
+    //font-size: 17px;
+    //background-color: 
+  }
+
   .mat-column-symbol, .mat-column-comment , .mat-column-codigo {
     max-width: 100px;
   }
