@@ -1,0 +1,35 @@
+
+    <form >
+        <mat-card>  
+          <mat-card-title>
+          Detalle posición {{ idPosicion }}
+          </mat-card-title>
+        
+
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Codigo" name="Codigo"
+          [(ngModel)]="posicion.codigo">
+          
+        </mat-form-field>
+
+
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Descripción" name="descripcion"
+            [(ngModel)]="posicion.name">
+            
+          </mat-form-field>
+      
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Observaciones"
+          name="observaciones" [(ngModel)]="observaciones"></textarea>
+        </mat-form-field>
+      </mat-card> 
+      <mat-card>
+        <button mat-raised-button  color="primary" (click)="goBack()">Volver</button> 
+      <!-- <button mat-raised-button color="primary" (click)="goValidacion()">Posiciones</button> -->
+
+      </mat-card> 
+  
+</form>
+

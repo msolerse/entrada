@@ -16,6 +16,9 @@ export class Tabla2Service {
 
   constructor(private http: HttpClient) { }
 
+  public currPedido: string; 
+  public currPosiciones: Element[];
+
  obtenerPosiciones (idPedido: string ,  albaran: string , 
     codCentro: string ) : Observable<any> {
      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
@@ -160,7 +163,7 @@ export class Tabla2Service {
   
       return this.http.post(url, body, { responseType: 'text' })
      .map( data => {
-        console.log(data);
+        //console.log(data);
         //let x2js = require('x2js');
           let x2js = new X2JS();
           let dom = x2js.xml2dom(data);
@@ -188,6 +191,8 @@ export class Tabla2Service {
            this.codigo =  detalle2[2].innerHTML;
           });
         
+          this.currPedido = idPedido;
+          this.currPosiciones = posiciones;
           return {
             codigo: this.codigo,
             posiciones: posiciones

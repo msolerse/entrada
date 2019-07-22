@@ -28,12 +28,13 @@
       <!-- Name Column -->
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let element" [routerLink]="['/articulo', element.id]"> {{element.codigo}} </mat-cell>
       </ng-container>
  <!-- Name Column -->
  <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    <mat-cell *matCellDef="let element" [routerLink]="['/articulo', element.id]">
+       {{element.name | titlecase}} </mat-cell>
   </ng-container>
       <!-- Symbol Column -->
       <ng-container matColumnDef="symbol">
@@ -74,7 +75,7 @@
     </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"  ></mat-row>
     </mat-table>
 
   </div>

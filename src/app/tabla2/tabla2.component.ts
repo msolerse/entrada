@@ -7,6 +7,7 @@ import { Element } from '../Element';
 import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DatosArticulo } from '../_entities/DatosArticulo';
 
 
 @Component({
@@ -44,6 +45,13 @@ export class Tabla2Component {
       console.log("albaran=" + this.albaran );
     });
 
+    if (this.idPedido ==  this.service.currPedido)
+    {
+    console.log( "idPedido="+this.idPedido+" currPedido="+this.service.currPedido);
+     this.posiciones = this.service.currPosiciones;
+     this.dataSource = new ExampleDataSource(this.posiciones);
+     this.entireDataSource = new ExampleDataSource(this.posiciones); }
+    else {
      this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
       console.log( "ja he cridat");
       console.log( "codigo= "+data.codigo);
@@ -56,12 +64,12 @@ export class Tabla2Component {
             this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
             break;
       };    
-    
-
          
     });
+  }
 
   }
+
 
   update(el: Element, comment: string) {
     if (comment == null) { return; }
@@ -122,7 +130,8 @@ export class Tabla2Component {
   public doFilter = (value: string) => {
    // console.log (this.entireDataSource.data());
     this.dataSource.update(this.entireDataSource.data().filter( row => row ));
-    const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) );
+    const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
+    row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase())  );
     this.dataSource.update(copy);
   }
  

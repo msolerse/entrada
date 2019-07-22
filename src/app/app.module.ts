@@ -43,6 +43,7 @@ import { LoaderService } from './_services/loader.service';
 import { HttpClientModule } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 import {AddRowDialog} from './tabla2/tabla2.component';
+import { ArticuloComponent } from './articulo/articulo.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import {AddRowDialog} from './tabla2/tabla2.component';
     LoaderComponent,
     HeaderComponent,
     InlineEditComponent,
-    AddRowDialog 
+    AddRowDialog,
+    ArticuloComponent 
   ],
   imports: [
     BrowserModule,
