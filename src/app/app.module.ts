@@ -44,6 +44,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 import {AddRowDialog} from './tabla2/tabla2.component';
 import { ArticuloComponent } from './articulo/articulo.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ArticuloComponent } from './articulo/articulo.component';
    MatIconModule,
    MatDialogModule,
    SatPopoverModule,
-   HttpClientModule
+   HttpClientModule,
+   FlexLayoutModule
   ],
 entryComponents: [AddRowDialog],
   providers: [
@@ -84,8 +86,8 @@ entryComponents: [AddRowDialog],
    httpInterceptorProviders,
    // DatePipe,
     LoaderService,
-    CredentialsService,
-    Tabla2Service],
+    CredentialsService
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

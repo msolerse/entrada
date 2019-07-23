@@ -4,21 +4,31 @@
           <mat-card-title>
           Detalle posición {{ idPosicion }}
           </mat-card-title>
-        
-
-
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Codigo" name="Codigo"
+ 
+          <div 
+  fxLayout="row wrap" 
+  fxLayout.lt-sm="column" 
+  fxLayoutGap="32px" 
+  fxLayoutAlign="flex-start" >
+  <ng-container >
+        <mat-form-field 
+        fxFlex="0 1 calc(50% - 32px)"
+        fxFlex.lt-sm="100%">
+          <input matInput readonly placeholder="Codigo" name="Codigo"
           [(ngModel)]="posicion.codigo">
           
         </mat-form-field>
 
-
-        <mat-form-field class="example-full-width">
-            <input matInput placeholder="Descripción" name="descripcion"
+        <mat-form-field    fxFlex="0 1 calc(50% - 32px)"
+        fxFlex.lt-sm="100%" >
+            <input matInput readonly placeholder="Descripción" name="descripcion"
             [(ngModel)]="posicion.name">
             
-          </mat-form-field>
+          </mat-form-field>  
+      
+     
+    </ng-container >
+  </div>  
       
         <mat-form-field class="example-full-width">
           <textarea matInput placeholder="Observaciones"

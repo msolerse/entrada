@@ -29,11 +29,13 @@ export class ArticuloComponent implements OnInit {
     
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPosicion = params["idPosicion"];
-      console.log("this.service.currPosiciones="+this.service.currPosiciones );
+      console.log("this.service.currPedido="+this.service.currPedido );
+      console.log("this.service.currPosiciones="+JSON.stringify( this.service.currPosiciones) );
      
-      this.posicion = this.service.currPosiciones.filter( row => row.id === this.idPosicion )[0];
+      this.posicion = this.service.currPosiciones.filter( row => row.id == this.idPosicion )[0];
       
       console.log("idPosicion=" + this.idPosicion );
+      console.log("this.posicion = " + this.posicion );
       
     
     });

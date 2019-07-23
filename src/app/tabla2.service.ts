@@ -5,8 +5,9 @@ import { Observable, throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 import * as X2JS from 'x2js';
 import { Element } from './Element';
-import 'rxjs/add/operator/timeout'
+import 'rxjs/add/operator/timeout';
 import { DatosArticulo } from './_entities/DatosArticulo';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +19,7 @@ export class Tabla2Service {
 
   public currPedido: string; 
   public currPosiciones: Element[];
+  public datosArticulos: DatosArticulo[] = [];
 
  obtenerPosiciones (idPedido: string ,  albaran: string , 
     codCentro: string ) : Observable<any> {
@@ -251,14 +253,24 @@ export class Tabla2Service {
 
             let codigo = dom.getElementsByTagName("MATNR")[0].innerHTML;
             let descripcion = dom.getElementsByTagName("MAKTX")[0].innerHTML;
+            let caja = dom.getElementsByTagName("CAJA")[0].innerHTML;
+            let retractil = dom.getElementsByTagName("RETRACTIL")[0].innerHTML;
+            let manto = dom.getElementsByTagName("MANTO")[0].innerHTML;
+            let palet = dom.getElementsByTagName("PALET")[0].innerHTML;
         
             datosArticulo = new DatosArticulo(
               codigo,
               descripcion,
+              +caja,
+              +retractil,
+              +manto,
+              +palet,
               codError,
               mensajeError,
 
             );
+            
+            this.datosArticulos.push(datosArticulo);
             return datosArticulo;
           })
           .pipe(
