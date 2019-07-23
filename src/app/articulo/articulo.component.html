@@ -25,6 +25,21 @@
             [(ngModel)]="posicion.name">
             
           </mat-form-field>  
+
+          <mat-form-field 
+          fxFlex="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%">
+            <input matInput readonly placeholder="Caja" name="Caja"
+            [(ngModel)]="datosArticulo.caja">
+            
+          </mat-form-field>
+  
+          <mat-form-field    fxFlex="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%" >
+              <input matInput readonly placeholder="Manto" name="manto"
+              [(ngModel)]="datosArticulo.manto">
+              
+            </mat-form-field>  
       
      
     </ng-container >
