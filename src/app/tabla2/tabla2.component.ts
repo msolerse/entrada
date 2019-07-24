@@ -79,6 +79,7 @@ export class Tabla2Component {
     el.comment = comment;
    // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
+    this.service.currPosiciones =  this.entireDataSource.data();
   }
   remove (el: Element ) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
@@ -87,6 +88,7 @@ export class Tabla2Component {
     
     this.dataSource.update(copy);
     this.entireDataSource.update(copy);
+    this.service.currPosiciones =  this.entireDataSource.data();
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
   }
@@ -115,7 +117,7 @@ export class Tabla2Component {
     this.dataSource.update(copy);
     this.entireDataSource.update(copy);
       });
-    
+      this.service.currPosiciones =  this.entireDataSource.data();
 
    /*  this.dataSource.data().push({
       id: 1,
