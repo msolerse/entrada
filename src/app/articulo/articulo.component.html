@@ -1,60 +1,54 @@
 
-    <form >
-        <mat-card>  
-          <mat-card-title>
-          Detalle posición {{ idPosicion }}
-          </mat-card-title>
- 
-          <div 
-  fxLayout="row wrap" 
-  fxLayout.lt-sm="column" 
-  fxLayoutGap="32px" 
-  fxLayoutAlign="flex-start" >
-  <ng-container >
-        <mat-form-field 
-        fxFlex="0 1 calc(50% - 32px)"
-        fxFlex.lt-sm="100%">
-          <input matInput readonly placeholder="Codigo" name="Codigo"
-          [(ngModel)]="posicion.codigo">
-          
-        </mat-form-field>
-
-        <mat-form-field    fxFlex="0 1 calc(50% - 32px)"
-        fxFlex.lt-sm="100%" >
-            <input matInput readonly placeholder="Descripción" name="descripcion"
-            [(ngModel)]="posicion.name">
-            
-          </mat-form-field>  
-
-          <mat-form-field 
-          fxFlex="0 1 calc(50% - 32px)"
-          fxFlex.lt-sm="100%">
-            <input matInput readonly placeholder="Caja" name="Caja"
-            [(ngModel)]="datosArticulo.caja">
-            
-          </mat-form-field>
-  
-          <mat-form-field    fxFlex="0 1 calc(50% - 32px)"
-          fxFlex.lt-sm="100%" >
-              <input matInput readonly placeholder="Manto" name="manto"
-              [(ngModel)]="datosArticulo.manto">
-              
-            </mat-form-field>  
-      
-     
-    </ng-container >
-  </div>  
-      
-        <mat-form-field class="example-full-width">
-          <textarea matInput placeholder="Observaciones"
-          name="observaciones" [(ngModel)]="observaciones"></textarea>
-        </mat-form-field>
-      </mat-card> 
+    <form>
       <mat-card>
-        <button mat-raised-button  color="primary" (click)="goBack()">Volver</button> 
-      <!-- <button mat-raised-button color="primary" (click)="goValidacion()">Posiciones</button> -->
-
-      </mat-card> 
-  
-</form>
-
+        <mat-card-title>
+          Detalle posición {{ idPosicion }}
+        </mat-card-title>
+    
+        <div fxLayout="row wrap" fxLayout.lt-sm="column"  fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'fxLayoutAlign="flex-start">
+          <ng-container>
+            <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+              <input matInput readonly placeholder="Codigo" name="Codigo" [(ngModel)]="posicion.codigo">
+    
+            </mat-form-field>
+    
+            <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+              <input matInput readonly placeholder="Descripción" name="descripcion" [(ngModel)]="posicion.name">
+    
+            </mat-form-field>
+    
+            
+              <mat-form-field *ngIf="datosArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <input matInput readonly placeholder="Caja" name="Caja" [(ngModel)]="datosArticulo.caja">
+    
+              </mat-form-field>
+   
+              <mat-form-field *ngIf="datosArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <input matInput readonly placeholder="Palet" name="palet" [(ngModel)]="datosArticulo.palet">
+    
+              </mat-form-field>
+   
+              <mat-form-field *ngIf="datosArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <input matInput readonly placeholder="Manto" name="manto" [(ngModel)]="datosArticulo.manto">
+    
+              </mat-form-field>
+    
+              <mat-form-field *ngIf="datosArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <input matInput readonly placeholder="Retractil" name="retractil" [(ngModel)]="datosArticulo.retractil">
+    
+              </mat-form-field>
+    
+          </ng-container>
+        </div>
+    
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Observaciones" name="observaciones" [(ngModel)]="observaciones"></textarea>
+        </mat-form-field>
+      </mat-card>
+      <mat-card>
+        <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
+        <!-- <button mat-raised-button color="primary" (click)="goValidacion()">Posiciones</button> -->
+    
+      </mat-card>
+    
+    </form>

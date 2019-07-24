@@ -100,10 +100,11 @@ export class Tabla2Component {
   
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
-        //this.animal = result;
+        
+        let maxId = Math.max.apply(Math, this.dataSource.data().map( o => o.id )) + 10;
 
         this.dataSource.data().push({
-          id: result.id,
+          id: maxId,
           codigo: result.codigo,
           name: result.name,
           symbol: result.symbol,

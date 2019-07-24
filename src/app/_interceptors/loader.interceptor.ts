@@ -14,6 +14,7 @@ export class LoaderInterceptor implements HttpInterceptor {
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log("loader es dispara");
         this.loader.show();
 
         //return next.handle(req).finally(() => {
