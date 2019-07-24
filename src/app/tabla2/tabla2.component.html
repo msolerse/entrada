@@ -3,20 +3,27 @@
 
 <div style="padding: 10px">
 
-  <div class="example-container mat-elevation-z8">
+  <!-- <div class="example-container mat-elevation-z8">
   <mat-card style="padding: 10px">  
     <mat-card-title>
-      Pedido
+      📝 Pedido
     </mat-card-title>
     <mat-card-subtitle>
       {{this.idPedido}}
     </mat-card-subtitle>
 </mat-card>
-</div>
+</div> -->
 
 
   <div class="example-container mat-elevation-z8" style="padding-top: 10px">
     <mat-card>
+        <mat-card-header>
+            <img mat-card-avatar src="../assets/baseline_list_black_18dp.png">
+            <mat-card-title> Pedido {{this.idPedido}}</mat-card-title>
+            <mat-card-subtitle> Albarán {{this.albaran}}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
       <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
           <mat-form-field fxFlex="40%">
             <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
@@ -77,12 +84,11 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"  ></mat-row>
     </mat-table>
-  </mat-card>
-
- 
-<mat-card style="padding: 10px">
+  </mat-card-content>
+  <mat-card-actions>
     <button mat-raised-button (click)="goBack()" >Salir</button> 
-    <button mat-raised-button color="accent" (click)="goValidar()" >Validar</button>
+    <button mat-raised-button color="accent" (click)="goValidar()" >Validar</button> 
+  </mat-card-actions>
   </mat-card>
   </div>
   

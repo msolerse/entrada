@@ -1,9 +1,18 @@
 
     <form>
-      <mat-card>
-        <mat-card-title>
-          Detalle posición {{ idPosicion }}
+      <mat-card >
+        <mat-card-header>
+          <img mat-card-avatar src="../assets/round_pageview_black_24dp.png">
+          <mat-card-title> Detalles Artículo </mat-card-title>
+          <mat-card-subtitle>Posición {{ idPosicion }}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image class="articulo-image" src="http://maep7java.miquel.es:50100/irj/go/km/docs/xenon_eureka/Articulos/{{ posicion.codigo  }}_1.jpg" alt="Photo of a Shiba Inu">
+
+
+        <mat-card-title >
+         
         </mat-card-title>
+        <mat-card-content>
     
         <div fxLayout="row wrap" fxLayout.lt-sm="column"  fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'fxLayoutAlign="flex-start">
           <ng-container>
@@ -44,11 +53,14 @@
         <mat-form-field class="example-full-width">
           <textarea matInput placeholder="Observaciones" name="observaciones" [(ngModel)]="observaciones"></textarea>
         </mat-form-field>
-      </mat-card>
-      <mat-card>
+      </mat-card-content>
+        <mat-card-actions>
         <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
-        <!-- <button mat-raised-button color="primary" (click)="goValidacion()">Posiciones</button> -->
-    
+        </mat-card-actions>
+
       </mat-card>
+    
+       <!-- <button mat-raised-button color="primary" (click)="goValidacion()">Posiciones</button> -->
+
     
     </form>
