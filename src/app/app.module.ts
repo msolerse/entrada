@@ -11,9 +11,10 @@ import {MatSelectModule} from '@angular/material/select';
 import { SeleccionComponent } from './seleccion/seleccion.component';
 import {MatInputModule} from '@angular/material/input';
  import {MatCardModule} from '@angular/material/card';
- import {MatTableModule} from '@angular/material/table';
+ import {MatTableModule} from ng seve'@angular/material/table';
  import { MatProgressBarModule } from '@angular/material/progress-bar';
- 
+ s
+
  import {MatToolbarModule} from '@angular/material/toolbar';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
