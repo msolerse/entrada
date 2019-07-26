@@ -1,76 +1,54 @@
-table {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+.course {
+  text-align: center;
+  width: 90%;
+  margin: 0 auto;
 }
 
-th.mat-header-cell {
+.course-thumbnail {
+  width: 150px;
+  margin: 20px auto 0 auto;
+  display: block;
+}
+
+.description-cell {
   text-align: left;
-  max-width: 300px!important;
+  margin-right: 20px auto;
+  margin-left: 20px auto;
+  //min-width: 100px;
+  cursor: pointer;
 }
+
 /* 
-.example-container {
-    display: flex;
-    flex-direction: column;
-    max-height: 500px;
-    min-width: 300px;
-  } */
-  
-  // .mat-card {
-  //   margin: 10px
-  // }
-  .mat-card-subtitle {
-    font-size: larger;
-  }
+.unidad {
+  text-align: right;
+  margin-left: 10px;
+} */
 
-  /* .mat-table {
-    overflow: auto;
-    max-height: 500px;
-  } */
-  /* 
-  .mat-row {
-    align-items: stretch;
-    
-    .mat-cell {
-      display: flex;
-      align-items: center;
-    }
+.duration-cell {
+  text-align: right;
+}
 
-   
-  } */
-  
-  //.mat-header-cell {
-    //font-weight: 900; 
-    //font-size: 17px;
-    //background-color: 
-  //}
+.duration-cell mat-icon {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+}
 
-   .mat-column-codigo {
-    max-width: 80px;
-  } 
-  .mat-column-symbol, .mat-column-comment  {
-    max-width: 50px;
-  } 
-  .mat-column-codigo {
-   cursor: pointer;
-  }
-  .mat-column-name {
-     min-width: 150px;
-     text-align: left;
-     margin: 10px auto;
-  //  margin-right: 15px;
-    cursor: pointer;
-  }
-  
-  .mat-cell.mat-column-comment {
-    cursor: pointer;
-  }
-  /* 
-  .add-comment {
-    opacity: 0.4;
-  }
- */
-   
-.example-header-image {
-  background-size: cover;
+.spinner-container {
+  height: 360px;
+  width: 390px;
+  position: fixed;
+}
+
+.lessons-table {
+  min-height: 360px;
+  margin-top: 10px;
+}
+
+.spinner-container mat-spinner {
+  margin: 130px auto 0 auto;
+}
+
+.botons {
+  margin-top: 20px;
 }

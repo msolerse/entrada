@@ -11,9 +11,9 @@ import {MatSelectModule} from '@angular/material/select';
 import { SeleccionComponent } from './seleccion/seleccion.component';
 import {MatInputModule} from '@angular/material/input';
  import {MatCardModule} from '@angular/material/card';
- import {MatTableModule} from ng seve'@angular/material/table';
+ import {MatTableModule} from '@angular/material/table';
  import { MatProgressBarModule } from '@angular/material/progress-bar';
- s
+ 
 
  import {MatToolbarModule} from '@angular/material/toolbar';
 import {FormsModule} from '@angular/forms';
@@ -46,6 +46,17 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {AddRowDialog} from './tabla2/tabla2.component';
 import { ArticuloComponent } from './articulo/articulo.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTabsModule} from '@angular/material/tabs';
+import { MatDatepickerModule } from "@angular/material/datepicker";
+
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSortModule } from "@angular/material/sort";
+
 
 @NgModule({
   declarations: [
@@ -65,6 +76,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MDBBootstrapModule.forRoot(),
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatSidenavModule, 
+    MatListModule,
     MatSelectModule,
     MatProgressBarModule,
      MatCardModule,
