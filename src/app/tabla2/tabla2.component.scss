@@ -1,54 +1,80 @@
-.course {
-  text-align: center;
-  width: 90%;
-  margin: 0 auto;
+.mat-table__wrapper .mat-table {
+  min-width: auto !important;
+  width: 100% !important;
 }
 
-.course-thumbnail {
-  width: 150px;
-  margin: 20px auto 0 auto;
-  display: block;
+.mat-header-row {
+  width: 100%;
 }
 
-.description-cell {
-  text-align: left;
-  margin-right: 20px auto;
-  margin-left: 20px auto;
-  //min-width: 100px;
-  cursor: pointer;
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 100%;
 }
 
-/* 
-.unidad {
-  text-align: right;
-  margin-left: 10px;
-} */
 
-.duration-cell {
-  text-align: right;
-}
-
-.duration-cell mat-icon {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 20px;
-}
-
-.spinner-container {
-  height: 360px;
-  width: 390px;
-  position: fixed;
-}
-
-.lessons-table {
-  min-height: 360px;
-  margin-top: 10px;
-}
-
-.spinner-container mat-spinner {
-  margin: 130px auto 0 auto;
+.mat-row {
+  width: 100%;
 }
 
 .botons {
   margin-top: 20px;
+  text-align: left;
+}
+
+
+.mat-column-codigo {
+  flex: 0 0 20% !important;
+  min-width: 30px !important;
+  cursor: pointer;
+}
+.mat-column-name {
+  flex: 0 0 50% !important;
+  min-width: 104px !important;
+  cursor: pointer;
+}
+
+
+.mat-column-symbol {
+  flex: 0 0 10% !important;
+  min-width: 20x !important;
+}
+
+
+.mat-column-comment {
+  flex: 0 0 10% !important;
+  min-width: 20px !important;
+  cursor: pointer;
+}
+
+.container-table {
+   margin-left: 30px;
+}
+
+
+.mat-h2 {
+  margin-left: 30px;
+}
+
+
+.mat-h3 {
+  margin-left: 30px;
+}
+
+
+
+.myNarrowClass {
+  margin-left: 0px;
+}
+
+.table-md {
+  margin-left: 20px;
+}
+
+.mat-column-actionsColumn {
+  flex: 0 0 10% !important;
+  min-width: 20px !important;
 }

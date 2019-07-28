@@ -81,20 +81,40 @@
 </div> --> 
 
 <!-- New version   -->
-<div class="course">
+<div class="course" fxFlex="90%" fxFlex.lt-sm="100%" >
 
-  <h2 class="mat-h2">Pedido {{this.idPedido}}</h2>
-
+  
  <!-- <img class="course-thumbnail" [src]="course?.iconUrl"> -->
+
+
+ <div fxLayout fxLayoutAlign="start center" style="padding-top: 10px">
+
+  
+ <h2 class="mat-h2">Pedido {{this.idPedido}}</h2>
+
+</div>
+
+<div fxLayout fxLayoutAlign="start center" >
+
+ <h3 class="mat-h3">Albarán {{this.albaran}}</h3>
+
+</div>
+ <div fxLayout fxLayoutAlign="center center" >
+
+  
 
   <mat-form-field>
 
     <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar">
 
   </mat-form-field>
+ </div>
 
-  
-  <mat-table class="lessons-table mat-elevation-z8" [dataSource]="dataSource">
+ <div [ngClass.sm]="'myNarrowClass'"
+ [ngClass.md]="'container-table'"
+     [ngClass.gt-md]="'container-table'"
+   >
+  <mat-table class="lessons-table mat-elevation-z8"  [dataSource]="dataSource"  >
             
 
       <ng-container matColumnDef="codigo">
@@ -115,12 +135,12 @@
       </ng-container>
 
       <ng-container matColumnDef="symbol">
-        <mat-header-cell *matHeaderCellDef> Unidad </mat-header-cell>
-        <mat-cell  class="unidad mat-typography" *matCellDef="let element"> {{element.symbol}} </mat-cell>
+        <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"> {{element.symbol}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comment">
-        <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Cant. </mat-header-cell>
         <mat-cell class="duration-cell mat-typography" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
           <ng-container *ngIf="element.comment">
             {{element.comment}}
@@ -157,12 +177,16 @@
   
 
   </mat-table>
+</div >
 
-  <button class="botons" mat-raised-button (click)="goBack()" >Salir</button> 
-  <button class="botons" mat-raised-button color="accent" (click)="goValidar()" >Validar</button> 
+
+  <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
+  <button class="botons example-full-width" mat-raised-button (click)="goBack()" >  <mat-icon>arrow_back</mat-icon> Salir</button> 
+  <button class="botons example-full-width" mat-raised-button color="accent" (click)="goValidar()" > <mat-icon>done</mat-icon>Validar</button> 
 
 </div>
 
+</div>
 
 
 

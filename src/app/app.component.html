@@ -32,10 +32,15 @@
 
   </mat-sidenav>
 
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="mat-elevation-z8" >
       <button mat-icon-button (click)="start.open('mouse')">
-          <mat-icon>menu</mat-icon>
+          <mat-icon>menu</mat-icon>    
       </button>
+      <span>Entrada de Albaranes</span>
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="example-fill-remaining-space"></span>
+    
   </mat-toolbar>
 
   <router-outlet></router-outlet>
