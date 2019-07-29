@@ -114,14 +114,16 @@
  [ngClass.md]="'container-table'"
      [ngClass.gt-md]="'container-table'"
    >
-  <mat-table class="lessons-table mat-elevation-z8"  [dataSource]="dataSource"  >
+  <mat-table class="lessons-table mat-elevation-z8"  [dataSource]="dataSource"  
+  [class.isMobile]="isMobile">
             
 
       <ng-container matColumnDef="codigo">
 
           <mat-header-cell *matHeaderCellDef >#</mat-header-cell>
 
-          <mat-cell   class="mat-typography" *matCellDef="let element" [routerLink]="['/articulo', element.id]">{{element.codigo}}</mat-cell>
+          <mat-cell   class="mat-typography" *matCellDef="let element"
+           [routerLink]="['/articulo', element.id]"> <span class="mobile-label">Código:</span>{{element.codigo}}</mat-cell>
 
       </ng-container>
 
@@ -130,19 +132,23 @@
           <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
 
           <mat-cell  class="description-cell mat-typography"
-                    *matCellDef="let element"  [routerLink]="['/articulo', element.id]">{{element.name | titlecase}}</mat-cell>
+                    *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
+                    <span class="mobile-label">Descripción:</span>
+                    {{element.name | titlecase}}</mat-cell>
 
       </ng-container>
 
       <ng-container matColumnDef="symbol">
         <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"> {{element.symbol}} </mat-cell>
+        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element">
+            <span class="mobile-label">Unidad:</span> {{element.symbol}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comment">
         <mat-header-cell *matHeaderCellDef> Cant. </mat-header-cell>
         <mat-cell class="duration-cell mat-typography" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
           <ng-container *ngIf="element.comment">
+              <span class="mobile-label">Cantidad:</span>
             {{element.comment}}
           </ng-container>
           <span class="add-comment" *ngIf="!element.comment">

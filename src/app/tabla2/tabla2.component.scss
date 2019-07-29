@@ -1,4 +1,4 @@
-.mat-table__wrapper .mat-table {
+/* .mat-table__wrapper .mat-table {
   min-width: auto !important;
   width: 100% !important;
 }
@@ -67,7 +67,7 @@
 
 
 .myNarrowClass {
-  margin-left: 0px;
+  margin-left: 10px;
 }
 
 .table-md {
@@ -77,4 +77,40 @@
 .mat-column-actionsColumn {
   flex: 0 0 10% !important;
   min-width: 20px !important;
+}
+ */
+
+ .example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+
+.mobile-label {
+  display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+        font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row { 
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+  }
 }
