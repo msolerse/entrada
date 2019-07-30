@@ -19,6 +19,7 @@ export class Tabla2Component {
 
   posiciones: Element[];
   displayedColumns = ['codigo','name', 'symbol', 'comment', 'actionsColumn'];
+  
    dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
    entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 

@@ -81,13 +81,13 @@
 </div> --> 
 
 <!-- New version   -->
-<div class="course" fxFlex="90%" fxFlex.lt-sm="100%" >
+<!--<div class="course" fxFlex="90%" fxFlex.lt-sm="100%" > -->
 
   
  <!-- <img class="course-thumbnail" [src]="course?.iconUrl"> -->
 
 
- <div fxLayout fxLayoutAlign="start center" style="padding-top: 10px">
+  <div fxLayout fxLayoutAlign="start center" style="padding-top: 10px">
 
   
  <h2 class="mat-h2">Pedido {{this.idPedido}}</h2>
@@ -99,22 +99,23 @@
  <h3 class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
- <div fxLayout fxLayoutAlign="center center" >
+<div fxLayout fxLayoutAlign="center center" >
 
-  
 
   <mat-form-field>
 
     <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar">
 
   </mat-form-field>
- </div>
 
+  </div> <!--
  <div [ngClass.sm]="'myNarrowClass'"
  [ngClass.md]="'container-table'"
      [ngClass.gt-md]="'container-table'"
-   >
-  <mat-table class="lessons-table mat-elevation-z8"  [dataSource]="dataSource"  
+   > -->
+
+   <div class="example-container mat-elevation-z8">
+  <mat-table #table  [dataSource]="dataSource"  
   [class.isMobile]="isMobile">
             
 
@@ -122,8 +123,9 @@
 
           <mat-header-cell *matHeaderCellDef >#</mat-header-cell>
 
-          <mat-cell   class="mat-typography" *matCellDef="let element"
-           [routerLink]="['/articulo', element.id]"> <span class="mobile-label">Código:</span>{{element.codigo}}</mat-cell>
+          <mat-cell  class="mat-typography" *matCellDef="let element"
+           [routerLink]="['/articulo', element.id]"> 
+           <span class="mobile-label">Código:</span>{{element.codigo}}</mat-cell>
 
       </ng-container>
 
@@ -171,19 +173,20 @@
         <mat-header-cell *matHeaderCellDef>
           <button mat-icon-button color="primary" (click)="addRow()"><i class="fa fa-plus mat-icon"></i></button>
         </mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element"> <span class="mobile-label">Eliminar:</span>
           <button mat-icon-button color="warn" focusable="false" (click)="remove( element )">
               <mat-icon class="mat-18">delete</mat-icon>
               </button>
         </mat-cell>
-      </ng-container>
+      </ng-container> 
   
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"  ></mat-row>
   
 
   </mat-table>
-</div >
+</div>
+<!--</div > -->
 
 
   <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
@@ -192,7 +195,9 @@
 
 </div>
 
-</div>
+<button class="btnCreate" mat-fab color="primary" (click)="addRow()"><mat-icon>add</mat-icon></button>
+
+
 
 
 
