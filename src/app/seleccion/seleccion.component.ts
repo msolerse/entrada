@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { DIR_DOCUMENT_FACTORY } from '@angular/cdk/bidi/typings/dir-document-token';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SeleccionService} from './seleccion.service';
 
 export interface Food {
   value: string;
@@ -33,18 +34,36 @@ export class SeleccionComponent implements OnInit {
   
   codCentro: string = '0208';
   descCentro: string =  'GROS MERCAT FIGUERES';
-  documento: string = '0010153849';
+  documento: string ;
   albaran: string = '12345-ABC';
   observaciones: string = "hola que tal";
   tipoDoc: string = 'Pedido-0';
   tipoMov: string = 'Previo';
 
   constructor(private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private service: SeleccionService) { }
 
   ngOnInit() {
-  }
 
+    let params = new URLSearchParams(location.search);
+    let idCentro = params.get("idCentro");
+    console.log("idCentro="+idCentro);
+    /* this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
+      console.log( "ja he cridat");
+      console.log( "codigo= "+data.codigo);
+      switch (+data.codigo) {
+        case 0:
+            this.posiciones = data.posiciones;
+          this.dataSource = new ExampleDataSource(this.posiciones);
+          this.entireDataSource = new ExampleDataSource(this.posiciones);
+      default:
+            this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
+            break;
+      };    
+         
+    }); */
+  }
   
 goValidacion() {
   this.router.navigate(['tabla2',  this.documento,  this.codCentro, { albaran: this.albaran} ]);
