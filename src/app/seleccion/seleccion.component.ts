@@ -3,6 +3,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { DIR_DOCUMENT_FACTORY } from '@angular/cdk/bidi/typings/dir-document-token';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeleccionService} from './seleccion.service';
+import { DatosCentro } from '../_entities/DatosCentro';
+import { AlertService } from '../_services/alert.service';
+import { AlertType } from '../_entities/Alert';
+
 
 export interface Food {
   value: string;
@@ -32,8 +36,8 @@ export class SeleccionComponent implements OnInit {
     {value: 'Plataforma', viewValue: 'Distribución Plataforma'}
   ];
   
-  codCentro: string = '0208';
-  descCentro: string =  'GROS MERCAT FIGUERES';
+  codCentro: string = '0000';
+  descCentro: string ;
   documento: string ;
   albaran: string = '12345-ABC';
   observaciones: string = "hola que tal";
@@ -42,27 +46,31 @@ export class SeleccionComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private service: SeleccionService) { }
+    private service: SeleccionService,
+    private alert: AlertService) { }
 
   ngOnInit() {
 
     let params = new URLSearchParams(location.search);
     let idCentro = params.get("idCentro");
     console.log("idCentro="+idCentro);
-    /* this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
-      console.log( "ja he cridat");
-      console.log( "codigo= "+data.codigo);
-      switch (+data.codigo) {
+    this.service.obtenerCentro( idCentro ).subscribe(data => {
+      
+      console.log("datoscentro="+JSON.stringify(data));
+      console.log(" codigo retornat"+data.codError);
+      switch (+data.codError) {
+
         case 0:
-            this.posiciones = data.posiciones;
-          this.dataSource = new ExampleDataSource(this.posiciones);
-          this.entireDataSource = new ExampleDataSource(this.posiciones);
+            this.codCentro = data.codigo;
+            this.descCentro = data.nombre;
+            console.log(" data nmbre"+data.nombre);
+          
       default:
-            this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
+            this.alert.sendAlert('Error al obtener los datos del centro', AlertType.Error);
             break;
       };    
          
-    }); */
+    }); 
   }
   
 goValidacion() {
