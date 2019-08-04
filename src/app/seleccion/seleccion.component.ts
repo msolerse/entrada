@@ -44,6 +44,8 @@ export class SeleccionComponent implements OnInit {
   tipoDoc: string = 'Pedido-0';
   tipoMov: string = 'Previo';
 
+  idProceso: string = '001';
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private service: SeleccionService,
@@ -54,16 +56,37 @@ export class SeleccionComponent implements OnInit {
     let params = new URLSearchParams(location.search);
     let idCentro = params.get("idCentro");
     console.log("idCentro="+idCentro);
-    this.service.obtenerCentro( idCentro ).subscribe(data => {
+
+    if  (this.service.currDatosCentro ) {
+      this.codCentro =  this.service.currDatosCentro.codigo;
+      this.descCentro = this.service.currDatosCentro.nombre; }
+    else    
+      this.service.obtenerCentro( idCentro ).subscribe(data => {
+        
+        console.log("datoscentro="+JSON.stringify(data));
+        console.log(" codigo retornat"+data.codError);
+        switch (+data.codError) {
+
+          case 0:
+              this.codCentro = data.codigo;
+              this.descCentro = data.nombre;
+            
+          default:
+              this.alert.sendAlert('Error al obtener los datos del centro', AlertType.Error);
+              break;
+        };    
+          
+      }); 
+
+
+    this.service.obtenerTiposMov ( this.idProceso ).subscribe(data => {
       
-      console.log("datoscentro="+JSON.stringify(data));
-      console.log(" codigo retornat"+data.codError);
+      
       switch (+data.codError) {
 
         case 0:
-            this.codCentro = data.codigo;
-            this.descCentro = data.nombre;
-            console.log(" data nmbre"+data.nombre);
+            
+            
           
       default:
             this.alert.sendAlert('Error al obtener los datos del centro', AlertType.Error);
@@ -71,6 +94,8 @@ export class SeleccionComponent implements OnInit {
       };    
          
     }); 
+
+
   }
   
 goValidacion() {
