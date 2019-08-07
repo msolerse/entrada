@@ -142,7 +142,7 @@
 
       <ng-container matColumnDef="symbol">
         <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element">
+        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
             <span class="mobile-label">Unidad:</span> {{element.symbol}} </mat-cell>
       </ng-container>
 
