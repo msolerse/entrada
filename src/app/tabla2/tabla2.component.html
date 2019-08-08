@@ -1,91 +1,9 @@
-<!-- 
-<div style="padding: 10px">
-
-  <div class="example-container mat-elevation-z8" style="padding-top: 10px">
-    <mat-card>
-        <mat-card-header>
-            <img mat-card-avatar src="../assets/baseline_list_black_18dp.png">
-            <mat-card-title> Pedido {{this.idPedido}}</mat-card-title>
-            <mat-card-subtitle> Albarán {{this.albaran}}</mat-card-subtitle>
-          </mat-card-header>
-
-          <mat-card-content>
-      <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
-          <mat-form-field fxFlex="40%">
-            <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
-          </mat-form-field>
-        </div>
-  
-    <mat-table #table [dataSource]="dataSource">
- 
-       Name Column 
-      <ng-container matColumnDef="codigo">
-        <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-        <mat-cell *matCellDef="let element" [routerLink]="['/articulo', element.id]"> {{element.codigo}} </mat-cell>
-      </ng-container>
-  Name Column 
- <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
-    <mat-cell *matCellDef="let element" [routerLink]="['/articulo', element.id]">
-       {{element.name | titlecase}} </mat-cell>
-  </ng-container>
-       Symbol Column 
-      <ng-container matColumnDef="symbol">
-        <mat-header-cell *matHeaderCellDef> Unidad </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
-      </ng-container>
-
-      Comment Column -
-      <ng-container matColumnDef="comment">
-        <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
-        <mat-cell *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
-          <ng-container *ngIf="element.comment">
-            {{element.comment}}
-          </ng-container>
-          <span class="add-comment" *ngIf="!element.comment">
-            Indicar cantidad
-          </span>
-
-          <sat-popover #p
-              hasBackdrop
-              xAlign="start"
-              yAlign="start"
-              (closed)="update(element, $event)">
-            <inline-edit [value]="element.comment"></inline-edit>
-          </sat-popover>
-        </mat-cell>
-      </ng-container>
- 
-  <ng-container matColumnDef="actionsColumn">
-      <mat-header-cell *matHeaderCellDef>
-        <button mat-icon-button color="primary" (click)="addRow()"><i class="fa fa-plus mat-icon"></i></button>
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-icon-button color="warn" focusable="false" (click)="remove( element )">
-            <mat-icon class="mat-18">delete</mat-icon>
-            </button>
-      </mat-cell>
-    </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"  ></mat-row>
-    </mat-table>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button (click)="goBack()" >Salir</button> 
-    <button mat-raised-button color="accent" (click)="goValidar()" >Validar</button> 
-  </mat-card-actions>
-  </mat-card>
-  </div>
-  
-</div> --> 
 
 <!-- New version   -->
 <!--<div class="course" fxFlex="90%" fxFlex.lt-sm="100%" > -->
 
   
- <!-- <img class="course-thumbnail" [src]="course?.iconUrl"> -->
-
+ 
 
   <div fxLayout fxLayoutAlign="start center" style="padding-top: 10px">
 
@@ -99,6 +17,49 @@
  <h3 class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
+<mat-card class="mat-elevation-z3">
+  <mat-card-title>Nueva Posición</mat-card-title>
+<mat-card-content>
+    
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
+      fxLayoutAlign="flex-start">
+      <ng-container>
+ 
+  
+  <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+    <mat-label>Código</mat-label>
+  <input matInput placeholder="código material" name="codigo" [(ngModel)]="newCodigo"
+  (change)= "changeCodigo()">
+  <button mat-icon-button matSuffix (click)="goSearchArticulo()" [attr.aria-label]="'Search'" [attr.aria-pressed]="hide">
+      <mat-icon>search</mat-icon>
+      </button>
+</mat-form-field>  
+<!-- <mat-form-field>
+  <input matInput placeholder="countChange" name="countChange" [(ngModel)]="countChange">
+</mat-form-field>  -->
+<mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+    <mat-label>Descripción</mat-label>
+  <input matInput readonly placeholder=""   [(ngModel)]="newName">
+</mat-form-field>  
+<mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+    <mat-label>Unidad</mat-label>
+    <mat-select name="Unidad" [(ngModel)]=newSymbol>
+      <mat-option *ngFor="let uni of unis" [value]="uni.value">
+        {{uni.viewValue}}
+      </mat-option>
+    </mat-select>
+</mat-form-field>  
+<mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+    <mat-label>Cantidad</mat-label>
+  <input matInput placeholder="cantidad"   [(ngModel)]="newComment">
+</mat-form-field>   
+    <button mat-raised-button color="primary"  (click)="anyadir()" >Añadir</button>
+
+</ng-container>
+</div>
+</mat-card-content>
+</mat-card>
+
 <div fxLayout fxLayoutAlign="center center" >
 
 

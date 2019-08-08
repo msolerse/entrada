@@ -27,15 +27,28 @@ export class Tabla2Component {
   albaran: string;
   codCentro: string;
   routingSubscription: any;
+  
+  newCodigo: string;
+  newName: string;
+  newSymbol: string;
+  newComment: string;
  
+  unis: Uni[] = [
+    {value: 'UN', viewValue: 'UN'},
+    {value: 'CJ', viewValue: 'CJ'},
+    {value: 'RET', viewValue: 'RET'},
+    {value: 'PAL', viewValue: 'PAL'},
+  ];
 
   constructor(private route: ActivatedRoute,
     private router: Router, private service: Tabla2Service, 
-     private alert: AlertService, public dialog: MatDialog) { }
+     private alert: AlertService, public dialog: MatDialog
+              ) { }
 
 
   ngOnInit() {
 
+  
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
       this.codCentro = params["codCentro"];
@@ -71,6 +84,50 @@ export class Tabla2Component {
 
   }
 
+  public changeCodigo() {
+    
+
+    this.service.obtenerArticulo(this.newCodigo, this.codCentro).subscribe(reply => {
+      switch (reply.codError) {
+        case 0:
+          this.alert.sendAlert(reply.mensaje, AlertType.Success);
+          this.newName = reply.descripcion;
+          break;
+        default:
+          this.alert.sendAlert(reply.mensaje, AlertType.Error);
+          break;
+      }
+      
+    });
+
+  }
+
+  anyadir() {
+     this.addPosicion( this.newCodigo, this.newName, this.newSymbol, this.newComment);
+  }
+
+  goSearchArticulo() {
+    this.router.navigate(['search-articulo']);
+  }
+
+ addPosicion (  codigo: string , name: string, symbol: string , comment: string) {
+  let maxId = Math.max.apply(Math, this.dataSource.data().map( o => o.id )) + 10;
+
+        this.dataSource.data().push({
+          id: maxId,
+          codigo: codigo,
+          name: name,
+          symbol: symbol,
+          comment: comment
+        });
+
+        const copy = this.dataSource.data().filter( row => row );
+    this.dataSource.update(copy);
+    this.entireDataSource.update(copy);
+    this.service.currPosiciones =  this.entireDataSource.data();
+
+ }
+
 
   update(el: Element, comment: string) {
     if (comment == null) { return; }
@@ -102,32 +159,17 @@ export class Tabla2Component {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
         
-        let maxId = Math.max.apply(Math, this.dataSource.data().map( o => o.id )) + 10;
+        this.addPosicion (
+           result.codigo,
+           result.name,
+           result.symbol,
+           result.comment );
 
-        this.dataSource.data().push({
-          id: maxId,
-          codigo: result.codigo,
-          name: result.name,
-          symbol: result.symbol,
-          comment: result.comment
         });
 
-        const copy = this.dataSource.data().filter( row => row );
-    this.dataSource.update(copy);
-    this.entireDataSource.update(copy);
-      });
-      this.service.currPosiciones =  this.entireDataSource.data();
 
-   /*  this.dataSource.data().push({
-      id: 1,
-      codigo: '30025',
-      name: "Hydrogen",
-      symbol: "CJ",
-      comment: '20'
-    }); */
-    
+      
 
   }
 
@@ -214,6 +256,7 @@ export class AddRowDialog {
   unis: Uni[] = [
     {value: 'UN', viewValue: 'UN'},
     {value: 'CJ', viewValue: 'CJ'},
+    {value: 'RET', viewValue: 'RET'},
     {value: 'PAL', viewValue: 'PAL'},
   ];
 

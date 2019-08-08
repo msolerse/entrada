@@ -56,7 +56,9 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSortModule } from "@angular/material/sort";
-
+import { SearchArticuloComponent } from './search-articulo/search-articulo.component';
+// search module
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,8 @@ import { MatSortModule } from "@angular/material/sort";
     HeaderComponent,
     InlineEditComponent,
     AddRowDialog,
-    ArticuloComponent 
+    ArticuloComponent,
+    SearchArticuloComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +93,8 @@ import { MatSortModule } from "@angular/material/sort";
    MatDialogModule,
    SatPopoverModule,
    HttpClientModule,
-   FlexLayoutModule
+   FlexLayoutModule,
+   Ng2SearchPipeModule
   ],
 entryComponents: [AddRowDialog],
   providers: [
