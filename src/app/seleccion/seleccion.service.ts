@@ -25,6 +25,8 @@ export class SeleccionService {
    public currTipoMov: string;
    public currDocumento: string;
    public currTipoDoc: string;
+   public currProveedor: string;
+   public currNombre: string;
    public currAlbaran: string;
    public currObservaciones: string;
    

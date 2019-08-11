@@ -25,6 +25,8 @@ export class SeleccionComponent implements OnInit {
   descCentro: string;
   documento: string;
   albaran: string;
+  proveedor: string;
+  nombre: string;
   observaciones: string;
   tipoDoc: string;
   tipoMov: string;
@@ -106,6 +108,12 @@ export class SeleccionComponent implements OnInit {
     }
    
 
+    if (this.service.currProveedor) {
+      this.proveedor = this.service.currProveedor; }
+
+      if (this.service.currNombre) {
+        this.nombre = this.service.currNombre; }
+  
        if (this.service.currAlbaran) {
         this.albaran = this.service.currAlbaran; }
 
@@ -117,6 +125,8 @@ export class SeleccionComponent implements OnInit {
   onTipMovSelection($event) {
     console.log(" changed tipo Mov="+  this.tipoMov);
     this.cargarTiposRef( this.tipoMov );
+
+    if (this.tipoMov != '001')
     this.tipoDoc = this.tiposRef[0].tipDocRef;
   }
 
@@ -127,12 +137,17 @@ export class SeleccionComponent implements OnInit {
 
   goValidacion() {
    // guardar valores
+
+   if (this.tipoMov = '001') { this.documento = '0'}
+      
    this.service.currDocumento = this.documento;
    this.service.currTipoMov = this.tipoMov;
    this.service.currTipoDoc = this.tipoDoc;
+   this.service.currProveedor = this.proveedor;
+   this.service.currNombre = this.nombre;
    this.service.currAlbaran = this.albaran;
    this.service.currObservaciones = this.observaciones;
-
+  
 
     this.router.navigate(['tabla2', this.documento, this.codCentro, { albaran: this.albaran }]);
   }

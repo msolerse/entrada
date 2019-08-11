@@ -17,9 +17,15 @@
  <h3 class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
-<mat-card class="mat-elevation-z3">
-  <mat-card-title>Nueva Posición</mat-card-title>
-<mat-card-content>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+      <mat-panel-title> Nueva Posición</mat-panel-title>
+   
+  </mat-expansion-panel-header>
+  
+<!--<mat-card class="mat-elevation-z3">
+  <mat-card-title></mat-card-title>
+<mat-card-content> -->
     
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
       fxLayoutAlign="flex-start">
@@ -53,12 +59,14 @@
     <mat-label>Cantidad</mat-label>
   <input matInput placeholder="cantidad"   [(ngModel)]="newComment">
 </mat-form-field>   
+<mat-action-row>
     <button mat-raised-button color="primary"  (click)="anyadir()" >Añadir</button>
-
+  </mat-action-row>
 </ng-container>
 </div>
-</mat-card-content>
-</mat-card>
+
+
+</mat-expansion-panel>
 
 <div fxLayout fxLayoutAlign="center center" >
 

@@ -13,6 +13,7 @@ import {MatInputModule} from '@angular/material/input';
  import {MatCardModule} from '@angular/material/card';
  import {MatTableModule} from '@angular/material/table';
  import { MatProgressBarModule } from '@angular/material/progress-bar';
+ import {MatExpansionModule} from '@angular/material/expansion';
  
 
  import {MatToolbarModule} from '@angular/material/toolbar';
@@ -94,7 +95,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
    SatPopoverModule,
    HttpClientModule,
    FlexLayoutModule,
-   Ng2SearchPipeModule
+   Ng2SearchPipeModule,
+   MatExpansionModule
   ],
 entryComponents: [AddRowDialog],
   providers: [
