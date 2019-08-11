@@ -95,6 +95,10 @@ export class SeleccionComponent implements OnInit {
       });
     }
 
+    console.log('currDocumento='+this.service.currDocumento);
+    console.log('currTipoMov='+this.service.currTipoMov);
+    console.log('currAlbaran='+this.service.currAlbaran);
+
     if (this.service.currDocumento) {
        this.documento = this.service.currDocumento; }
     
@@ -138,7 +142,7 @@ export class SeleccionComponent implements OnInit {
   goValidacion() {
    // guardar valores
 
-   if (this.tipoMov = '001') { this.documento = '0'}
+   
       
    this.service.currDocumento = this.documento;
    this.service.currTipoMov = this.tipoMov;
@@ -147,6 +151,8 @@ export class SeleccionComponent implements OnInit {
    this.service.currNombre = this.nombre;
    this.service.currAlbaran = this.albaran;
    this.service.currObservaciones = this.observaciones;
+
+   if (this.tipoMov = '001') { this.documento = '0'}
   
 
     this.router.navigate(['tabla2', this.documento, this.codCentro, { albaran: this.albaran }]);
