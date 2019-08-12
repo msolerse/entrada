@@ -33,8 +33,8 @@
         <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
         fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
         <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)" fxFlex.lt-sm="100%">
-            <input matInput placeholder="Proveedor" name="proveedor"
-            [(ngModel)]="proveedor">
+            <input matInput placeholder="Proveedor" name="proveedor" 
+            [(ngModel)]="proveedor" (change)= "changeProveedor()">
           </mat-form-field>
             <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(75% - 5px)" fxFlex.lt-sm="100%">
               <input matInput readonly placeholder="Nombre" name="nombre"

@@ -8,3 +8,22 @@ table {
   width: 100%;
 }
 
+
+
+.mat-row {
+  cursor: pointer;
+  &:hover {
+    background-color: #e9f3ff;
+  }
+  a {
+    color: #3e75ff;
+    text-decoration: none;
+    &:hover {
+    text-decoration: underline;
+    }
+  }
+}
+
+.mobile-label {
+  display: none;
+}

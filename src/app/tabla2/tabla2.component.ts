@@ -271,7 +271,7 @@ export class AddRowDialog {
   }
 
   public changeCodigo() {
-    this.countChange = this.countChange + 1;
+    // this.countChange = this.countChange + 1;
 
     this.service.obtenerArticulo(this.data.codigo, this.data.codCentro).subscribe(reply => {
       switch (reply.codError) {

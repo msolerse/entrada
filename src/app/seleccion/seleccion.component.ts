@@ -138,11 +138,36 @@ export class SeleccionComponent implements OnInit {
      this.tiposRef = this.service.tiposRef.filter ( row => row.tipMov == tipMov);
     
   }
+  
+
+ changeProveedor() {
+  this.service.obtenerProveedor(this.proveedor, this.codCentro).subscribe(reply => {
+    switch (reply.codError) {
+      case 0:
+        //this.alert.sendAlert(reply.mensaje, AlertType.Success);
+        this.nombre= reply.nombre;
+        this.service.obtenerArticulosProv(this.proveedor, this.codCentro).subscribe(reply => {
+          switch (reply.codigo) {
+            case 0:
+                console.log("ws datos art prov ok");
+                break;
+
+          default:
+              console.log("ws datos art prov no ok");
+              break;
+           } 
+          });  
+        break;
+      default:
+        this.alert.sendAlert(reply.mensaje, AlertType.Error);
+        break;
+    }
+    
+  });
+ }
 
   goValidacion() {
    // guardar valores
-
-   
       
    this.service.currDocumento = this.documento;
    this.service.currTipoMov = this.tipoMov;
