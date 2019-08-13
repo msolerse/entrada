@@ -20,7 +20,7 @@ import { SearchArticuloService } from '../search-articulo/search-articulo.servic
 export class Tabla2Component {
 
   posiciones: Element[];
-  displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn'];
+  displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
 
   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
@@ -33,7 +33,7 @@ export class Tabla2Component {
   newCodigo: string;
   newName: string;
   newSymbol: string;
-  newComment: string;
+  newComment: number;
 
   isExpanded: boolean;
 
@@ -56,15 +56,8 @@ export class Tabla2Component {
       this.idPedido = params["idPedido"];
       this.codCentro = params["codCentro"];
       this.albaran = params["albaran"];
-
-     // console.log("idPedido=" + this.idPedido);
-     // console.log("codCentro=" + this.codCentro);
-     // console.log("albaran=" + this.albaran);
     });
 
-    // console.log("idPedido=" + this.idPedido + " currPedido=" + this.service.currPedido);
-    // console.log("albaran=" + this.albaran + " currAlbaran=" + this.service.currAlbaran);
-     
     if (this.idPedido == this.service.currPedido) {
       console.log("pedido igual , agafem posicions en memoria");
       this.posiciones = this.service.currPosiciones;
@@ -108,7 +101,6 @@ export class Tabla2Component {
 
 
     if (this.search.codigo) {
-      console.log("codigo search=" + this.search.codigo);
       this.newCodigo = this.search.codigo;
       this.newName = this.search.nombre;
       this.isExpanded = true;
@@ -142,14 +134,15 @@ export class Tabla2Component {
     this.newCodigo = '';
     this.newName = '';
     this.newSymbol = '';
-    this.newComment = '';
+    this.newComment = 0;
+
   }
 
   goSearchArticulo() {
     this.router.navigate(['search-articulo']);
   }
 
-  addPosicion(codigo: string, name: string, symbol: string, comment: string) {
+  addPosicion(codigo: string, name: string, symbol: string, comment: number) {
 
     let maxId: number;
 
@@ -176,12 +169,13 @@ export class Tabla2Component {
   }
 
 
-  update(el: Element, comment: string) {
+  update(el: Element, comment: number) {
     if (comment == null) { return; }
     // copy and mutate
     //const copy = this.dataSource.data().slice()
     const copy = this.entireDataSource.data().slice()
     el.comment = comment;
+    el.dif = el.cantref - el.comment;
     // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();
@@ -280,7 +274,7 @@ export interface DialogData {
   codigo: string;
   name: string;
   symbol: string;
-  comment: string;
+  comment: number;
 }
 
 export interface Uni {

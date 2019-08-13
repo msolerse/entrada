@@ -4,6 +4,9 @@ export class Element {
     public codigo: string,
     public name: string,
     public symbol: string,
-    public comment?: string )
+    public cantref?: number,
+    public comment?: number,
+    public dif?: number,
+   )
 {  }
 }

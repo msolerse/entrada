@@ -115,6 +115,13 @@
             <span class="mobile-label">Unidad:</span> {{element.symbol}} </mat-cell>
       </ng-container>
 
+
+      <ng-container matColumnDef="cantref">
+        <mat-header-cell class="duration-cell" *matHeaderCellDef> Cant.Ref.</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
+            <span class="mobile-label">Cant.Ref.:</span> {{element.cantref}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="comment">
         <mat-header-cell *matHeaderCellDef> Cant. </mat-header-cell>
         <mat-cell class="duration-cell mat-typography" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
@@ -136,7 +143,11 @@
         </mat-cell>
       </ng-container>
 
-      
+      <ng-container matColumnDef="dif">
+        <mat-header-cell class="duration-cell" *matHeaderCellDef> Dif.</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
+            <span class="mobile-label">Dif.:</span> {{element.dif}} </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="actionsColumn">
         <mat-header-cell *matHeaderCellDef>

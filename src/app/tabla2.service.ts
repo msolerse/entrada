@@ -183,7 +183,9 @@ export class Tabla2Service {
                      detalle[1].innerHTML,
                      detalle[2].innerHTML,
                      detalle[4].innerHTML,
-                     detalle[3].innerHTML,
+                     +detalle[3].innerHTML,
+                     +detalle[3].innerHTML,
+                     0
                   ));
             });
 
