@@ -18,6 +18,7 @@ export class Tabla2Service {
    constructor(private http: HttpClient) { }
 
    public currPedido: string;
+   public currAlbaran: string;
    public currPosiciones: Element[];
    public datosArticulos: DatosArticulo[] = [];
 

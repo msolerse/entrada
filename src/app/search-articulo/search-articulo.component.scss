@@ -8,9 +8,8 @@ table {
   width: 100%;
 }
 
-
-
 .mat-row {
+  
   cursor: pointer;
   &:hover {
     background-color: #e9f3ff;
@@ -22,6 +21,11 @@ table {
     text-decoration: underline;
     }
   }
+}
+
+
+.mat-cell {
+  padding-right: 5px;
 }
 
 .mobile-label {

@@ -1,13 +1,15 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {DataSource} from '@angular/cdk/collections';
-import {Observable, BehaviorSubject, of} from 'rxjs';
+import { DataSource } from '@angular/cdk/collections';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Tabla2Service} from '../tabla2.service';
+import { Tabla2Service } from '../tabla2.service';
 import { Element } from '../Element';
 import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatosArticulo } from '../_entities/DatosArticulo';
+import { SearchArticuloService } from '../search-articulo/search-articulo.service';
+
 
 
 @Component({
@@ -18,74 +20,106 @@ import { DatosArticulo } from '../_entities/DatosArticulo';
 export class Tabla2Component {
 
   posiciones: Element[];
-  displayedColumns = ['codigo','name', 'symbol', 'comment', 'actionsColumn'];
-  
-   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
-   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
+  displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn'];
+
+  dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
+  entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 
   idPedido: string;
   albaran: string;
   codCentro: string;
   routingSubscription: any;
-  
+
   newCodigo: string;
   newName: string;
   newSymbol: string;
   newComment: string;
- 
+
+  isExpanded: boolean;
+
   unis: Uni[] = [
-    {value: 'UN', viewValue: 'UN'},
-    {value: 'CJ', viewValue: 'CJ'},
-    {value: 'RET', viewValue: 'RET'},
-    {value: 'PAL', viewValue: 'PAL'},
+    { value: 'UN', viewValue: 'UN' },
+    { value: 'CJ', viewValue: 'CJ' },
+    { value: 'RET', viewValue: 'RET' },
+    { value: 'PAL', viewValue: 'PAL' },
   ];
 
   constructor(private route: ActivatedRoute,
-    private router: Router, private service: Tabla2Service, 
-     private alert: AlertService, public dialog: MatDialog
-              ) { }
+    private router: Router, private service: Tabla2Service,
+    private alert: AlertService, public dialog: MatDialog,
+    private search: SearchArticuloService) { }
 
 
   ngOnInit() {
 
-  
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
       this.codCentro = params["codCentro"];
       this.albaran = params["albaran"];
-      
-      console.log("idPedido=" + this.idPedido );
-      console.log("codCentro=" + this.codCentro );
-      console.log("albaran=" + this.albaran );
+
+     // console.log("idPedido=" + this.idPedido);
+     // console.log("codCentro=" + this.codCentro);
+     // console.log("albaran=" + this.albaran);
     });
 
-    if (this.idPedido ==  this.service.currPedido)
-    {
-    console.log( "idPedido="+this.idPedido+" currPedido="+this.service.currPedido);
-     this.posiciones = this.service.currPosiciones;
-     this.dataSource = new ExampleDataSource(this.posiciones);
-     this.entireDataSource = new ExampleDataSource(this.posiciones); }
-    else {
-     this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran ).subscribe(data => {
-      console.log( "ja he cridat");
-      console.log( "codigo= "+data.codigo);
-      switch (+data.codigo) {
-        case 0:
-            this.posiciones = data.posiciones;
-          this.dataSource = new ExampleDataSource(this.posiciones);
-          this.entireDataSource = new ExampleDataSource(this.posiciones);
-      default:
-            this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
-            break;
-      };    
-         
-    });
-  }
+    // console.log("idPedido=" + this.idPedido + " currPedido=" + this.service.currPedido);
+    // console.log("albaran=" + this.albaran + " currAlbaran=" + this.service.currAlbaran);
+     
+    if (this.idPedido == this.service.currPedido) {
+      console.log("pedido igual , agafem posicions en memoria");
+      this.posiciones = this.service.currPosiciones;
+      this.dataSource = new ExampleDataSource(this.posiciones);
+      this.entireDataSource = new ExampleDataSource(this.posiciones);
+    } else {
+      if (this.idPedido != '0') {
+        console.log("pedido diferent , recuperem posicions ws");
+
+        this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran).subscribe(data => {
+    
+          switch (+data.codigo) {
+            case 0:
+              this.posiciones = data.posiciones;
+              this.dataSource = new ExampleDataSource(this.posiciones);
+              this.entireDataSource = new ExampleDataSource(this.posiciones);
+            default:
+              this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
+              break;
+          }
+        });
+      } else {
+        console.log("estem a entrades directes");
+
+        if (this.albaran == this.service.currAlbaran) {
+          console.log("albaran igual , agafem posicions en memoria");
+  
+          this.posiciones = this.service.currPosiciones; 
+        } else {
+          console.log("albaran diferent , inicialitzem posicions");
+  
+          this.posiciones = [];
+          this.service.currAlbaran = this.albaran;
+          this.isExpanded = true;
+        }
+        this.dataSource = new ExampleDataSource(this.posiciones);
+        this.entireDataSource = new ExampleDataSource(this.posiciones);
+        this.service.currPosiciones = this.posiciones;
+      }
+    }
+
+
+    if (this.search.codigo) {
+      console.log("codigo search=" + this.search.codigo);
+      this.newCodigo = this.search.codigo;
+      this.newName = this.search.nombre;
+      this.isExpanded = true;
+      this.search.codigo = '';
+      this.search.nombre = '';
+    }
 
   }
 
   public changeCodigo() {
-    
+
 
     this.service.obtenerArticulo(this.newCodigo, this.codCentro).subscribe(reply => {
       switch (reply.codError) {
@@ -97,36 +131,49 @@ export class Tabla2Component {
           this.alert.sendAlert(reply.mensaje, AlertType.Error);
           break;
       }
-      
+
     });
 
   }
 
   anyadir() {
-     this.addPosicion( this.newCodigo, this.newName, this.newSymbol, this.newComment);
+    this.addPosicion(this.newCodigo, this.newName, this.newSymbol, this.newComment);
+    console.log("vaig a borrar");
+    this.newCodigo = '';
+    this.newName = '';
+    this.newSymbol = '';
+    this.newComment = '';
   }
 
   goSearchArticulo() {
     this.router.navigate(['search-articulo']);
   }
 
- addPosicion (  codigo: string , name: string, symbol: string , comment: string) {
-  let maxId = Math.max.apply(Math, this.dataSource.data().map( o => o.id )) + 10;
+  addPosicion(codigo: string, name: string, symbol: string, comment: string) {
 
-        this.dataSource.data().push({
-          id: maxId,
-          codigo: codigo,
-          name: name,
-          symbol: symbol,
-          comment: comment
-        });
+    let maxId: number;
 
-        const copy = this.dataSource.data().filter( row => row );
+    if ((this.dataSource.data()) && (this.dataSource.data().length !== 0)) {
+      console.log("length="+this.dataSource.data().length);
+      maxId = Math.max.apply(Math, this.dataSource.data().map(o => o.id)) + 10;
+    } else {
+      maxId = 10;
+    }
+
+    this.dataSource.data().push({
+      id: maxId,
+      codigo: codigo,
+      name: name,
+      symbol: symbol,
+      comment: comment
+    });
+
+    const copy = this.dataSource.data().filter(row => row);
     this.dataSource.update(copy);
     this.entireDataSource.update(copy);
-    this.service.currPosiciones =  this.entireDataSource.data();
+    this.service.currPosiciones = this.entireDataSource.data();
 
- }
+  }
 
 
   update(el: Element, comment: string) {
@@ -135,53 +182,50 @@ export class Tabla2Component {
     //const copy = this.dataSource.data().slice()
     const copy = this.entireDataSource.data().slice()
     el.comment = comment;
-   // this.dataSource.update(copy);
+    // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
-    this.service.currPosiciones =  this.entireDataSource.data();
+    this.service.currPosiciones = this.entireDataSource.data();
   }
-  remove (el: Element ) {
+  remove(el: Element) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
-    const copy =  this.entireDataSource.data().filter( row => row != el );
+    const copy = this.entireDataSource.data().filter(row => row != el);
     //console.log("copy="+JSON.stringify(copy)) ;
-    
+
     this.dataSource.update(copy);
     this.entireDataSource.update(copy);
-    this.service.currPosiciones =  this.entireDataSource.data();
+    this.service.currPosiciones = this.entireDataSource.data();
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
   }
 
-  addRow():void {
-    
-      const dialogRef = this.dialog.open(AddRowDialog, {
-        width: '400px',
-        data: {codCentro: this.codCentro}
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        
-        this.addPosicion (
-           result.codigo,
-           result.name,
-           result.symbol,
-           result.comment );
+  addRow(): void {
 
-        });
+    const dialogRef = this.dialog.open(AddRowDialog, {
+      width: '400px',
+      data: { codCentro: this.codCentro }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
 
-      
+      this.addPosicion(
+        result.codigo,
+        result.name,
+        result.symbol,
+        result.comment);
+
+    });
 
   }
 
   public doFilter = (value: string) => {
-   // console.log (this.entireDataSource.data());
-    this.dataSource.update(this.entireDataSource.data().filter( row => row ));
-    const copy = this.dataSource.data().filter( row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
-    row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase())  );
+    // console.log (this.entireDataSource.data());
+    this.dataSource.update(this.entireDataSource.data().filter(row => row));
+    const copy = this.dataSource.data().filter(row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
+      row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()));
     this.dataSource.update(copy);
   }
- 
-  
+
+
   goBack() {
     this.router.navigate(['']);
   }
@@ -228,7 +272,7 @@ export class ExampleDataSource extends DataSource<any> {
     return this.dataSubject;
   }
 
-  disconnect() {}
+  disconnect() { }
 }
 
 export interface DialogData {
@@ -254,17 +298,17 @@ export class AddRowDialog {
   countChange: number = 0;
 
   unis: Uni[] = [
-    {value: 'UN', viewValue: 'UN'},
-    {value: 'CJ', viewValue: 'CJ'},
-    {value: 'RET', viewValue: 'RET'},
-    {value: 'PAL', viewValue: 'PAL'},
+    { value: 'UN', viewValue: 'UN' },
+    { value: 'CJ', viewValue: 'CJ' },
+    { value: 'RET', viewValue: 'RET' },
+    { value: 'PAL', viewValue: 'PAL' },
   ];
 
   constructor(
     public dialogRef: MatDialogRef<AddRowDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-     private service: Tabla2Service, 
-    private alert: AlertService ) {}
+    private service: Tabla2Service,
+    private alert: AlertService) { }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -283,7 +327,7 @@ export class AddRowDialog {
           this.alert.sendAlert(reply.mensaje, AlertType.Error);
           break;
       }
-      
+
     });
 
   }

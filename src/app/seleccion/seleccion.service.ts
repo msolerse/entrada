@@ -149,7 +149,7 @@ export class SeleccionService {
                }
             });
 
-            console.log( JSON.stringify(this.tiposRef));
+            //console.log( JSON.stringify(this.tiposRef));
 
             let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
             itemsDOM2.forEach(item => {
@@ -229,9 +229,9 @@ export class SeleccionService {
             let nombre = dom.getElementsByTagName("WERKS_DESC")[0].innerHTML;
             let canal = dom.getElementsByTagName("VTWEG")[0].innerHTML;
 
-            console.log("codigo=" + codigo);
-            console.log("nombre=" + nombre);
-            console.log("codError=" + codError);
+            //console.log("codigo=" + codigo);
+            //console.log("nombre=" + nombre);
+            //console.log("codError=" + codError);
 
             if (sinCentro === 'X') {
                mensajeError = "Usuario sin centro asignado"; }
@@ -247,7 +247,7 @@ export class SeleccionService {
 
             this.currDatosCentro = datosCentro;
 
-            console.log("datoscentro=" + JSON.stringify(datosCentro));
+           // console.log("datoscentro=" + JSON.stringify(datosCentro));
 
             return datosCentro;
          })
@@ -352,7 +352,7 @@ export class SeleccionService {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            console.log(data);
+            //console.log(data);
             var datosProv;
             var mensajeError;
             var codError;
@@ -371,9 +371,7 @@ export class SeleccionService {
              let codigo = dom.getElementsByTagName("VENDOR")[0].innerHTML;
             let nombre = dom.getElementsByTagName("NAME")[0].innerHTML;
          
-            console.log("codigo = "+ codigo);
-            console.log("nombre = "+ nombre);
-
+            
             if (nombre != null && !(nombre.length == 0)) {
                codError = 0;
             } else {   
@@ -381,10 +379,6 @@ export class SeleccionService {
                mensajeError = 
                'No se encontraron registros para la búsqueda seleccionada de proveedores';
             }
-
-            console.log("codigo=" + codigo);
-            console.log("nombre=" + nombre);
-            console.log("codError=" + codError);
 
 
             datosProv = new DatosProveedor(
@@ -395,8 +389,6 @@ export class SeleccionService {
             );
 
             this.currNombre = nombre;
-
-            console.log("datos prov=" + JSON.stringify(datosProv));
 
             return datosProv;
          })
@@ -473,7 +465,7 @@ export class SeleccionService {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            console.log(data);
+            //console.log(data);
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -485,10 +477,7 @@ export class SeleccionService {
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
 
-               console.log( detalle[1].innerHTML + ' ' + detalle[8].innerHTML 
-               + ' '+  detalle[6].innerHTML +
-                 ' '+  detalle[0].innerHTML + ' ' +  detalle[7].innerHTML);
-               if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+                 if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
                   articulosProv.push(new DatosArticuloProv(
                      detalle[1].innerHTML, //codigo
                      detalle[8].innerHTML, //descripcion
@@ -507,7 +496,7 @@ export class SeleccionService {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
             });
-            console.log( "codigo= " + codigo);
+            //console.log( "codigo= " + codigo);
             this.currProveedor = proveedor;
             this.currDatosArticuloProv = articulosProv;
             return {
