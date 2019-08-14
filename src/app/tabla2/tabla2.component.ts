@@ -9,6 +9,7 @@ import { AlertType } from '../_entities/Alert';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatosArticulo } from '../_entities/DatosArticulo';
 import { SearchArticuloService } from '../search-articulo/search-articulo.service';
+import { isUndefined } from 'util';
 
 
 
@@ -36,6 +37,7 @@ export class Tabla2Component {
   newComment: number;
 
   isExpanded: boolean;
+  showAlbaran: boolean;
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -108,6 +110,14 @@ export class Tabla2Component {
       this.search.nombre = '';
     }
 
+
+    if ( !!this.albaran && this.albaran !== 'undefined' )
+        { this.showAlbaran = true; }
+    else
+        {  this.showAlbaran = false; }
+
+        console.log("aLbaran ="+ this.albaran);  
+        console.log("showALbaran ="+ this.showAlbaran);  
   }
 
   public changeCodigo() {
@@ -147,21 +157,23 @@ export class Tabla2Component {
     let maxId: number;
 
     if ((this.dataSource.data()) && (this.dataSource.data().length !== 0)) {
-      console.log("length="+this.dataSource.data().length);
+      //console.log("length="+this.dataSource.data().length);
       maxId = Math.max.apply(Math, this.dataSource.data().map(o => o.id)) + 10;
     } else {
       maxId = 10;
     }
 
-    this.dataSource.data().push({
+    this.entireDataSource.data().push({
       id: maxId,
       codigo: codigo,
       name: name,
       symbol: symbol,
-      comment: comment
+      cantref: comment,
+      comment: comment,
+      dif: 0
     });
 
-    const copy = this.dataSource.data().filter(row => row);
+    const copy = this.entireDataSource.data().filter(row => row);
     this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();

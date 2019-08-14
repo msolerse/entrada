@@ -5,16 +5,16 @@
   
  
 
-  <div fxLayout fxLayoutAlign="start center" style="padding-top: 10px">
-
+<div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" >
   
- <h2 class="mat-h2">Pedido {{this.idPedido}}</h2>
+ <h2  class="mat-h2">Pedido {{this.idPedido}}</h2>
 
-</div>
+</div> 
 
-<div fxLayout fxLayoutAlign="start center" >
 
- <h3 class="mat-h3">Albarán {{this.albaran}}</h3>
+<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" >
+
+ <h3 *ngIf="showAlbaran" class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
 <mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'">
@@ -68,7 +68,7 @@
 
 </mat-expansion-panel >
 
-<div fxLayout fxLayoutAlign="center center" >
+<div fxLayout fxLayoutAlign="center center" style="padding-top: 10px" >
 
 
   <mat-form-field>
@@ -175,7 +175,7 @@
 
 </div>
 
-<button class="btnCreate" mat-fab color="primary" (click)="addRow()"><mat-icon>add</mat-icon></button>
+<button *ngIf="idPedido != 0" class="btnCreate" mat-fab color="primary" (click)="addRow()"><mat-icon>add</mat-icon></button>
 
 
 

@@ -135,6 +135,10 @@ export class SeleccionComponent implements OnInit {
     console.log(" changed tipo Mov=" + this.tipoMov);
     this.cargarTiposRef(this.tipoMov);
 
+    this.service.currAlbaran = '';
+    this.service.currDocumento = '';
+    this.service.currProveedor = '';
+
     if (this.tipoMov != '001')
       this.tipoDoc = this.tiposRef[0].tipDocRef;
   }
