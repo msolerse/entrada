@@ -149,6 +149,17 @@
             <span class="mobile-label">Dif.:</span> {{element.dif}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="motivo">
+          <mat-header-cell *matHeaderCellDef>Motivo</mat-header-cell>
+          <mat-cell *matCellDef="let element"> <span class="mobile-label">Motivo:</span>
+  <mat-select>
+    <mat-option *ngFor="let food of foods" [value]="food.value">
+      {{food.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-cell>
+</ng-container> 
+
       <ng-container matColumnDef="actionsColumn">
         <mat-header-cell *matHeaderCellDef>
           <button mat-icon-button color="primary" (click)="addRow()"><i class="fa fa-plus mat-icon"></i></button>

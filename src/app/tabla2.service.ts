@@ -7,6 +7,7 @@ import * as X2JS from 'x2js';
 import { Element } from './Element';
 import 'rxjs/add/operator/timeout';
 import { DatosArticulo } from './_entities/DatosArticulo';
+import { Ean } from './_entities/Ean';
 
 @Injectable({
    providedIn: 'root'
@@ -21,6 +22,8 @@ export class Tabla2Service {
    public currAlbaran: string;
    public currPosiciones: Element[];
    public datosArticulos: DatosArticulo[] = [];
+   public eansArticulos: Ean[] = [];
+   public currCentro: string;
 
    obtenerPosiciones(idPedido: string, albaran: string,
       codCentro: string): Observable<any> {
@@ -280,6 +283,109 @@ export class Tabla2Service {
             catchError(this.handleError)
          );
    }
+
+   obtenerEans(codigo: string,
+      codCentro: string): Observable<any> {
+
+    
+      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
+      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let body = `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <urn:ZWD_LISTA_EAN>
+            <!--Optional:-->
+            <I_ALTERNATIVOS></I_ALTERNATIVOS>
+            <!--Optional:-->
+            <I_IDNLF></I_IDNLF>
+            <!--Optional:-->
+            <I_MATNR>123</I_MATNR>
+            <I_WERKS>0021</I_WERKS>
+            <T_LIS_EAN>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <MATNR></MATNR>
+                  <MAKTX></MAKTX>
+                  <MAKTM></MAKTM>
+                  <EAN11></EAN11>
+                  <MEINH></MEINH>
+                  <UMREZ></UMREZ>
+                  <MEINS></MEINS>
+                  <ERSDA></ERSDA>
+                  <NUMTP></NUMTP>
+                  <ALTERNATIVO></ALTERNATIVO>
+                  <BORRADO></BORRADO>
+               </item>
+            </T_LIS_EAN>
+            <T_RETURN>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <TYPE></TYPE>
+                  <ID></ID>
+                  <NUMBER></NUMBER>
+                  <MESSAGE></MESSAGE>
+                  <LOG_NO></LOG_NO>
+                  <LOG_MSG_NO></LOG_MSG_NO>
+                  <MESSAGE_V1></MESSAGE_V1>
+                  <MESSAGE_V2></MESSAGE_V2>
+                  <MESSAGE_V3></MESSAGE_V3>
+                  <MESSAGE_V4></MESSAGE_V4>
+                  <PARAMETER></PARAMETER>
+                  <ROW></ROW>
+                  <FIELD></FIELD>
+                  <SYSTEM></SYSTEM>
+               </item>
+            </T_RETURN>
+         </urn:ZWD_LISTA_EAN>
+      </soapenv:Body>
+   </soapenv:Envelope>
+      `;
+
+      return this.http.post(url, body, { responseType: 'text' })
+         .map(data => {
+            //console.log(data);
+            //let x2js = require('x2js');
+            let x2js = new X2JS();
+            let dom = x2js.xml2dom(data);
+
+
+            let itemsDOM = Array.from(dom.getElementsByTagName('T_LIS_EAN')[0].children);
+
+            let eansArticulo: Ean[] = [];
+            itemsDOM.forEach(item => {
+               let detalle = Array.from(item.children);
+
+                 if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+                  eansArticulo.push(new Ean(
+                     detalle[0].innerHTML, //codigo
+                     detalle[3].innerHTML, //Ean
+                  ));
+                  this.eansArticulos.push(new Ean(
+                     detalle[0].innerHTML, //codigo
+                     detalle[3].innerHTML, //Ean
+                  ));
+            });
+
+            let codigo;
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
+            itemsDOM2.forEach(item => {
+               let detalle2 = Array.from(item.children);
+               codigo = +detalle2[2].innerHTML;
+            });
+            //console.log( "codigo= " + codigo);
+            
+           
+            return {
+               codigo: codigo,
+               eansArticulo: eansArticulo
+            };
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
+   }
+
 
 
 

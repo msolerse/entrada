@@ -11,7 +11,10 @@ import { DatosArticulo } from '../_entities/DatosArticulo';
 import { SearchArticuloService } from '../search-articulo/search-articulo.service';
 import { isUndefined } from 'util';
 
-
+export interface Food {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-tabla2',
@@ -20,8 +23,14 @@ import { isUndefined } from 'util';
 })
 export class Tabla2Component {
 
+  foods: Food[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'}
+  ];
+
   posiciones: Element[];
-  displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
+  displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
 
   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
@@ -57,6 +66,7 @@ export class Tabla2Component {
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
       this.codCentro = params["codCentro"];
+      this.service.currCentro = this.codCentro;
       this.albaran = params["albaran"];
     });
 

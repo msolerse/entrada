@@ -138,6 +138,9 @@ export class SeleccionComponent implements OnInit {
     this.service.currAlbaran = '';
     this.service.currDocumento = '';
     this.service.currProveedor = '';
+    this.albaran='';
+    this.documento='';
+    this.proveedor='';
 
     if (this.tipoMov != '001')
       this.tipoDoc = this.tiposRef[0].tipDocRef;

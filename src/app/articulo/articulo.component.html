@@ -8,7 +8,7 @@
         </mat-card-header>
         <img mat-card-image class="articulo-image"
           src="http://maep7java.miquel.es:50100/irj/go/km/docs/xenon_eureka/Articulos/{{ posicion.codigo  }}_1.jpg"
-          alt="Photo of a Shiba Inu">
+          alt="Imagen del articulo">
   
         <mat-card-content>
     
@@ -49,9 +49,55 @@
             </ng-container>
           </div>
     
-          <mat-form-field class="example-full-width">
-            <textarea matInput placeholder="Observaciones" name="observaciones" [(ngModel)]="observaciones"></textarea>
-          </mat-form-field>
+         
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Stocks
+                </mat-panel-title>
+                <mat-panel-description>
+                   Visualizar stocks del articulo
+                  <mat-icon>storage</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+          
+              <ng-template matExpansionPanelContent>
+                Some deferred content
+                <mat-form-field>
+                  <input matInput placeholder="First name">
+                </mat-form-field>
+            
+                <mat-form-field>
+                  <input matInput type="number" min="1" placeholder="Age">
+                </mat-form-field>
+            
+              </ng-template>
+              
+             
+            </mat-expansion-panel>
+          
+            <mat-expansion-panel [expanded]="step === 1" (opened)="obtenerEans()" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Eans
+                </mat-panel-title>
+                <mat-panel-description>
+                  Eans del articulo
+                  <mat-icon>scanner</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-list dense> 
+                  <mat-list-item *ngFor="let ean of eansArticulo"  class="mat-typography"> {{ ean.ean }}  </mat-list-item>
+                 </mat-list>
+              </ng-template>
+              
+          
+            </mat-expansion-panel>
+
+          </mat-accordion>
+
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button color="primary" (click)="goBack()">Volver</button>

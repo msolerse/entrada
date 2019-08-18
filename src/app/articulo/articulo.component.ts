@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatosArticulo } from '../_entities/DatosArticulo';
+import { Ean } from '../_entities/Ean';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AlertService } from '../_services/alert.service';
@@ -15,10 +16,15 @@ import { Element } from '../Element';
 
 export class ArticuloComponent implements OnInit {
 
+
   idPosicion: number;
   posicion: Element;
   datosArticulo: DatosArticulo;
   routingSubscription: any;
+  step: number;
+  eansArticulo: Ean[] = [];
+
+
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -58,6 +64,31 @@ export class ArticuloComponent implements OnInit {
     });
   }
 
+  setStep(index: number) {
+    this.step = index;
+  }
+
+
+  obtenerEans() {
+    this.setStep(1);
+
+    
+    this.eansArticulo = this.service.eansArticulos.filter(row => +row.codigo == +this.posicion.codigo);
+
+    if (this.eansArticulo.length == 0)  {
+      this.service.obtenerEans(this.posicion.codigo, this.service.currCentro).subscribe(data => {
+
+        switch (+data.codigo) {
+          case 0:
+            this.eansArticulo = data.eansArticulo;
+            console.log(JSON.stringify(this.service.eansArticulos))
+          default:
+            this.alert.sendAlert('Error al obtener los Eans.', AlertType.Error);
+            break;
+        }
+      });
+    }
+  }
 
   goBack(): void {
 
