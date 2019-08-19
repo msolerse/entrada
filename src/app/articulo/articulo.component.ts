@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatosArticulo } from '../_entities/DatosArticulo';
 import { Ean } from '../_entities/Ean';
+import { Stock } from '../_entities/Stock';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AlertService } from '../_services/alert.service';
@@ -23,6 +24,7 @@ export class ArticuloComponent implements OnInit {
   routingSubscription: any;
   step: number;
   eansArticulo: Ean[] = [];
+  stockArticulo: Stock;
 
 
 
@@ -68,6 +70,25 @@ export class ArticuloComponent implements OnInit {
     this.step = index;
   }
 
+  obtenerStock() {
+    this.setStep(0);
+
+    this.stockArticulo = this.service.stocks.filter(row => +row.codigo == +this.posicion.codigo)[0];
+
+    if (!(this.stockArticulo))  {
+      this.service.obtenerStock(this.posicion.codigo, this.service.currCentro).subscribe(data => {
+
+        switch (+data.codigo) {
+          case 0:
+            this.stockArticulo = data.stock;
+            console.log(JSON.stringify(this.service.stock));
+          default:
+            this.alert.sendAlert('Error al obtener los stocks.', AlertType.Error);
+            break;
+        }
+      });
+    }
+  }
 
   obtenerEans() {
     this.setStep(1);

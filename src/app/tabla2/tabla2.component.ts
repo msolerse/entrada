@@ -30,20 +30,22 @@ export class Tabla2Component {
   ];
 
   posiciones: Element[];
-  displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
-
+ 
   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 
+  displayedColumns: string[] ;
   idPedido: string;
   albaran: string;
   codCentro: string;
   routingSubscription: any;
+  tipoMov: string;
 
   newCodigo: string;
   newName: string;
   newSymbol: string;
   newComment: number;
+  newMotivo: string;
 
   isExpanded: boolean;
   showAlbaran: boolean;
@@ -58,7 +60,7 @@ export class Tabla2Component {
   constructor(private route: ActivatedRoute,
     private router: Router, private service: Tabla2Service,
     private alert: AlertService, public dialog: MatDialog,
-    private search: SearchArticuloService) { }
+    private search: SearchArticuloService ) { }
 
 
   ngOnInit() {
@@ -68,8 +70,17 @@ export class Tabla2Component {
       this.codCentro = params["codCentro"];
       this.service.currCentro = this.codCentro;
       this.albaran = params["albaran"];
+      this.tipoMov = params["tipoMov"];
+
+      if (  this.tipoMov == '002')
+       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];}
+      else
+       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
+
     });
 
+    console.log ('this.idPedido='+this.idPedido);
+    console.log ('this.service.currPedido=' + this.service.currPedido) ;
     if (this.idPedido == this.service.currPedido) {
       console.log("pedido igual , agafem posicions en memoria");
       this.posiciones = this.service.currPosiciones;
@@ -103,6 +114,7 @@ export class Tabla2Component {
   
           this.posiciones = [];
           this.service.currAlbaran = this.albaran;
+          this.service.currPedido = this.idPedido;
           this.isExpanded = true;
         }
         this.dataSource = new ExampleDataSource(this.posiciones);
@@ -149,12 +161,13 @@ export class Tabla2Component {
   }
 
   anyadir() {
-    this.addPosicion(this.newCodigo, this.newName, this.newSymbol, this.newComment);
+    this.addPosicion(this.newCodigo, this.newName, this.newSymbol, this.newComment, this.newMotivo);
     console.log("vaig a borrar");
     this.newCodigo = '';
     this.newName = '';
     this.newSymbol = '';
     this.newComment = 0;
+    this.newMotivo = '';
 
   }
 
@@ -162,7 +175,7 @@ export class Tabla2Component {
     this.router.navigate(['search-articulo']);
   }
 
-  addPosicion(codigo: string, name: string, symbol: string, comment: number) {
+  addPosicion(codigo: string, name: string, symbol: string, comment: number, motivo: string) {
 
     let maxId: number;
 
@@ -180,7 +193,8 @@ export class Tabla2Component {
       symbol: symbol,
       cantref: comment,
       comment: comment,
-      dif: 0
+      dif: 0,
+      motivo: motivo
     });
 
     const copy = this.entireDataSource.data().filter(row => row);
@@ -197,7 +211,7 @@ export class Tabla2Component {
     //const copy = this.dataSource.data().slice()
     const copy = this.entireDataSource.data().slice()
     el.comment = comment;
-    el.dif = el.cantref - el.comment;
+    el.dif = el.comment - el.cantref ;
     // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();
@@ -218,7 +232,7 @@ export class Tabla2Component {
 
     const dialogRef = this.dialog.open(AddRowDialog, {
       width: '400px',
-      data: { codCentro: this.codCentro }
+      data: { tipoMov: this.tipoMov, codCentro: this.codCentro }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -227,7 +241,8 @@ export class Tabla2Component {
         result.codigo,
         result.name,
         result.symbol,
-        result.comment);
+        result.comment,
+        result.motivo);
 
     });
 
@@ -292,11 +307,13 @@ export class ExampleDataSource extends DataSource<any> {
 }
 
 export interface DialogData {
+  tipoMov: string;
   codCentro: string;
   codigo: string;
   name: string;
   symbol: string;
   comment: number;
+  motivo: string;
 }
 
 export interface Uni {
@@ -324,7 +341,10 @@ export class AddRowDialog {
     public dialogRef: MatDialogRef<AddRowDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private service: Tabla2Service,
-    private alert: AlertService) { }
+    private alert: AlertService) {
+
+      console.log("tipoMov= "+ data.tipoMov);
+     }
 
   onNoClick(): void {
     this.dialogRef.close();

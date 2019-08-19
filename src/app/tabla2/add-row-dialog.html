@@ -22,10 +22,21 @@
         </mat-option>
       </mat-select>
   </mat-form-field>  
+ 
   <mat-form-field  class="example-full-width">
       <mat-label>Cantidad</mat-label>
     <input matInput placeholder="cantidad"   [(ngModel)]="data.comment">
   </mat-form-field>   
+
+  <mat-form-field  *ngIf="data.tipoMov == 002" class="example-full-width">
+    <mat-label>Motivo</mat-label>
+    <mat-select name="Motivo" [(ngModel)]=data.motivo>
+      <mat-option *ngFor="let food of foods" [value]="food.value">
+        {{food.viewValue}}
+      </mat-option>
+    </mat-select>
+</mat-form-field>  
+
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">Cancelar</button>

@@ -8,6 +8,7 @@ import { Element } from './Element';
 import 'rxjs/add/operator/timeout';
 import { DatosArticulo } from './_entities/DatosArticulo';
 import { Ean } from './_entities/Ean';
+import { Stock } from './_entities/Stock';
 
 @Injectable({
    providedIn: 'root'
@@ -24,6 +25,8 @@ export class Tabla2Service {
    public datosArticulos: DatosArticulo[] = [];
    public eansArticulos: Ean[] = [];
    public currCentro: string;
+   public stock: Stock;
+   public stocks: Stock[] = [];
 
    obtenerPosiciones(idPedido: string, albaran: string,
       codCentro: string): Observable<any> {
@@ -287,7 +290,7 @@ export class Tabla2Service {
    obtenerEans(codigo: string,
       codCentro: string): Observable<any> {
 
-    
+
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
@@ -356,15 +359,15 @@ export class Tabla2Service {
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
 
-                 if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+               if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
                   eansArticulo.push(new Ean(
                      detalle[0].innerHTML, //codigo
                      detalle[3].innerHTML, //Ean
                   ));
-                  this.eansArticulos.push(new Ean(
-                     detalle[0].innerHTML, //codigo
-                     detalle[3].innerHTML, //Ean
-                  ));
+               this.eansArticulos.push(new Ean(
+                  detalle[0].innerHTML, //codigo
+                  detalle[3].innerHTML, //Ean
+               ));
             });
 
             let codigo;
@@ -374,8 +377,8 @@ export class Tabla2Service {
                codigo = +detalle2[2].innerHTML;
             });
             //console.log( "codigo= " + codigo);
-            
-           
+
+
             return {
                codigo: codigo,
                eansArticulo: eansArticulo
@@ -385,6 +388,339 @@ export class Tabla2Service {
             catchError(this.handleError)
          );
    }
+
+   obtenerStock(codigo: string,
+      codCentro: string): Observable<any> {
+
+      let url = 'http://localhost:8088/mockZ_GET_STOCK_MATERIALES'
+      let body = `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <urn:ZGetStockMateriales>
+            <!--Optional:-->
+            <ILoadOtrosStocks>X</ILoadOtrosStocks>
+            <!--Optional:-->
+            <IOnlyMinimoMaximo></IOnlyMinimoMaximo>
+            <IWerks>0021</IWerks>
+            <TiMateriales>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <Mandt></Mandt>
+                  <Matnr>2813</Matnr>
+                  <Ersda></Ersda>
+                  <Ernam></Ernam>
+                  <Laeda></Laeda>
+                  <Aenam></Aenam>
+                  <Vpsta></Vpsta>
+                  <Pstat></Pstat>
+                  <Lvorm></Lvorm>
+                  <Mtart></Mtart>
+                  <Mbrsh></Mbrsh>
+                  <Matkl></Matkl>
+                  <Bismt></Bismt>
+                  <Meins></Meins>
+                  <Bstme></Bstme>
+                  <Zeinr></Zeinr>
+                  <Zeiar></Zeiar>
+                  <Zeivr></Zeivr>
+                  <Zeifo></Zeifo>
+                  <Aeszn></Aeszn>
+                  <Blatt></Blatt>
+                  <Blanz></Blanz>
+                  <Ferth></Ferth>
+                  <Formt></Formt>
+                  <Groes></Groes>
+                  <Wrkst></Wrkst>
+                  <Normt></Normt>
+                  <Labor></Labor>
+                  <Ekwsl></Ekwsl>
+                  <Brgew></Brgew>
+                  <Ntgew></Ntgew>
+                  <Gewei></Gewei>
+                  <Volum></Volum>
+                  <Voleh></Voleh>
+                  <Behvo></Behvo>
+                  <Raube></Raube>
+                  <Tempb></Tempb>
+                  <Disst></Disst>
+                  <Tragr></Tragr>
+                  <Stoff></Stoff>
+                  <Spart></Spart>
+                  <Kunnr></Kunnr>
+                  <Eannr></Eannr>
+                  <Wesch></Wesch>
+                  <Bwvor></Bwvor>
+                  <Bwscl></Bwscl>
+                  <Saiso></Saiso>
+                  <Etiar></Etiar>
+                  <Etifo></Etifo>
+                  <Entar></Entar>
+                  <Ean11></Ean11>
+                  <Numtp></Numtp>
+                  <Laeng></Laeng>
+                  <Breit></Breit>
+                  <Hoehe></Hoehe>
+                  <Meabm></Meabm>
+                  <Prdha></Prdha>
+                  <Aeklk></Aeklk>
+                  <Cadkz></Cadkz>
+                  <Qmpur></Qmpur>
+                  <Ergew></Ergew>
+                  <Ergei></Ergei>
+                  <Ervol></Ervol>
+                  <Ervoe></Ervoe>
+                  <Gewto></Gewto>
+                  <Volto></Volto>
+                  <Vabme></Vabme>
+                  <Kzrev></Kzrev>
+                  <Kzkfg></Kzkfg>
+                  <Xchpf></Xchpf>
+                  <Vhart></Vhart>
+                  <Fuelg></Fuelg>
+                  <Stfak></Stfak>
+                  <Magrv></Magrv>
+                  <Begru></Begru>
+                  <Datab></Datab>
+                  <Liqdt></Liqdt>
+                  <Saisj></Saisj>
+                  <Plgtp></Plgtp>
+                  <Mlgut></Mlgut>
+                  <Extwg></Extwg>
+                  <Satnr></Satnr>
+                  <Attyp></Attyp>
+                  <Kzkup></Kzkup>
+                  <Kznfm></Kznfm>
+                  <Pmata></Pmata>
+                  <Mstae></Mstae>
+                  <Mstav></Mstav>
+                  <Mstde></Mstde>
+                  <Mstdv></Mstdv>
+                  <Taklv></Taklv>
+                  <Rbnrm></Rbnrm>
+                  <Mhdrz></Mhdrz>
+                  <Mhdhb></Mhdhb>
+                  <Mhdlp></Mhdlp>
+                  <Inhme></Inhme>
+                  <Inhal></Inhal>
+                  <Vpreh></Vpreh>
+                  <Etiag></Etiag>
+                  <Inhbr></Inhbr>
+                  <Cmeth></Cmeth>
+                  <Cuobf></Cuobf>
+                  <Kzumw></Kzumw>
+                  <Kosch></Kosch>
+                  <Sprof></Sprof>
+                  <Nrfhg></Nrfhg>
+                  <Mfrpn></Mfrpn>
+                  <Mfrnr></Mfrnr>
+                  <Bmatn></Bmatn>
+                  <Mprof></Mprof>
+                  <Kzwsm></Kzwsm>
+                  <Saity></Saity>
+                  <Profl></Profl>
+                  <Ihivi></Ihivi>
+                  <Iloos></Iloos>
+                  <Serlv></Serlv>
+                  <Kzgvh></Kzgvh>
+                  <Xgchp></Xgchp>
+                  <Kzeff></Kzeff>
+                  <Compl></Compl>
+                  <Iprkz></Iprkz>
+                  <Rdmhd></Rdmhd>
+                  <Przus></Przus>
+                  <MtposMara></MtposMara>
+                  <Bflme></Bflme>
+                  <Matfi></Matfi>
+                  <Cmrel></Cmrel>
+                  <Bbtyp></Bbtyp>
+                  <SledBbd></SledBbd>
+                  <GtinVariant></GtinVariant>
+                  <Gennr></Gennr>
+                  <Rmatp></Rmatp>
+                  <GdsRelevant></GdsRelevant>
+                  <Weora></Weora>
+                  <HutypDflt></HutypDflt>
+                  <Pilferable></Pilferable>
+                  <Whstc></Whstc>
+                  <Whmatgr></Whmatgr>
+                  <Hndlcode></Hndlcode>
+                  <Hazmat></Hazmat>
+                  <Hutyp></Hutyp>
+                  <TareVar></TareVar>
+                  <Maxc></Maxc>
+                  <MaxcTol></MaxcTol>
+                  <Maxl></Maxl>
+                  <Maxb></Maxb>
+                  <Maxh></Maxh>
+                  <MaxdimUom></MaxdimUom>
+                  <Herkl></Herkl>
+                  <Mfrgr></Mfrgr>
+                  <Qqtime></Qqtime>
+                  <Qqtimeuom></Qqtimeuom>
+                  <Qgrp></Qgrp>
+                  <Serial></Serial>
+                  <PsSmartform></PsSmartform>
+                  <Logunit></Logunit>
+                  <Cwqrel></Cwqrel>
+                  <Cwqproc></Cwqproc>
+                  <Cwqtolgr></Cwqtolgr>
+                  <Adprof></Adprof>
+                  <AnimalOrigin></AnimalOrigin>
+                  <TextileCompInd></TextileCompInd>
+                  <_-bev1_-luleinh></_-bev1_-luleinh>
+                  <_-bev1_-luldegrp></_-bev1_-luldegrp>
+                  <_-bev1_-nestruccat></_-bev1_-nestruccat>
+                  <_-dsd_-slToltyp></_-dsd_-slToltyp>
+                  <_-dsd_-svCntGrp></_-dsd_-svCntGrp>
+                  <_-dsd_-vcGroup></_-dsd_-vcGroup>
+                  <_-vso_-rTiltInd></_-vso_-rTiltInd>
+                  <_-vso_-rStackInd></_-vso_-rStackInd>
+                  <_-vso_-rBotInd></_-vso_-rBotInd>
+                  <_-vso_-rTopInd></_-vso_-rTopInd>
+                  <_-vso_-rStackNo></_-vso_-rStackNo>
+                  <_-vso_-rPalInd></_-vso_-rPalInd>
+                  <_-vso_-rPalOvrD></_-vso_-rPalOvrD>
+                  <_-vso_-rPalOvrW></_-vso_-rPalOvrW>
+                  <_-vso_-rPalBHt></_-vso_-rPalBHt>
+                  <_-vso_-rPalMinH></_-vso_-rPalMinH>
+                  <_-vso_-rTolBHt></_-vso_-rTolBHt>
+                  <_-vso_-rNoPGvh></_-vso_-rNoPGvh>
+                  <_-vso_-rQuanUnit></_-vso_-rQuanUnit>
+                  <_-vso_-rKzgvhInd></_-vso_-rKzgvhInd>
+                  <Packcode></Packcode>
+                  <DgPackStatus></DgPackStatus>
+                  <Mcond></Mcond>
+                  <Retdelc></Retdelc>
+                  <LoglevReto></LoglevReto>
+                  <Nsnid></Nsnid>
+                  <Imatn></Imatn>
+                  <Picnum></Picnum>
+                  <Bstat></Bstat>
+                  <ColorAtinn></ColorAtinn>
+                  <Size1Atinn></Size1Atinn>
+                  <Size2Atinn></Size2Atinn>
+                  <Color></Color>
+                  <Size1></Size1>
+                  <Size2></Size2>
+                  <FreeChar></FreeChar>
+                  <CareCode></CareCode>
+                  <BrandId></BrandId>
+                  <FiberCode1></FiberCode1>
+                  <FiberPart1></FiberPart1>
+                  <FiberCode2></FiberCode2>
+                  <FiberPart2></FiberPart2>
+                  <FiberCode3></FiberCode3>
+                  <FiberPart3></FiberPart3>
+                  <FiberCode4></FiberCode4>
+                  <FiberPart4></FiberPart4>
+                  <FiberCode5></FiberCode5>
+                  <FiberPart5></FiberPart5>
+                  <Fashgrd></Fashgrd>
+                  <Zzfraccionable></Zzfraccionable>
+                  <Zzobsequio></Zzobsequio>
+                  <Zzdenominacion></Zzdenominacion>
+                  <Zzcalibre></Zzcalibre>
+                  <Zzcategoria></Zzcategoria>
+                  <Zztipoalcohol></Zztipoalcohol>
+                  <Zzlitros></Zzlitros>
+                  <Zzgrados></Zzgrados>
+                  <Zzepigrafe></Zzepigrafe>
+                  <Zziddeposito></Zziddeposito>
+                  <Zzproddescat></Zzproddescat>
+                  <Zzraae></Zzraae>
+                  <Zzcomposicion></Zzcomposicion>
+                  <Zzdevol></Zzdevol>
+                  <Zzclasaran></Zzclasaran>
+                  <Zzpartent></Zzpartent>
+                  <Zzulitros></Zzulitros>
+                  <Zzugrados></Zzugrados>
+                  <ZzfactorNeto></ZzfactorNeto>
+                  <Zzlote></Zzlote>
+                  <ZzfecVolumetria></ZzfecVolumetria>
+                  <Zzaiem></Zzaiem>
+                  <Zzgrplato></Zzgrplato>
+                  <Zzpadre></Zzpadre>
+                  <Zzprioridad></Zzprioridad>
+                  <Zzagregar></Zzagregar>
+               </item>
+            </TiMateriales>
+            <ToStock>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <Werks></Werks>
+                  <Lgort></Lgort>
+                  <Matnr></Matnr>
+                  <Labst></Labst>
+                  <StockCompra></StockCompra>
+                  <StockVenta></StockVenta>
+                  <Prwog></Prwog>
+                  <Prwug></Prwug>
+                  <UnidadBase></UnidadBase>
+                  <Sobst></Sobst>
+                  <StockSeguridad></StockSeguridad>
+                  <CoberturaObjetivo></CoberturaObjetivo>
+                  <StockActual></StockActual>
+                  <EntradasPrevistas></EntradasPrevistas>
+                  <StockPrevisto></StockPrevisto>
+                  <NecesidadReapro></NecesidadReapro>
+                  <Ciclo></Ciclo>
+                  <DescripcionCiclo></DescripcionCiclo>
+                  <StockEnCurso></StockEnCurso>
+                  <PuntoPedido></PuntoPedido>
+                  <StockTransito></StockTransito>
+                  <StockExpedido></StockExpedido>
+                  <StockProforma></StockProforma>
+                  <StockPedido></StockPedido>
+               </item>
+            </ToStock>
+         </urn:ZGetStockMateriales>
+      </soapenv:Body>
+   </soapenv:Envelope>
+      `;
+
+      return this.http.post(url, body, { responseType: 'text' })
+         .map(data => {
+            //console.log(data);
+            //let x2js = require('x2js');
+            let x2js = new X2JS();
+            let dom = x2js.xml2dom(data);
+
+
+            let itemsDOM = Array.from(dom.getElementsByTagName('ToStock')[0].children);
+
+            let codigo = 4;
+            itemsDOM.forEach(item => {
+               let detalle = Array.from(item.children);
+
+               if (detalle[2].innerHTML !== '' && detalle[2].innerHTML !== '0') {
+                  codigo = 0;
+                  this.stock = new Stock(
+                     detalle[2].innerHTML, //codigo
+                     +detalle[5].innerHTML, // stock venta
+                     +detalle[19].innerHTML // stock pedido
+                  );
+               }
+
+
+            });
+
+            this.stocks.push(this.stock);
+
+            //console.log( "codigo= " + codigo);
+
+
+            return {
+               codigo: codigo,
+               stock: this.stock
+            };
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
+   }
+
+
 
 
 

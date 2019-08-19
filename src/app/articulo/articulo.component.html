@@ -51,7 +51,7 @@
     
          
           <mat-accordion class="example-headers-align">
-            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+            <mat-expansion-panel [expanded]="step === 0" (opened)="obtenerStock()" hideToggle>
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Stocks
@@ -62,17 +62,20 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
           
-              <ng-template matExpansionPanelContent>
-                Some deferred content
-                <mat-form-field>
-                  <input matInput placeholder="First name">
+             
+              <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
+              fxLayoutAlign="flex-start">
+              
+                <mat-form-field *ngIf="stockArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                  <input matInput readonly placeholder="Stock" name="Stock" [(ngModel)]="stockArticulo.stockVenta">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="stockArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                  <input matInput readonly placeholder="Nuv. Stock" name="nuvStock" [(ngModel)]="stockArticulo.stockPedido">
                 </mat-form-field>
             
-                <mat-form-field>
-                  <input matInput type="number" min="1" placeholder="Age">
-                </mat-form-field>
-            
-              </ng-template>
+              
+              </div>
               
              
             </mat-expansion-panel>

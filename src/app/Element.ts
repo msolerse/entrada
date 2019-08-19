@@ -7,6 +7,7 @@ export class Element {
     public cantref?: number,
     public comment?: number,
     public dif?: number,
+    public motivo?: string,
    )
 {  }
 }
