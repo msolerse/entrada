@@ -16,8 +16,8 @@
 
 
         <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
-          <input matInput placeholder="Documento" name="documento"
-          [(ngModel)]="documento">
+          <input id="documento" matInput placeholder="Documento" name="documento" 
+          [(ngModel)]="documento"   required minlength="4">
           
         </mat-form-field>
 
@@ -57,6 +57,17 @@
         <button mat-raised-button color="primary" (click)="goValidacion()" >Posiciones</button>
 
       </mat-card> 
+<!-- 
+      <div *ngIf="documento.invalid && (documento.dirty || documento.touched)"
+      class="alert alert-danger">
   
+    <div *ngIf="documento.errors.required">
+      Documento is required.
+    </div>
+    <div *ngIf="documento.errors.minlength">
+      Documento must be at least 4 characters long.
+    </div>
+  </div>
+   -->
 </form>
 
