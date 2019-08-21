@@ -9,7 +9,7 @@
             <mat-label>Tipo movimiento</mat-label>
             <mat-select name="tipoMov" [(ngModel)]=tipoMov (ngModelChange)="onTipMovSelection()" > 
               <mat-option *ngFor="let mov of tiposMov" [value]="mov.tipMov" >
-                    {{mov.desTipMov}}
+                    {{mov.desTipMov }}
               </mat-option>
             </mat-select>
           </mat-form-field>

@@ -9,6 +9,7 @@ import 'rxjs/add/operator/timeout';
 import { DatosArticulo } from './_entities/DatosArticulo';
 import { Ean } from './_entities/Ean';
 import { Stock } from './_entities/Stock';
+import { Motivo } from './_entities/Motivo';
 
 @Injectable({
    providedIn: 'root'
@@ -16,6 +17,7 @@ import { Stock } from './_entities/Stock';
 export class Tabla2Service {
 
    codigo: string;
+   codMotivo: string;
 
    constructor(private http: HttpClient) { }
 
@@ -23,6 +25,7 @@ export class Tabla2Service {
    public currAlbaran: string;
    public currPosiciones: Element[];
    public datosArticulos: DatosArticulo[] = [];
+   public motivosMov: Motivo[] = [];
    public eansArticulos: Ean[] = [];
    public currCentro: string;
    public stock: Stock;
@@ -719,6 +722,102 @@ export class Tabla2Service {
             catchError(this.handleError)
          );
    }
+
+
+   obtenerMotivos(): Observable<any> {
+      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
+      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let body = `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <urn:ZWD_MM_MATCH_MOTIVO_MOV>
+            <!--Optional:-->
+            <I_BWART></I_BWART>
+            <!--Optional:-->
+            <I_LOAD_NOSAP_MOTIV>X</I_LOAD_NOSAP_MOTIV>
+            <!--Optional:-->
+            <I_MOV_BACKOFF>002</I_MOV_BACKOFF>
+            <TO_FOUND_MOV>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <MANDT></MANDT>
+                  <SPRAS></SPRAS>
+                  <BWART></BWART>
+                  <GRUND></GRUND>
+                  <GRTXT></GRTXT>
+               </item>
+            </TO_FOUND_MOV>
+            <!--Optional:-->
+            <TO_RETURN>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <TYPE></TYPE>
+                  <ID></ID>
+                  <NUMBER></NUMBER>
+                  <MESSAGE></MESSAGE>
+                  <LOG_NO></LOG_NO>
+                  <LOG_MSG_NO></LOG_MSG_NO>
+                  <MESSAGE_V1></MESSAGE_V1>
+                  <MESSAGE_V2></MESSAGE_V2>
+                  <MESSAGE_V3></MESSAGE_V3>
+                  <MESSAGE_V4></MESSAGE_V4>
+                  <PARAMETER></PARAMETER>
+                  <ROW></ROW>
+                  <FIELD></FIELD>
+                  <SYSTEM></SYSTEM>
+               </item>
+            </TO_RETURN>
+         </urn:ZWD_MM_MATCH_MOTIVO_MOV>
+      </soapenv:Body>
+   </soapenv:Envelope>
+   `;
+
+      return this.http.post(url, body, { responseType: 'text' })
+         .map(data => {
+
+           //console.log(data);
+            let x2js = new X2JS();
+            let dom = x2js.xml2dom(data);
+
+
+            // obtener tipos  movimiento
+            let itemsDOM = Array.from(dom.getElementsByTagName('TO_FOUND_MOV')[0].children);
+
+
+            itemsDOM.forEach(item => {
+               let detalle = Array.from(item.children);
+
+               if ((detalle[3].innerHTML !== '') && (detalle[3].innerHTML !== '0')) {
+
+                  this.motivosMov.push(new Motivo(
+                     detalle[3].innerHTML,
+                     detalle[4].innerHTML,
+                     
+                  ));
+               }
+            });
+
+            
+            console.log( JSON.stringify(this.motivosMov));
+
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
+            itemsDOM2.forEach(item => {
+               let detalle2 = Array.from(item.children);
+               this.codMotivo = detalle2[2].innerHTML;
+            });
+
+
+            return {
+               motivosMov: this.motivosMov,
+               codigo: this.codMotivo,
+            };
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
+   }
+
 
 
 

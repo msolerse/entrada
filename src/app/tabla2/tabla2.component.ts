@@ -8,13 +8,10 @@ import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatosArticulo } from '../_entities/DatosArticulo';
+import { Motivo } from '../_entities/Motivo';
 import { SearchArticuloService } from '../search-articulo/search-articulo.service';
 import { isUndefined } from 'util';
 
-export interface Food {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-tabla2',
@@ -23,11 +20,8 @@ export interface Food {
 })
 export class Tabla2Component {
 
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
-  ];
+  motivos: Motivo[] =  [{ value: '12', viewValue: 'UN' },
+  { value: '13', viewValue: 'CJ' }];
 
   posiciones: Element[];
  
@@ -73,7 +67,27 @@ export class Tabla2Component {
       this.tipoMov = params["tipoMov"];
 
       if (  this.tipoMov == '002')
-       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];}
+       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
+      
+       if ( this.service.motivosMov.length != 0) {
+        console.log("this.service.motivos="+ this.service.motivosMov);
+          this.motivos = this.service.motivosMov; }
+       else  {
+         this.service.obtenerMotivos().subscribe(data => {
+
+          console.log("codigo="+ +data.codigo);
+          switch (+data.codigo) {
+            case 0:
+              
+              this.motivos = data.motivosMov;
+              console.log("this.motivos="+JSON.stringify(this.motivos));
+            default:
+              this.alert.sendAlert('Error al obtener los Motivos.', AlertType.Error);
+              break;
+          }
+        });
+       }     
+      }
       else
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
 
@@ -138,8 +152,7 @@ export class Tabla2Component {
     else
         {  this.showAlbaran = false; }
 
-        console.log("aLbaran ="+ this.albaran);  
-        console.log("showALbaran ="+ this.showAlbaran);  
+   
   }
 
   public changeCodigo() {

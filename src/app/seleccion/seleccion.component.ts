@@ -144,6 +144,8 @@ export class SeleccionComponent implements OnInit {
 
     if (this.tipoMov != '001')
       this.tipoDoc = this.tiposRef[0].tipDocRef;
+
+      
   }
 
   cargarTiposRef(tipMov: string) {
