@@ -1,73 +1,77 @@
+<form novalidate
+      #f="ngForm">
+  <mat-card>
+    <mat-card-title>
+      {{ descCentro }}
+    </mat-card-title>
+    <mat-form-field class="example-full-width">
+      <mat-label>Tipo movimiento</mat-label>
+      <mat-select name="tipoMov" [(ngModel)]=tipoMov (ngModelChange)="onTipMovSelection()">
+        <mat-option *ngFor="let mov of tiposMov" [value]="mov.tipMov">
+          {{mov.desTipMov }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <form >
-        <mat-card>  
-          <mat-card-title>
-          {{ descCentro }}
-          </mat-card-title>
-        <mat-form-field 
-        class="example-full-width">
-            <mat-label>Tipo movimiento</mat-label>
-            <mat-select name="tipoMov" [(ngModel)]=tipoMov (ngModelChange)="onTipMovSelection()" > 
-              <mat-option *ngFor="let mov of tiposMov" [value]="mov.tipMov" >
-                    {{mov.desTipMov }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
 
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
+      <input id="documento" matInput class="form-control" placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
+      minlength="4">
 
-        <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
-          <input id="documento" matInput placeholder="Documento" name="documento" 
-          [(ngModel)]="documento"   required minlength="4">
-          
-        </mat-form-field>
+    </mat-form-field>
 
-        <mat-form-field  class="example-full-width" *ngIf="tipoMov != 001">
-          <mat-label>Tipo documento</mat-label>
-          <mat-select name="tipoDoc" [(ngModel)]=tipoDoc>
-            <mat-option *ngFor="let food of tiposRef" [value]="food.tipDocRef">
-              {{food.desDocRef}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+    <div *ngIf="f.form.controls.documento?.invalid && (f.form.controls.documento?.dirty || f.form.controls.documento?.touched)" class="alert alert-danger">
 
-        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
-        fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
-        <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)" fxFlex.lt-sm="100%">
-            <input matInput placeholder="Proveedor" name="proveedor" 
-            [(ngModel)]="proveedor" (change)= "changeProveedor()">
-          </mat-form-field>
-            <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(75% - 5px)" fxFlex.lt-sm="100%">
-              <input matInput readonly placeholder="Nombre" name="nombre"
-              [(ngModel)]="nombre">  
-          </mat-form-field>
+      <div *ngIf="f.form.controls.documento?.errors.required">
+        El número de documento es obligatorio
+      </div>
+    </div>
+
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
+      <mat-label>Tipo documento</mat-label>
+      <mat-select name="tipoDoc" [(ngModel)]=tipoDoc>
+        <mat-option *ngFor="let food of tiposRef" [value]="food.tipDocRef">
+          {{food.desDocRef}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
+      fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
+      <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)"
+        fxFlex.lt-sm="100%">
+        <input id="proveedor" matInput placeholder="Proveedor" class="form-control" name="proveedor" [(ngModel)]="model.proveedor" (change)="changeProveedor()" required>
+      </mat-form-field>
+      <div *ngIf="f.form.controls.proveedor?.invalid && (f.form.controls.proveedor?.dirty || f.form.controls.proveedor?.touched)" class="alert alert-danger">
+
+        <div *ngIf="f.form.controls.proveedor?.errors.required">
+          El código de proveedor es obligatorio
         </div>
-        <mat-form-field class="example-full-width" *ngIf="tipoMov != 002">
-            <input matInput placeholder="Albarán" name="albaran"
-            [(ngModel)]="albaran">
-            
-          </mat-form-field>
-      
-        <mat-form-field class="example-full-width">
-          <textarea matInput placeholder="Observaciones"
-          name="observaciones" [(ngModel)]="observaciones"></textarea>
-        </mat-form-field>
-      </mat-card> 
-      <mat-card>
-        <button mat-raised-button>Salir</button> 
-        <button mat-raised-button color="primary" (click)="goValidacion()" >Posiciones</button>
+      </div>
+      <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(75% - 5px)"
+        fxFlex.lt-sm="100%">
+        <input matInput readonly placeholder="Nombre" class="form-control" name="nombre" [(ngModel)]="nombre">
+      </mat-form-field>
+    </div>
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != 002">
+      <input id="albaran" matInput  placeholder="Albarán" class="form-control" name="albaran" [(ngModel)]="model.albaran" required>
+    </mat-form-field>
+    <div *ngIf="f.form.controls.albaran?.invalid && (f.form.controls.albaran?.dirty || f.form.controls.albaran?.touched)" class="alert alert-danger">
 
-      </mat-card> 
-<!-- 
-      <div *ngIf="documento.invalid && (documento.dirty || documento.touched)"
-      class="alert alert-danger">
-  
-    <div *ngIf="documento.errors.required">
-      Documento is required.
+      <div *ngIf="f.form.controls.albaran?.errors.required">
+        El número de albarán es obligatorio
+      </div>
     </div>
-    <div *ngIf="documento.errors.minlength">
-      Documento must be at least 4 characters long.
-    </div>
-  </div>
-   -->
+
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Observaciones" name="observaciones" [(ngModel)]="model.observaciones"></textarea>
+    </mat-form-field>
+  </mat-card>
+  <mat-card>
+    <button mat-raised-button>Salir</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid" (click)="goValidacion()">Posiciones</button>
+
+  </mat-card>
+
+
 </form>
-

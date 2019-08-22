@@ -1,18 +1,24 @@
+<form novalidate
+      #f="ngForm">
 <h1 mat-dialog-title>Añadir posición</h1>
 <div mat-dialog-content>
    
   <mat-form-field  class="example-full-width" >
       <mat-label>Código</mat-label>
      
-    <input matInput placeholder="código material" name="codigo" [(ngModel)]="data.codigo"
-    (change)= "changeCodigo()">
+    <input id="codigo" matInput placeholder="código material"  class="form-control" name="codigo" [(ngModel)]="data.codigo"
+    (change)= "changeCodigo()" required>
   </mat-form-field>  
-  <!-- <mat-form-field>
-    <input matInput placeholder="countChange" name="countChange" [(ngModel)]="countChange">
-  </mat-form-field>  -->
+  <div *ngIf="f.form.controls.codigo?.invalid && (f.form.controls.codigo?.dirty || f.form.controls.codigo?.touched)" class="alert alert-danger">
+    <div *ngIf="f.form.controls.codigo?.errors.required">
+      El código de material es obligatorio
+    </div>
+  </div>
+
+
   <mat-form-field  class="example-full-width">
       <mat-label>Descripción</mat-label>
-    <input matInput readonly placeholder=""   [(ngModel)]="data.name">
+    <input id="name" matInput readonly placeholder="" name="name"  class="form-control"  [(ngModel)]="data.name">
   </mat-form-field>  
    <mat-form-field  class="example-full-width">
       <mat-label>Unidad</mat-label>
@@ -25,20 +31,33 @@
  
   <mat-form-field  class="example-full-width">
       <mat-label>Cantidad</mat-label>
-    <input matInput placeholder="cantidad"   [(ngModel)]="data.comment">
+    <input id="cantidad" matInput name="cantidad" placeholder="cantidad" class="form-control"  [(ngModel)]="data.comment"
+     required>
   </mat-form-field>   
+
+  <div *ngIf="f.form.controls.cantidad?.invalid && (f.form.controls.cantidad?.dirty || f.form.controls.cantidad?.touched)" class="alert alert-danger">
+    <div *ngIf="f.form.controls.cantidad?.errors.required">
+      El campo cantidad es obligatorio
+    </div>
+  </div>
 
   <mat-form-field  *ngIf="data.tipoMov == 002" class="example-full-width">
     <mat-label>Motivo</mat-label>
-    <mat-select name="Motivo" [(ngModel)]=data.motivo>
-      <mat-option *ngFor="let food of foods" [value]="food.value">
-        {{food.viewValue}}
+    <mat-select id="motivo" name="motivo" [(ngModel)]=data.motivo required>
+      <mat-option *ngFor="let motivo of motivos" [value]="motivo.value">
+        {{motivo.viewValue | titlecase}}
       </mat-option>
     </mat-select>
 </mat-form-field>  
+<div *ngIf="f.form.controls.motivo?.invalid && (f.form.controls.motivo?.dirty || f.form.controls.motivo?.touched)" class="alert alert-danger">
+  <div *ngIf="f.form.controls.motivo?.errors.required">
+    El campo motivo es obligatorio
+  </div>
+</div>
 
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
-  <button mat-raised-button [mat-dialog-close]="data" color = "primary" cdkFocusInitial>Ok</button>
+  <button mat-raised-button (click)="onNoClick()"  cdkFocusInitial>Cancelar</button>
+  <button mat-raised-button [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid">Ok</button>
 </div>
+</form>

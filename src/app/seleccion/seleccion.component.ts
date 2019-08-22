@@ -8,7 +8,7 @@ import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
 import { TiposMov } from '../_entities/TiposMov';
 import { TiposRef } from '../_entities/TiposRef';
-
+import { Seleccion } from '../_entities/Seleccion';
 
 @Component({
   selector: 'app-seleccion',
@@ -20,19 +20,20 @@ export class SeleccionComponent implements OnInit {
   tiposRef: TiposRef[] = [];
   tiposMov: TiposMov[] = [];
 
+  model: Seleccion = new Seleccion('', '', '', '');
 
   codCentro: string;
   descCentro: string;
-  documento: string;
-  albaran: string;
-  proveedor: string;
+  //documento: string;
+  //albaran: string;
+  //proveedor: string;
   nombre: string;
-  observaciones: string;
+  //observaciones: string;
   tipoDoc: string;
   tipoMov: string;
 
   idProceso: string = '001';
-
+  
   constructor(private router: Router,
     private route: ActivatedRoute,
     private service: SeleccionService,
@@ -100,7 +101,7 @@ export class SeleccionComponent implements OnInit {
     //console.log('currAlbaran='+this.service.currAlbaran);
 
     if (this.service.currDocumento) {
-      this.documento = this.service.currDocumento;
+      this.model.documento = this.service.currDocumento;
     }
 
     if (this.service.currTipoMov) {
@@ -114,7 +115,7 @@ export class SeleccionComponent implements OnInit {
 
 
     if (this.service.currProveedor) {
-      this.proveedor = this.service.currProveedor;
+      this.model.proveedor = this.service.currProveedor;
     }
 
     if (this.service.currNombre) {
@@ -122,11 +123,11 @@ export class SeleccionComponent implements OnInit {
     }
 
     if (this.service.currAlbaran) {
-      this.albaran = this.service.currAlbaran;
+      this.model.albaran = this.service.currAlbaran;
     }
 
     if (this.service.currObservaciones) {
-      this.observaciones = this.service.currObservaciones;
+      this.model.observaciones = this.service.currObservaciones;
     }
 
 
@@ -138,9 +139,10 @@ export class SeleccionComponent implements OnInit {
     this.service.currAlbaran = '';
     this.service.currDocumento = '';
     this.service.currProveedor = '';
-    this.albaran='';
-    this.documento='';
-    this.proveedor='';
+    this.model.albaran = '';
+    this.model.documento = '';
+    this.model.proveedor = '';
+    this.nombre = '';
 
     if (this.tipoMov != '001')
       this.tipoDoc = this.tiposRef[0].tipDocRef;
@@ -155,12 +157,12 @@ export class SeleccionComponent implements OnInit {
 
 
   changeProveedor() {
-    this.service.obtenerProveedor(this.proveedor, this.codCentro).subscribe(reply => {
+    this.service.obtenerProveedor(this.model.proveedor, this.codCentro).subscribe(reply => {
       switch (reply.codError) {
         case 0:
           //this.alert.sendAlert(reply.mensaje, AlertType.Success);
           this.nombre = reply.nombre;
-          this.service.obtenerArticulosProv(this.proveedor, this.codCentro).subscribe(reply => {
+          this.service.obtenerArticulosProv(this.model.proveedor, this.codCentro).subscribe(reply => {
             switch (reply.codigo) {
               case 0:
                 console.log("ws datos art prov ok");
@@ -183,22 +185,22 @@ export class SeleccionComponent implements OnInit {
   goValidacion() {
     // guardar valores
 
-    this.service.currDocumento = this.documento;
+    this.service.currDocumento = this.model.documento;
     this.service.currTipoMov = this.tipoMov;
     this.service.currTipoDoc = this.tipoDoc;
-    this.service.currProveedor = this.proveedor;
+    this.service.currProveedor = this.model.proveedor;
     this.service.currNombre = this.nombre;
-    this.service.currAlbaran = this.albaran;
-    this.service.currObservaciones = this.observaciones;
+    this.service.currAlbaran = this.model.albaran;
+    this.service.currObservaciones = this.model.observaciones;
 
     console.log("tipoMov=" + this.tipoMov);
 
     if (this.tipoMov == '001') {
       console.log("canvio document a 0");
-      this.documento = '0';
+      this.model.documento = '0';
     }
 
-    this.router.navigate(['tabla2', this.documento, this.codCentro, { albaran: this.albaran , tipoMov: this.tipoMov }]);
+    this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov }]);
   }
 
 }

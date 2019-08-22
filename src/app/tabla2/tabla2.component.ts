@@ -20,8 +20,7 @@ import { isUndefined } from 'util';
 })
 export class Tabla2Component {
 
-  motivos: Motivo[] =  [{ value: '12', viewValue: 'UN' },
-  { value: '13', viewValue: 'CJ' }];
+  motivos: Motivo[];
 
   posiciones: Element[];
  
@@ -70,12 +69,12 @@ export class Tabla2Component {
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
       
        if ( this.service.motivosMov.length != 0) {
-        console.log("this.service.motivos="+ this.service.motivosMov);
+        //console.log("this.service.motivos="+ this.service.motivosMov);
           this.motivos = this.service.motivosMov; }
        else  {
          this.service.obtenerMotivos().subscribe(data => {
 
-          console.log("codigo="+ +data.codigo);
+          //console.log("codigo="+ +data.codigo);
           switch (+data.codigo) {
             case 0:
               
@@ -249,13 +248,13 @@ export class Tabla2Component {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      if (result) {
       this.addPosicion(
         result.codigo,
         result.name,
         result.symbol,
         result.comment,
-        result.motivo);
+        result.motivo); }
 
     });
 
@@ -327,6 +326,7 @@ export interface DialogData {
   symbol: string;
   comment: number;
   motivo: string;
+  cancel: boolean;
 }
 
 export interface Uni {
@@ -341,7 +341,7 @@ export interface Uni {
 })
 export class AddRowDialog {
 
-  countChange: number = 0;
+  motivos: Motivo[];
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -357,10 +357,13 @@ export class AddRowDialog {
     private alert: AlertService) {
 
       console.log("tipoMov= "+ data.tipoMov);
+      this.data.symbol = 'CJ';
+      this.motivos = this.service.motivosMov;
      }
 
   onNoClick(): void {
-    this.dialogRef.close();
+  
+    this.dialogRef.close( 0 );
   }
 
   public changeCodigo() {
