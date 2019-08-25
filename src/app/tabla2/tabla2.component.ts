@@ -36,7 +36,7 @@ export class Tabla2Component {
 
   newCodigo: string;
   newName: string;
-  newSymbol: string;
+  newSymbol: string = 'CJ';
   newComment: number;
   newMotivo: string;
 
@@ -69,17 +69,14 @@ export class Tabla2Component {
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
       
        if ( this.service.motivosMov.length != 0) {
-        //console.log("this.service.motivos="+ this.service.motivosMov);
           this.motivos = this.service.motivosMov; }
        else  {
          this.service.obtenerMotivos().subscribe(data => {
 
-          //console.log("codigo="+ +data.codigo);
           switch (+data.codigo) {
             case 0:
               
               this.motivos = data.motivosMov;
-              console.log("this.motivos="+JSON.stringify(this.motivos));
             default:
               this.alert.sendAlert('Error al obtener los Motivos.', AlertType.Error);
               break;
@@ -92,38 +89,42 @@ export class Tabla2Component {
 
     });
 
-    console.log ('this.idPedido='+this.idPedido);
-    console.log ('this.service.currPedido=' + this.service.currPedido) ;
+    
     if (this.idPedido == this.service.currPedido) {
-      console.log("pedido igual , agafem posicions en memoria");
+     // console.log("pedido igual , agafem posicions en memoria");
       this.posiciones = this.service.currPosiciones;
       this.dataSource = new ExampleDataSource(this.posiciones);
       this.entireDataSource = new ExampleDataSource(this.posiciones);
     } else {
       if (this.idPedido != '0') {
-        console.log("pedido diferent , recuperem posicions ws");
+        //console.log("pedido diferent , recuperem posicions ws");
 
         this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran).subscribe(data => {
     
+          console.log("data.codigo = "+data.codigo); 
           switch (+data.codigo) {
             case 0:
               this.posiciones = data.posiciones;
               this.dataSource = new ExampleDataSource(this.posiciones);
               this.entireDataSource = new ExampleDataSource(this.posiciones);
+              this.service.currAlbaran = this.albaran;
             default:
-              this.alert.sendAlert('Error al obtener las posiciones.', AlertType.Error);
+              this.alert.sendAlert( data.mensaje, AlertType.Error);
+              console.log( data.mensaje );
               break;
           }
         });
       } else {
-        console.log("estem a entrades directes");
-
+        //console.log("estem a entrades directes");
+        console.log("albaran="+ this.albaran );
+        console.log("currAlbaran="+ this.service.currAlbaran );
+        
         if (this.albaran == this.service.currAlbaran) {
           console.log("albaran igual , agafem posicions en memoria");
   
           this.posiciones = this.service.currPosiciones; 
         } else {
-          console.log("albaran diferent , inicialitzem posicions");
+          //console.log("albaran diferent , inicialitzem posicions");
   
           this.posiciones = [];
           this.service.currAlbaran = this.albaran;
@@ -172,14 +173,13 @@ export class Tabla2Component {
 
   }
 
-  anyadir() {
+  anyadir(f: any) {
+    
     this.addPosicion(this.newCodigo, this.newName, this.newSymbol, this.newComment, this.newMotivo);
-    console.log("vaig a borrar");
-    this.newCodigo = '';
-    this.newName = '';
-    this.newSymbol = '';
-    this.newComment = 0;
-    this.newMotivo = '';
+    f.form.reset();
+    this.newSymbol = 'UN';
+    this.newSymbol = 'CJ';
+    console.log("this.newSymbol="+this.newSymbol);
 
   }
 

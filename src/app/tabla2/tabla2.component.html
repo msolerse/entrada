@@ -25,7 +25,7 @@
 <!--<mat-card class="mat-elevation-z3">
   <mat-card-title></mat-card-title>
 <mat-card-content> -->
-  <form novalidate   #f="ngForm">
+  <form novalidate  #f="ngForm">
 
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
       fxLayoutAlign="flex-start">
@@ -40,6 +40,11 @@
       <mat-icon>search</mat-icon>
       </button>
 </mat-form-field>  
+<div *ngIf="f.form.controls.codigo?.invalid && (f.form.controls.codigo?.dirty || f.form.controls.codigo?.touched)" class="alert alert-danger">
+  <div *ngIf="f.form.controls.codigo?.errors.required">
+    El código de material es obligatorio
+  </div>
+</div>
 <!-- <mat-form-field>
   <input matInput placeholder="countChange" name="countChange" [(ngModel)]="countChange">
 </mat-form-field>  -->
@@ -49,7 +54,7 @@
 </mat-form-field>  
 <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Unidad</mat-label>
-    <mat-select name="unidad" class="form-control" [(ngModel)]=newSymbol required>
+    <mat-select id="unidad" name="unidad" class="form-control" placeholder="" [(ngModel)]="newSymbol" required>
       <mat-option *ngFor="let uni of unis" [value]="uni.value">
         {{uni.viewValue}}
       </mat-option>
@@ -59,8 +64,13 @@
     <mat-label>Cantidad</mat-label>
   <input id="cantidad" matInput placeholder="cantidad"  name="cantidad" class="form-control" [(ngModel)]="newComment" required>
 </mat-form-field>   
+<div *ngIf="f.form.controls.cantidad?.invalid && (f.form.controls.cantidad?.dirty || f.form.controls.cantidad?.touched)" class="alert alert-danger">
+  <div *ngIf="f.form.controls.cantidad?.errors.required">
+    El campo cantidad es obligatorio
+  </div>
+</div>
 <mat-action-row>
-    <button mat-raised-button color="primary"  [disabled]="f.invalid" (click)="anyadir()" >Añadir</button>
+    <button mat-raised-button color="primary"  [disabled]="f.invalid" (click)="anyadir(f)" >Añadir</button>
   </mat-action-row>
 </ng-container>
 </div>

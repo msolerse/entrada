@@ -17,6 +17,7 @@ import { Motivo } from './_entities/Motivo';
 export class Tabla2Service {
 
    codigo: string;
+   mensaje: string;
    codMotivo: string;
 
    constructor(private http: HttpClient) { }
@@ -181,10 +182,10 @@ export class Tabla2Service {
             let dom = x2js.xml2dom(data);
 
 
-            let itemsDOM = Array.from(dom.getElementsByTagName('TPos')[0].children);
+           // let itemsDOM = Array.from(dom.getElementsByTagName('TPos')[0].children);
 
-            let posiciones: Element[] = [];
-            itemsDOM.forEach(item => {
+             let posiciones: Element[] = [];
+          /*  itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
                   posiciones.push(new Element(
@@ -196,20 +197,23 @@ export class Tabla2Service {
                      +detalle[3].innerHTML,
                      0
                   ));
-            });
+            }); */
 
 
-            let itemsDOM2 = Array.from(dom.getElementsByTagName('ToReturn')[0].children);
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
             itemsDOM2.forEach(item => {
                let detalle2 = Array.from(item.children);
-               this.codigo = detalle2[2].innerHTML;
+               if ( detalle2[0].innerHTML == 'E' )
+                {   this.codigo = '4' ;
+                   this.mensaje = detalle2[3].innerHTML; }
             });
 
             this.currPedido = idPedido;
             this.currPosiciones = posiciones;
             return {
                codigo: this.codigo,
-               posiciones: posiciones
+               posiciones: posiciones,
+               mensaje: this.mensaje
             };
          })
          .pipe(
@@ -797,9 +801,6 @@ export class Tabla2Service {
                   ));
                }
             });
-
-            
-            console.log( JSON.stringify(this.motivosMov));
 
             let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
             itemsDOM2.forEach(item => {
