@@ -1,0 +1,12 @@
+.container-alertas {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 10000;
+}
+.alert {
+    margin-bottom: 0;
+    margin-top: 10px;
+    z-index: 1000;
+}
