@@ -60,6 +60,8 @@ import { MatSortModule } from "@angular/material/sort";
 import { SearchArticuloComponent } from './search-articulo/search-articulo.component';
 // search module
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { AlertComponent } from './alert/alert.component';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     InlineEditComponent,
     AddRowDialog,
     ArticuloComponent,
-    SearchArticuloComponent
+    AlertComponent,
+    SearchArticuloComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,

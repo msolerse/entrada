@@ -1,0 +1,16 @@
+<table class="table table-hover">
+  <thead>
+      <tr>
+          <td>codigo</td>
+          <td>Descripcion</td>
+          <td>Cantidad</td>
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let pos of posiciones" >
+          <td>{{pos.codigo}}</td>
+          <td>{{pos.name}}</td>
+          <td>{{pos.comment}}</td>
+      </tr>
+  </tbody>
+</table> 

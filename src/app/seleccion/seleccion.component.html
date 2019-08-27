@@ -1,6 +1,6 @@
 <form novalidate
       #f="ngForm">
-  <mat-card>
+  <mat-card class="mat-elevation-z3">
     <mat-card-title>
       {{ descCentro }}
     </mat-card-title>
@@ -70,7 +70,7 @@
   <mat-card>
     <button mat-raised-button>Salir</button>
     <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid" (click)="goValidacion()">Posiciones</button>
-
+    <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button>
   </mat-card>
 
 

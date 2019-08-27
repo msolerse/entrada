@@ -101,18 +101,12 @@ export class Tabla2Component {
 
         this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran).subscribe(data => {
     
-          console.log("data.codigo = "+data.codigo); 
-          switch (+data.codigo) {
-            case 0:
-              this.posiciones = data.posiciones;
+         
+              this.posiciones = data;
               this.dataSource = new ExampleDataSource(this.posiciones);
               this.entireDataSource = new ExampleDataSource(this.posiciones);
               this.service.currAlbaran = this.albaran;
-            default:
-              this.alert.sendAlert( data.mensaje, AlertType.Error);
-              console.log( data.mensaje );
-              break;
-          }
+            
         });
       } else {
         //console.log("estem a entrades directes");

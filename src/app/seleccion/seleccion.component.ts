@@ -203,4 +203,8 @@ export class SeleccionComponent implements OnInit {
     this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov }]);
   }
 
+  goTest() {
+    this.router.navigate(['test', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov }]);
+  }
+
 }

@@ -10,6 +10,9 @@ import { DatosArticulo } from './_entities/DatosArticulo';
 import { Ean } from './_entities/Ean';
 import { Stock } from './_entities/Stock';
 import { Motivo } from './_entities/Motivo';
+import { AlertType } from './_entities/Alert';
+import { AlertService } from './_services/alert.service';
+
 
 @Injectable({
    providedIn: 'root'
@@ -20,7 +23,7 @@ export class Tabla2Service {
    mensaje: string;
    codMotivo: string;
 
-   constructor(private http: HttpClient) { }
+   constructor(private http: HttpClient, private alert: AlertService) { }
 
    public currPedido: string;
    public currAlbaran: string;
@@ -33,7 +36,7 @@ export class Tabla2Service {
    public stocks: Stock[] = [];
 
    obtenerPosiciones(idPedido: string, albaran: string,
-      codCentro: string): Observable<any> {
+      codCentro: string): Observable<Element[]> {
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -181,10 +184,11 @@ export class Tabla2Service {
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
+         
+            let itemsDOM = Array.from(dom.getElementsByTagName('T_POS')[0].children);
 
-            let itemsDOM = Array.from(dom.getElementsByTagName('TPos')[0].children);
-
-             let posiciones: Element[] = [];
+            let posiciones: Element[] = [];
+             
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0') {
@@ -198,7 +202,7 @@ export class Tabla2Service {
                      0, ''
                   ));
                }
-            }); 
+            });
 
 
             const itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
@@ -206,23 +210,23 @@ export class Tabla2Service {
                const detalle2 = Array.from(item.children);
                if ( detalle2[0].innerHTML == 'E' )
                 {   this.codigo = '4' ;
-                    this.mensaje = detalle2[3].innerHTML; }
+                    this.mensaje = detalle2[3].innerHTML; 
+                    this.alert.sendAlert(this.mensaje, AlertType.Error);
+                     }
                      else     {        this.codigo = '0'; }
             });
 
          
-
             this.currPedido = idPedido;
             this.currPosiciones = posiciones;
-            return {
-               codigo: this.codigo,
-               posiciones: posiciones,
-               mensaje: this.mensaje
-            };
-         })
-         .pipe(
+            
+            return  posiciones;
+            
+            
+         });
+         /* .pipe(
             catchError(this.handleError)
-         );
+         ); */
    }
 
    obtenerArticulo(idArticulo: string,
