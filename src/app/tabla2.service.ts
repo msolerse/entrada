@@ -36,7 +36,7 @@ export class Tabla2Service {
    public stocks: Stock[] = [];
 
    obtenerPosiciones(idPedido: string, albaran: string,
-      codCentro: string): Observable<Element[]> {
+                     codCentro: string): Observable<Element[]> {
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -213,13 +213,12 @@ export class Tabla2Service {
                     this.mensaje = detalle2[3].innerHTML; 
                     this.alert.sendAlert(this.mensaje, AlertType.Error);
                      }
-                     else     {        this.codigo = '0'; }
+                     else     {        this.codigo = '0'; 
+                                       this.currPedido = idPedido;
+                                       this.currPosiciones = posiciones;
+                     }
             });
-
-         
-            this.currPedido = idPedido;
-            this.currPosiciones = posiciones;
-            
+           
             return  posiciones;
             
             
@@ -230,7 +229,7 @@ export class Tabla2Service {
    }
 
    obtenerArticulo(idArticulo: string,
-      codCentro: string): Observable<any> {
+                   codCentro: string): Observable<any> {
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -303,7 +302,7 @@ export class Tabla2Service {
    }
 
    obtenerEans(codigo: string,
-      codCentro: string): Observable<any> {
+               codCentro: string): Observable<any> {
 
 
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
@@ -405,7 +404,7 @@ export class Tabla2Service {
    }
 
    obtenerStock(codigo: string,
-      codCentro: string): Observable<any> {
+                codCentro: string): Observable<any> {
 
       let url = 'http://localhost:8088/mockZ_GET_STOCK_MATERIALES'
       let body = `
