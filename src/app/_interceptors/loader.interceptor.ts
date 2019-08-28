@@ -20,7 +20,7 @@ export class LoaderInterceptor implements HttpInterceptor {
         //return next.handle(req).finally(() => {
          //   this.loader.hide();
 
-         return next.handle(req).delay(2000).finally(() => {
+         return next.handle(req).delay(1000).finally(() => {
             this.loader.hide();
         });
     

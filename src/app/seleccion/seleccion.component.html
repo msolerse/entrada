@@ -40,7 +40,7 @@
       fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
       <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)"
         fxFlex.lt-sm="100%">
-        <input id="proveedor" matInput placeholder="Proveedor" class="form-control" name="proveedor" [(ngModel)]="model.proveedor" (change)="changeProveedor()" required>
+        <input id="proveedor" matInput placeholder="Proveedor" class="form-control" name="proveedor" [(ngModel)]="model.proveedor" (change)="changeProveedor(f)" required>
       </mat-form-field>
       <div *ngIf="f.form.controls.proveedor?.invalid && (f.form.controls.proveedor?.dirty || f.form.controls.proveedor?.touched)" class="alert alert-danger">
 
@@ -70,8 +70,8 @@
   <mat-card>
     <button mat-raised-button>Salir</button>
     <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid" (click)="goValidacion()">Posiciones</button>
-    <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button>
-  </mat-card>
+   <!-- <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button> -->
+  </mat-card> 
 
 
 </form>

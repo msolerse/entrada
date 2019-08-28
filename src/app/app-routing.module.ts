@@ -11,7 +11,10 @@ import { TestResolverService } from './test/test-resolver.service';
 const routes: Routes = [
   { path: '', component: SeleccionComponent},
   //{ path: 'tabla/:idPedido', component: TablaComponent},
-  { path: 'tabla2/:idPedido/:codCentro', component: Tabla2Component},
+  { path: 'tabla2/:idPedido/:codCentro', component: Tabla2Component,
+  resolve: {
+    crisis: TestResolverService
+  }},
   { path: 'test/:idPedido/:codCentro', component: TestComponent,
     resolve: {
       crisis: TestResolverService

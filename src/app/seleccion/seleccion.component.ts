@@ -156,8 +156,10 @@ export class SeleccionComponent implements OnInit {
   }
 
 
-  changeProveedor() {
+  changeProveedor(f: any) {
     this.service.obtenerProveedor(this.model.proveedor, this.codCentro).subscribe(reply => {
+      console.log("reply.codError="+ reply.codError);
+      console.log("reply.mensajeError="+ reply.mensajeError);
       switch (reply.codError) {
         case 0:
           //this.alert.sendAlert(reply.mensaje, AlertType.Success);
@@ -175,8 +177,9 @@ export class SeleccionComponent implements OnInit {
           });
           break;
         default:
-          this.alert.sendAlert(reply.mensaje, AlertType.Error);
-          break;
+          this.alert.sendAlert(reply.mensajeError, AlertType.Error);
+          //this.model.proveedor = '';
+          f.form.controls.proveedor.reset();
       }
 
     });

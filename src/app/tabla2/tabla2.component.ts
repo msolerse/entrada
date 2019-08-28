@@ -51,9 +51,9 @@ export class Tabla2Component {
   ];
 
   constructor(private route: ActivatedRoute,
-    private router: Router, private service: Tabla2Service,
-    private alert: AlertService, public dialog: MatDialog,
-    private search: SearchArticuloService ) { }
+              private router: Router, private service: Tabla2Service,
+              private alert: AlertService, public dialog: MatDialog,
+              private search: SearchArticuloService ) { }
 
 
   ngOnInit() {
@@ -68,7 +68,7 @@ export class Tabla2Component {
       if (  this.tipoMov == '002')
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
       
-       if ( this.service.motivosMov.length != 0) {
+         if ( this.service.motivosMov.length != 0) {
           this.motivos = this.service.motivosMov; }
        else  {
          this.service.obtenerMotivos().subscribe(data => {
@@ -77,6 +77,7 @@ export class Tabla2Component {
             case 0:
               
               this.motivos = data.motivosMov;
+              break;
             default:
               this.alert.sendAlert('Error al obtener los Motivos.', AlertType.Error);
               break;
@@ -90,63 +91,32 @@ export class Tabla2Component {
     });
 
     
-    if (this.idPedido == this.service.currPedido) {
-     // console.log("pedido igual , agafem posicions en memoria");
-      this.posiciones = this.service.currPosiciones;
+   
+    this.route.data
+    .subscribe((data: { crisis: Element[] }) => {
+      this.posiciones = data.crisis;
+     // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
       this.dataSource = new ExampleDataSource(this.posiciones);
       this.entireDataSource = new ExampleDataSource(this.posiciones);
-    } else {
-      if (this.idPedido != '0') {
-        //console.log("pedido diferent , recuperem posicions ws");
 
-        this.service.obtenerPosiciones(this.idPedido, this.codCentro, this.albaran).subscribe(data => {
-    
-         
-              this.posiciones = data;
-              this.dataSource = new ExampleDataSource(this.posiciones);
-              this.entireDataSource = new ExampleDataSource(this.posiciones);
-              this.service.currAlbaran = this.albaran;
-            
-        });
-      } else {
-        //console.log("estem a entrades directes");
-        console.log("albaran="+ this.albaran );
-        console.log("currAlbaran="+ this.service.currAlbaran );
-        
-        if (this.albaran == this.service.currAlbaran) {
-          console.log("albaran igual , agafem posicions en memoria");
-  
-          this.posiciones = this.service.currPosiciones; 
-        } else {
-          //console.log("albaran diferent , inicialitzem posicions");
-  
-          this.posiciones = [];
-          this.service.currAlbaran = this.albaran;
-          this.service.currPedido = this.idPedido;
-          this.isExpanded = true;
+      if (this.idPedido == '0' ) {
+      this.isExpanded = true;
         }
-        this.dataSource = new ExampleDataSource(this.posiciones);
-        this.entireDataSource = new ExampleDataSource(this.posiciones);
-        this.service.currPosiciones = this.posiciones;
-      }
-    }
 
-
-    if (this.search.codigo) {
+      if (this.search.codigo) {
       this.newCodigo = this.search.codigo;
       this.newName = this.search.nombre;
       this.isExpanded = true;
       this.search.codigo = '';
       this.search.nombre = '';
     }
-
+  });
 
     if ( !!this.albaran && this.albaran !== 'undefined' )
         { this.showAlbaran = true; }
     else
         {  this.showAlbaran = false; }
 
-   
   }
 
   public changeCodigo() {

@@ -82,6 +82,7 @@ export class ArticuloComponent implements OnInit {
           case 0:
             this.stockArticulo = data.stock;
             console.log(JSON.stringify(this.service.stock));
+            break;
           default:
             this.alert.sendAlert('Error al obtener los stocks.', AlertType.Error);
             break;
@@ -102,7 +103,8 @@ export class ArticuloComponent implements OnInit {
         switch (+data.codigo) {
           case 0:
             this.eansArticulo = data.eansArticulo;
-            console.log(JSON.stringify(this.service.eansArticulos))
+            console.log(JSON.stringify(this.service.eansArticulos));
+            break;
           default:
             this.alert.sendAlert('Error al obtener los Eans.', AlertType.Error);
             break;

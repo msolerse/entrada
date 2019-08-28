@@ -36,7 +36,7 @@ export class TestComponent implements OnInit {
     .subscribe((data: { crisis: Element[] }) => {
       this.posiciones = data.crisis;
 
-      console.log('posiciones='+ JSON.stringify(this.posiciones)) ;
+    //  console.log('posiciones='+ JSON.stringify(this.posiciones)) ;
     });
    
   }
