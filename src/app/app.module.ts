@@ -62,6 +62,8 @@ import { SearchArticuloComponent } from './search-articulo/search-articulo.compo
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { AlertComponent } from './alert/alert.component';
 import { TestComponent } from './test/test.component';
+import { ProveedorExistValidatorDirective } from './_services/proveedor.directive';
+import { DataService } from './_services/data.service';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { TestComponent } from './test/test.component';
     ArticuloComponent,
     AlertComponent,
     SearchArticuloComponent,
-    TestComponent
+    TestComponent,
+    ProveedorExistValidatorDirective
   ],
   imports: [
     BrowserModule,
@@ -110,7 +113,8 @@ entryComponents: [AddRowDialog],
    httpInterceptorProviders,
    // DatePipe,
     LoaderService,
-    CredentialsService
+    CredentialsService,
+    DataService
    ],
   bootstrap: [AppComponent]
 })

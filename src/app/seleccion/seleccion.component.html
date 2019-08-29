@@ -15,7 +15,7 @@
 
 
     <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
-      <input id="documento" matInput class="form-control" placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
+      <input id="documento" matInput  placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
       minlength="4">
 
     </mat-form-field>
@@ -40,13 +40,19 @@
       fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
       <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)"
         fxFlex.lt-sm="100%">
-        <input id="proveedor" matInput placeholder="Proveedor" class="form-control" name="proveedor" [(ngModel)]="model.proveedor" (change)="changeProveedor(f)" required>
+        <input id="proveedor" matInput placeholder="Proveedor" class="form-control" name="proveedor" [(ngModel)]="model.proveedor"   [ngModelOptions]="{ updateOn: 'blur' }"
+        appProveedorExist required>
       </mat-form-field>
+      <div *ngIf="f.form.controls.proveedor?.pending">Validando...</div>
       <div *ngIf="f.form.controls.proveedor?.invalid && (f.form.controls.proveedor?.dirty || f.form.controls.proveedor?.touched)" class="alert alert-danger">
 
         <div *ngIf="f.form.controls.proveedor?.errors.required">
           El código de proveedor es obligatorio
         </div>
+        <div *ngIf="!(f.form.controls.proveedor?.errors.proveedorExist)">
+           El proveedor no existe o no está asignado al centro
+        </div>
+       
       </div>
       <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(75% - 5px)"
         fxFlex.lt-sm="100%">
@@ -69,7 +75,7 @@
   </mat-card>
   <mat-card>
     <button mat-raised-button>Salir</button>
-    <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid" (click)="goValidacion()">Posiciones</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid ||f.form.controls.proveedor?.pending" (click)="goValidacion()">Posiciones</button>
    <!-- <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button> -->
   </mat-card> 
 

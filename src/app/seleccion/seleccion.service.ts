@@ -10,14 +10,15 @@ import { TiposRef } from '../_entities/TiposRef';
 import { DatosCentro } from '../_entities/DatosCentro';
 import { DatosProveedor } from '../_entities/DatosProveedor';2
 import { DatosArticuloProv } from '../_entities/DatosArticuloProv';
-
+import { DataService } from '../_services/data.service';
 
 @Injectable({
    providedIn: 'root'
 })
 export class SeleccionService {
 
-   constructor(private http: HttpClient) { }
+   constructor(private http: HttpClient,
+               private data: DataService) { }
 
    public currDatosCentro: DatosCentro;
    public tiposMov: TiposMov[] = [];
@@ -368,12 +369,13 @@ export class SeleccionService {
             else
                codError = 0; */
 
-             let codigo = dom.getElementsByTagName("VENDOR")[0].innerHTML;
+            let codigo = dom.getElementsByTagName("VENDOR")[0].innerHTML;
             let nombre = dom.getElementsByTagName("NAME")[0].innerHTML;
          
             
             if (nombre != null && !(nombre.length == 0)) {
                codError = 0;
+               this.data.changeMessage(nombre);
             } else {   
                codError = 4;
                mensajeError = 
@@ -388,6 +390,8 @@ export class SeleccionService {
                mensajeError
             );
 
+            console.log(JSON.stringify( datosProv));
+            
             this.currNombre = nombre;
 
             return datosProv;
@@ -399,7 +403,7 @@ export class SeleccionService {
 
 
    obtenerArticulosProv(proveedor: string,
-      codCentro: string): Observable<any> {
+                        codCentro: string): Observable<any> {
 
     
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';

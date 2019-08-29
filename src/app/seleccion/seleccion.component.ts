@@ -9,6 +9,7 @@ import { AlertType } from '../_entities/Alert';
 import { TiposMov } from '../_entities/TiposMov';
 import { TiposRef } from '../_entities/TiposRef';
 import { Seleccion } from '../_entities/Seleccion';
+import { DataService } from '../_services/data.service';
 
 @Component({
   selector: 'app-seleccion',
@@ -35,12 +36,14 @@ export class SeleccionComponent implements OnInit {
   idProceso: string = '001';
   
   constructor(private router: Router,
-    private route: ActivatedRoute,
-    private service: SeleccionService,
-    private alert: AlertService) { }
+              private route: ActivatedRoute,
+              private service: SeleccionService,
+              private alert: AlertService,
+              private data: DataService) { }
 
   ngOnInit() {
 
+    this.data.currentMessage.subscribe(message => this.nombre = message);
     let params = new URLSearchParams(location.search);
     let idCentro = params.get("idCentro");
     //console.log("idCentro=" + idCentro);
