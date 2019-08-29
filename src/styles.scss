@@ -48,7 +48,8 @@ $theme: mat-light-theme($primary, $accent);
 // Include all theme styles for the components.
 @include angular-material-theme($theme);  */
 
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+//@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 body { 
   font-family: Roboto, Arial, sans-serif;
@@ -60,5 +61,5 @@ body {
 
 .basic-container {
   padding: 10px;
-  background-color: lightgrey;
+ // background-color: lightgrey;
 }
