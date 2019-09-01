@@ -67,11 +67,11 @@
               fxLayoutAlign="flex-start">
               
                 <mat-form-field *ngIf="stockArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
-                  <input matInput readonly placeholder="Stock" name="Stock" [(ngModel)]="stockArticulo.stockVenta">
+                  <input matInput readonly placeholder="Stock"  class="text-color" name="Stock" [(ngModel)]="stockArticulo.stockVenta">
                 </mat-form-field>
 
                 <mat-form-field *ngIf="stockArticulo" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
-                  <input matInput readonly placeholder="Nuv. Stock" name="nuvStock" [(ngModel)]="stockArticulo.stockPedido">
+                  <input matInput readonly placeholder="Nuv. Stock"  class="text-color" name="nuvStock" [(ngModel)]="stockArticulo.stockPedido">
                 </mat-form-field>
             
               
@@ -92,7 +92,7 @@
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
                 <mat-list dense> 
-                  <mat-list-item *ngFor="let ean of eansArticulo"  class="mat-typography"> {{ ean.ean }}  </mat-list-item>
+                  <mat-list-item *ngFor="let ean of eansArticulo"  class="text-color mat-typography"> {{ ean.ean }}  </mat-list-item>
                  </mat-list>
               </ng-template>
               
