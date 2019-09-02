@@ -1,22 +1,18 @@
 
-<!-- New version   -->
-<!--<div class="course" fxFlex="90%" fxFlex.lt-sm="100%" > -->
-
-  
  
-<div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" class="example-container">
+<div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" class="margin-container">
   
  <h2  class="mat-h2">Pedido {{this.idPedido}}</h2>
 
 </div> 
 
 
-<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" >
+<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" class="margin-container">
 
  <h3 *ngIf="showAlbaran" class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
-<mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="mat-elevation-z3"> 
+<mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="example-container margin-container mat-elevation-z3"> 
   <mat-expansion-panel-header>
       <mat-panel-title> Nueva Posición</mat-panel-title>
    
@@ -28,22 +24,26 @@
   <form novalidate  #f="ngForm">
 
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
-      fxLayoutAlign="flex-start">
+      fxLayoutAlign="flex-start" >
       <ng-container>
  
   
   <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Código</mat-label>
-  <input matInput placeholder="código material" class="form-control" name="codigo" [(ngModel)]="newCodigo"
-  (change)= "changeCodigo()" required>
+  <input matInput placeholder="código material" class="form-control" name="codigo" [(ngModel)]="newCodigo" [ngModelOptions]="{ updateOn: 'blur' }"
+    appArticuloExist required>
   <button mat-icon-button matSuffix (click)="goSearchArticulo()" [attr.aria-label]="'Search'" [attr.aria-pressed]="hide">
       <mat-icon>search</mat-icon>
       </button>
 </mat-form-field>  
+<div *ngIf="f.form.controls.codigo?.pending">Validando...</div>
 <div *ngIf="f.form.controls.codigo?.invalid && (f.form.controls.codigo?.dirty || f.form.controls.codigo?.touched)" class="alert alert-danger">
   <div *ngIf="f.form.controls.codigo?.errors.required">
     El código de material es obligatorio
   </div>
+  <div *ngIf="!(f.form.controls.codigo?.errors.articuloExist)">
+      El articulo no existe o no está asignado al proveedor
+   </div>
 </div>
 <!-- <mat-form-field>
   <input matInput placeholder="countChange" name="countChange" [(ngModel)]="countChange">
@@ -70,7 +70,7 @@
   </div>
 </div>
 <mat-action-row>
-    <button mat-raised-button color="primary"  [disabled]="f.invalid" (click)="anyadir(f)" >Añadir</button>
+    <button mat-raised-button color="primary"  [disabled]="f.invalid ||f.form.controls.codigo?.pending" (click)="anyadir(f)" >Añadir</button>
   </mat-action-row>
 </ng-container>
 </div>
@@ -93,7 +93,7 @@
      [ngClass.gt-md]="'container-table'"
    > -->
 
-   <div class="example-container mat-elevation-z8">
+   <div class="example-container margin-container mat-elevation-z8">
   <mat-table #table  [dataSource]="dataSource"  
   [class.isMobile]="isMobile">
             
@@ -134,7 +134,7 @@
 
       <ng-container matColumnDef="comment">
         <mat-header-cell *matHeaderCellDef> Cant. </mat-header-cell>
-        <mat-cell class="duration-cell mat-typography" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
+        <mat-cell class="duration-cell mat-typography text-color" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
           <ng-container *ngIf="element.comment">
               <span class="mobile-label">Cantidad:</span>
             {{element.comment}}

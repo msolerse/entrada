@@ -10,6 +10,7 @@ import { TiposMov } from '../_entities/TiposMov';
 import { TiposRef } from '../_entities/TiposRef';
 import { Seleccion } from '../_entities/Seleccion';
 import { DataService } from '../_services/data.service';
+import { ToolbarService } from '../_services/toolbar.service';
 
 @Component({
   selector: 'app-seleccion',
@@ -39,11 +40,16 @@ export class SeleccionComponent implements OnInit {
               private route: ActivatedRoute,
               private service: SeleccionService,
               private alert: AlertService,
-              private data: DataService) { }
+              private data: DataService,
+              private ts: ToolbarService) { }
 
   ngOnInit() {
 
-    this.data.currentMessage.subscribe(message => this.nombre = message);
+    this.ts.changeMessage('Menu');
+    console.log()
+    this.data.currentMessage.subscribe(message => 
+    //  this. = message.split(';')[0];
+      this.nombre = message.split(';')[1]);
     let params = new URLSearchParams(location.search);
     let idCentro = params.get("idCentro");
     //console.log("idCentro=" + idCentro);
@@ -159,7 +165,7 @@ export class SeleccionComponent implements OnInit {
   }
 
 
-  changeProveedor(f: any) {
+  /* changeProveedor(f: any) {
     this.service.obtenerProveedor(this.model.proveedor, this.codCentro).subscribe(reply => {
       console.log("reply.codError="+ reply.codError);
       console.log("reply.mensajeError="+ reply.mensajeError);
@@ -186,7 +192,7 @@ export class SeleccionComponent implements OnInit {
       }
 
     });
-  }
+  } */
 
   goValidacion() {
     // guardar valores
@@ -206,7 +212,7 @@ export class SeleccionComponent implements OnInit {
       this.model.documento = '0';
     }
 
-    this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov }]);
+    this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov, codProv: this.model.proveedor }]);
   }
 
   goTest() {

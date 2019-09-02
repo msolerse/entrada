@@ -11,6 +11,7 @@ import { DatosArticulo } from '../_entities/DatosArticulo';
 import { Motivo } from '../_entities/Motivo';
 import { SearchArticuloService } from '../search-articulo/search-articulo.service';
 import { isUndefined } from 'util';
+import { ToolbarService } from '../_services/toolbar.service';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class Tabla2Component {
   codCentro: string;
   routingSubscription: any;
   tipoMov: string;
+  codProv: string;
 
   newCodigo: string;
   newName: string;
@@ -53,17 +55,20 @@ export class Tabla2Component {
   constructor(private route: ActivatedRoute,
               private router: Router, private service: Tabla2Service,
               private alert: AlertService, public dialog: MatDialog,
-              private search: SearchArticuloService ) { }
+              private search: SearchArticuloService ,
+              private ts: ToolbarService) { }
 
 
   ngOnInit() {
 
+    this.ts.changeMessage('Back');
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
       this.codCentro = params["codCentro"];
       this.service.currCentro = this.codCentro;
       this.albaran = params["albaran"];
       this.tipoMov = params["tipoMov"];
+      this.codProv = params['codProv'];
 
       if (  this.tipoMov == '002')
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
@@ -87,6 +92,20 @@ export class Tabla2Component {
       }
       else
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
+
+      if (this.codProv) {
+       this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
+        switch (reply.codigo) {
+          case 0:
+            console.log("ws datos art prov ok");
+            break;
+
+          default:
+            console.log("ws datos art prov no ok");
+            break;
+        }
+      });
+    }
 
     });
 

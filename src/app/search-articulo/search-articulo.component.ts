@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { DatosArticuloProv } from '../_entities/DatosArticuloProv';
-import { SeleccionService } from '../seleccion/seleccion.service';
 import { AlertService } from '../_services/alert.service';
 import { SearchArticuloService } from './search-articulo.service';
 import { Location } from '@angular/common';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
+import { Tabla2Service } from '../tabla2.service';
 
 @Component({
   selector: 'app-search-articulo',
@@ -28,7 +28,7 @@ export class SearchArticuloComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  constructor(private service: SeleccionService,
+  constructor(private service: Tabla2Service,
     private alert: AlertService,
     private search: SearchArticuloService,
     private location: Location,

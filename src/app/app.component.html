@@ -32,16 +32,8 @@
 
   </mat-sidenav>
 
-  <mat-toolbar color="primary" class="mat-elevation-z8" >
-      <button mat-icon-button (click)="start.open('mouse')">
-          <mat-icon>menu</mat-icon>    
-      </button>
-      <span>{{title}}</span>
-
-      <!-- This fills the remaining space of the current row -->
-      <span class="example-fill-remaining-space"></span>
-    
-  </mat-toolbar>
+  <app-toolbar></app-toolbar>
+  <p> </p>
   <app-alert></app-alert>
 
   <div class="mat-app-background basic-container">

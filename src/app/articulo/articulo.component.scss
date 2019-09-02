@@ -8,6 +8,18 @@
     width: 100%;
   }
   
+  
+.articulo-image {
+  max-width: 200px;
+}
+
+  @media(max-width: 600px) {
+
+    .articulo-image {
+      max-width: 100px;
+    }
+  }
+
    mat-card {
     margin: 20px;
    //  padding: 20px;
@@ -32,9 +44,6 @@
   background-size: cover;
 }
 
-.articulo-image {
-  max-width: 200px;
-}
 
 .example-headers-align .mat-expansion-panel-header-title,
 .example-headers-align .mat-expansion-panel-header-description {

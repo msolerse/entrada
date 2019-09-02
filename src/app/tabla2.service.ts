@@ -12,6 +12,7 @@ import { Stock } from './_entities/Stock';
 import { Motivo } from './_entities/Motivo';
 import { AlertType } from './_entities/Alert';
 import { AlertService } from './_services/alert.service';
+import { DatosArticuloProv } from './_entities/DatosArticuloProv';
 
 
 @Injectable({
@@ -34,6 +35,9 @@ export class Tabla2Service {
    public currCentro: string;
    public stock: Stock;
    public stocks: Stock[] = [];
+   public currProveedor: string;
+   public currDatosArticuloProv: DatosArticuloProv[];
+
 
    obtenerPosiciones(idPedido: string, albaran: string,
                      codCentro: string): Observable<Element[]> {
@@ -268,11 +272,7 @@ export class Tabla2Service {
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
-            let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
-            if (mensajeError != null && !(mensajeError.length == 0))
-               codError = 4;
-            else
-               codError = 0;
+         
 
             let codigo = dom.getElementsByTagName("MATNR")[0].innerHTML;
             let descripcion = dom.getElementsByTagName("MAKTX")[0].innerHTML;
@@ -280,6 +280,14 @@ export class Tabla2Service {
             let retractil = dom.getElementsByTagName("RETRACTIL")[0].innerHTML;
             let manto = dom.getElementsByTagName("MANTO")[0].innerHTML;
             let palet = dom.getElementsByTagName("PALET")[0].innerHTML;
+
+            let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
+            console.log("codigo="+codigo);
+           
+            if (codigo != null && !(codigo.length == 0)) 
+               codError = 0;
+            else
+               codError = 4;
 
             datosArticulo = new DatosArticulo(
                codigo,
@@ -727,6 +735,118 @@ export class Tabla2Service {
             return {
                codigo: codigo,
                stock: this.stock
+            };
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
+   }
+
+
+ obtenerArticulosProv(proveedor: string,
+                        codCentro: string): Observable<any> {
+
+    
+      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
+      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let body = `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <urn:ZWD_MM_LIST_MAT_PROV>
+            <I_LIFNR>?</I_LIFNR>
+            <I_WERKS>?</I_WERKS>
+            <T_MATNR>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <LGPBE>?</LGPBE>
+                  <MATNR>?</MATNR>
+                  <MEINS>?</MEINS>
+                  <MENGE_PL>?</MENGE_PL>
+                  <PRWOG>?</PRWOG>
+                  <PRWUG>?</PRWUG>
+                  <IDNLF>?</IDNLF>
+                  <IND>?</IND>
+                  <MAKTX>?</MAKTX>
+                  <SUMINISTRA_CASH>?</SUMINISTRA_CASH>
+                  <SUMINISTRA_CNTRO>?</SUMINISTRA_CNTRO>
+                  <PLATAFORMA>?</PLATAFORMA>
+                  <DESCR_PLATAFORMA>?</DESCR_PLATAFORMA>
+                  <PSEN_PRIOR>?</PSEN_PRIOR>
+                  <DEVOLUCION>?</DEVOLUCION>
+               </item>
+            </T_MATNR>
+            <!--Optional:-->
+            <T_MEINS>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <MATNR>?</MATNR>
+                  <MEINS>?</MEINS>
+               </item>
+            </T_MEINS>
+            <T_RETURN>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <TYPE>?</TYPE>
+                  <ID>?</ID>
+                  <NUMBER>?</NUMBER>
+                  <MESSAGE>?</MESSAGE>
+                  <LOG_NO>?</LOG_NO>
+                  <LOG_MSG_NO>?</LOG_MSG_NO>
+                  <MESSAGE_V1>?</MESSAGE_V1>
+                  <MESSAGE_V2>?</MESSAGE_V2>
+                  <MESSAGE_V3>?</MESSAGE_V3>
+                  <MESSAGE_V4>?</MESSAGE_V4>
+                  <PARAMETER>?</PARAMETER>
+                  <ROW>?</ROW>
+                  <FIELD>?</FIELD>
+                  <SYSTEM>?</SYSTEM>
+               </item>
+            </T_RETURN>
+         </urn:ZWD_MM_LIST_MAT_PROV>
+      </soapenv:Body>
+   </soapenv:Envelope>
+      `;
+
+      return this.http.post(url, body, { responseType: 'text' })
+         .map(data => {
+            //console.log(data);
+            //let x2js = require('x2js');
+            let x2js = new X2JS();
+            let dom = x2js.xml2dom(data);
+
+
+            let itemsDOM = Array.from(dom.getElementsByTagName('T_MATNR')[0].children);
+
+            let articulosProv: DatosArticuloProv[] = [];
+            itemsDOM.forEach(item => {
+               let detalle = Array.from(item.children);
+
+                 if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+                  articulosProv.push(new DatosArticuloProv(
+                     detalle[1].innerHTML, //codigo
+                     detalle[8].innerHTML, //descripcion
+                     detalle[6].innerHTML, //cod proveedor
+                     detalle[0].innerHTML, //ubicacion
+                     detalle[7].innerHTML, //descatalogado
+                     +detalle[3].innerHTML, //stock Compras
+                     +detalle[4].innerHTML, //stock Maximo
+                     +detalle[5].innerHTML, //stock Minimo
+                  ));
+            });
+
+            let codigo;
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
+            itemsDOM2.forEach(item => {
+               let detalle2 = Array.from(item.children);
+               codigo = +detalle2[2].innerHTML;
+            });
+            //console.log( "codigo= " + codigo);
+            this.currProveedor = proveedor;
+            this.currDatosArticuloProv = articulosProv;
+            return {
+               codigo: codigo,
+               DatosArticuloProv: articulosProv
             };
          })
          .pipe(

@@ -63,7 +63,10 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { AlertComponent } from './alert/alert.component';
 import { TestComponent } from './test/test.component';
 import { ProveedorExistValidatorDirective } from './_services/proveedor.directive';
+import { ArticuloExistValidatorDirective } from './_services/articulo.directive';
 import { DataService } from './_services/data.service';
+import { ToolbarService } from './_services/toolbar.service';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,9 @@ import { DataService } from './_services/data.service';
     AlertComponent,
     SearchArticuloComponent,
     TestComponent,
-    ProveedorExistValidatorDirective
+    ProveedorExistValidatorDirective,
+    ArticuloExistValidatorDirective,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -114,7 +119,8 @@ entryComponents: [AddRowDialog],
    // DatePipe,
     LoaderService,
     CredentialsService,
-    DataService
+    DataService,
+    ToolbarService
    ],
   bootstrap: [AppComponent]
 })

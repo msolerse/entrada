@@ -8,6 +8,7 @@ import { AlertService } from '../_services/alert.service';
 import { AlertType } from '../_entities/Alert';
 import { Tabla2Service } from '../tabla2.service';
 import { Element } from '../Element';
+import { ToolbarService } from '../_services/toolbar.service';
 
 @Component({
   selector: 'app-articulo',
@@ -29,13 +30,15 @@ export class ArticuloComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
-    private alert: AlertService,
-    private service: Tabla2Service,
-    private location: Location) { }
+              private router: Router,
+              private alert: AlertService,
+              private service: Tabla2Service,
+              private location: Location,
+              private ts: ToolbarService) { }
 
   ngOnInit() {
 
+    this.ts.changeMessage('Back');
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPosicion = params["idPosicion"];
       console.log("this.service.currPedido=" + this.service.currPedido);
