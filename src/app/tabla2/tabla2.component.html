@@ -2,7 +2,7 @@
  
 <div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" class="margin-container">
   
- <h2  class="mat-h2">Pedido {{this.idPedido}}</h2>
+ <h2  class="mat-h2"> <mat-icon>list</mat-icon>  Pedido {{this.idPedido}}</h2>
 
 </div> 
 
@@ -12,15 +12,16 @@
  <h3 *ngIf="showAlbaran" class="mat-h3">Albarán {{this.albaran}}</h3>
 
 </div>
-<mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="example-container margin-container mat-elevation-z3"> 
+<mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="margin-container example-headers-align mat-elevation-z3"> 
+
   <mat-expansion-panel-header>
-      <mat-panel-title> Nueva Posición</mat-panel-title>
-   
+    <mat-panel-title> Nueva Posición</mat-panel-title>
+    <mat-panel-description>
+       Añadir posición a entrada 
+      <mat-icon>note_add</mat-icon>
+    </mat-panel-description>
   </mat-expansion-panel-header>
-  
-<!--<mat-card class="mat-elevation-z3">
-  <mat-card-title></mat-card-title>
-<mat-card-content> -->
+
   <form novalidate  #f="ngForm">
 
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutGap.lt-sm='5px'
@@ -30,7 +31,7 @@
   
   <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Código</mat-label>
-  <input matInput placeholder="código material" class="form-control" name="codigo" [(ngModel)]="newCodigo" [ngModelOptions]="{ updateOn: 'blur' }"
+  <input matInput placeholder="código material"  name="codigo" [(ngModel)]="newCodigo" [ngModelOptions]="{ updateOn: 'blur' }"
     appArticuloExist required>
   <button mat-icon-button matSuffix (click)="goSearchArticulo()" [attr.aria-label]="'Search'" [attr.aria-pressed]="hide">
       <mat-icon>search</mat-icon>
@@ -50,11 +51,11 @@
 </mat-form-field>  -->
 <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Descripción</mat-label>
-  <input matInput readonly name="descripcion" class="form-control" placeholder=""   [(ngModel)]="newName">
+  <input matInput readonly name="descripcion"  placeholder=""   [(ngModel)]="newName">
 </mat-form-field>  
 <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Unidad</mat-label>
-    <mat-select id="unidad" name="unidad" class="form-control" placeholder="" [(ngModel)]="newSymbol" required>
+    <mat-select id="unidad" name="unidad" placeholder="" [(ngModel)]="newSymbol" required>
       <mat-option *ngFor="let uni of unis" [value]="uni.value">
         {{uni.viewValue}}
       </mat-option>
@@ -62,7 +63,7 @@
 </mat-form-field>  
 <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Cantidad</mat-label>
-  <input id="cantidad" matInput placeholder="cantidad"  name="cantidad" class="form-control" [(ngModel)]="newComment" required>
+  <input id="cantidad" matInput placeholder="cantidad"  name="cantidad"  [(ngModel)]="newComment" required>
 </mat-form-field>   
 <div *ngIf="f.form.controls.cantidad?.invalid && (f.form.controls.cantidad?.dirty || f.form.controls.cantidad?.touched)" class="alert alert-danger">
   <div *ngIf="f.form.controls.cantidad?.errors.required">

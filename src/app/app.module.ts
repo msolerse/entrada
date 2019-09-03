@@ -67,6 +67,7 @@ import { ArticuloExistValidatorDirective } from './_services/articulo.directive'
 import { DataService } from './_services/data.service';
 import { ToolbarService } from './_services/toolbar.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ArticuloDescService } from './_services/articuloDesc.service';
 
 @NgModule({
   declarations: [
@@ -120,7 +121,8 @@ entryComponents: [AddRowDialog],
     LoaderService,
     CredentialsService,
     DataService,
-    ToolbarService
+    ToolbarService,
+    ArticuloDescService
    ],
   bootstrap: [AppComponent]
 })

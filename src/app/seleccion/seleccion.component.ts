@@ -124,7 +124,9 @@ export class SeleccionComponent implements OnInit {
 
 
     if (this.service.currProveedor) {
+      
       this.model.proveedor = this.service.currProveedor;
+     
     }
 
     if (this.service.currNombre) {

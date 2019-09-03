@@ -10,13 +10,13 @@ import { filter } from 'rxjs/operators';
       <div class="mat-subheading-2">Modificar cantidad</div>
       
       <mat-form-field>
-        <input matInput maxLength="140" name="comment" [(ngModel)]="comment">
-        <mat-hint align="end">{{comment?.length || 0}}/140</mat-hint>
+        <input matInput maxLength="10" name="comment" [(ngModel)]="comment">
+        <mat-hint align="end">{{comment?.length || 0}}/10</mat-hint>
       </mat-form-field>
 
       <div class="actions">
-        <button mat-button type="button" color="primary" (click)="onCancel()">CANCEL</button>
-        <button mat-button type="submit" color="primary">SAVE</button>
+        <button mat-button type="button" color="primary" (click)="onCancel()">CANCELAR</button>
+        <button mat-button type="submit" color="primary">GUARDAR</button>
       </div>
     </form>
   `
@@ -34,10 +34,12 @@ export class InlineEditComponent {
   /** Form model for the input. */
   comment = '';
 
-  constructor(@Optional() @Host() public popover: SatPopover) { }
+  constructor(
+               @Optional() @Host() public popover: SatPopover) { }
 
   ngOnInit() {
     // subscribe to cancellations and reset form value
+
     if (this.popover) {
       this.popover.closed.pipe(filter(val => val == null))
         .subscribe(() => this.comment = this.value || '');

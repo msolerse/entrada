@@ -6,19 +6,23 @@
   <mat-form-field  class="example-full-width" >
       <mat-label>Código</mat-label>
      
-    <input id="codigo" matInput placeholder="código material"  class="form-control" name="codigo" [(ngModel)]="data.codigo"
-    (change)= "changeCodigo()" required>
+    <input id="codigo" matInput placeholder="código material"  name="codigo" [(ngModel)]="data.codigo" [ngModelOptions]="{ updateOn: 'blur' }"
+    appArticuloExist required>
   </mat-form-field>  
+  <div *ngIf="f.form.controls.codigo?.pending">Validando...</div>
   <div *ngIf="f.form.controls.codigo?.invalid && (f.form.controls.codigo?.dirty || f.form.controls.codigo?.touched)" class="alert alert-danger">
     <div *ngIf="f.form.controls.codigo?.errors.required">
       El código de material es obligatorio
+    </div>
+    <div *ngIf="!(f.form.controls.codigo?.errors.articuloExist)">
+      El articulo no existe o no está asignado al proveedor
     </div>
   </div>
 
 
   <mat-form-field  class="example-full-width">
       <mat-label>Descripción</mat-label>
-    <input id="name" matInput readonly placeholder="" name="name"  class="form-control"  [(ngModel)]="data.name">
+    <input id="name" matInput readonly placeholder="" name="name"   [(ngModel)]="data.name">
   </mat-form-field>  
    <mat-form-field  class="example-full-width">
       <mat-label>Unidad</mat-label>
@@ -31,7 +35,7 @@
  
   <mat-form-field  class="example-full-width">
       <mat-label>Cantidad</mat-label>
-    <input id="cantidad" matInput name="cantidad" placeholder="cantidad" class="form-control"  [(ngModel)]="data.comment"
+    <input id="cantidad" matInput name="cantidad" placeholder="cantidad" [(ngModel)]="data.comment"
      required>
   </mat-form-field>   
 
@@ -58,6 +62,6 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()"  cdkFocusInitial>Cancelar</button>
-  <button mat-raised-button [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid">Ok</button>
+  <button mat-raised-button [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid ||f.form.controls.codigo?.pending">Ok</button>
 </div>
 </form>

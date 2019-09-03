@@ -9,6 +9,7 @@ import { AlertType } from '../_entities/Alert';
 import { Tabla2Service } from '../tabla2.service';
 import { Element } from '../Element';
 import { ToolbarService } from '../_services/toolbar.service';
+import { ArticuloDescService } from '../_services/articuloDesc.service';
 
 @Component({
   selector: 'app-articulo',
@@ -34,7 +35,8 @@ export class ArticuloComponent implements OnInit {
               private alert: AlertService,
               private service: Tabla2Service,
               private location: Location,
-              private ts: ToolbarService) { }
+              private ts: ToolbarService,
+              private ads: ArticuloDescService) { }
 
   ngOnInit() {
 
@@ -118,6 +120,7 @@ export class ArticuloComponent implements OnInit {
 
   goBack(): void {
 
+    this.ads.changeMessage('');
     this.location.back();
 
   }

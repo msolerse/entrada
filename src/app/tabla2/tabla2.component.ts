@@ -12,6 +12,7 @@ import { Motivo } from '../_entities/Motivo';
 import { SearchArticuloService } from '../search-articulo/search-articulo.service';
 import { isUndefined } from 'util';
 import { ToolbarService } from '../_services/toolbar.service';
+import { ArticuloDescService } from '../_services/articuloDesc.service';
 
 
 @Component({
@@ -56,11 +57,15 @@ export class Tabla2Component {
               private router: Router, private service: Tabla2Service,
               private alert: AlertService, public dialog: MatDialog,
               private search: SearchArticuloService ,
-              private ts: ToolbarService) { }
+              private ts: ToolbarService,
+              private ads: ArticuloDescService) { }
 
 
   ngOnInit() {
 
+    this.ads.changeMessage('');
+    this.ads.currentMessage.subscribe(message => 
+        this.newName = message);
     this.ts.changeMessage('Back');
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
@@ -93,7 +98,7 @@ export class Tabla2Component {
       else
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
 
-      if (this.codProv) {
+      if (this.codProv && ( this.codProv !== this.service.currProveedor ) ) {
        this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
         switch (reply.codigo) {
           case 0:
@@ -126,7 +131,7 @@ export class Tabla2Component {
       this.newCodigo = this.search.codigo;
       this.newName = this.search.nombre;
       this.isExpanded = true;
-      this.search.codigo = '';
+     // this.search.codigo = '';
       this.search.nombre = '';
     }
   });
@@ -337,18 +342,21 @@ export class AddRowDialog {
     public dialogRef: MatDialogRef<AddRowDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private service: Tabla2Service,
-    private alert: AlertService) {
+    private alert: AlertService,
+    private ads: ArticuloDescService) {
 
       console.log("tipoMov= "+ data.tipoMov);
       this.data.symbol = 'CJ';
       this.motivos = this.service.motivosMov;
+       //this.ads.changeMessage('');
+      this.ads.currentMessage.subscribe(message => 
+        this.data.name = message);
      }
 
   onNoClick(): void {
-  
     this.dialogRef.close( 0 );
   }
-
+/* 
   public changeCodigo() {
     // this.countChange = this.countChange + 1;
 
@@ -365,6 +373,6 @@ export class AddRowDialog {
 
     });
 
-  }
+  } */
 
 }

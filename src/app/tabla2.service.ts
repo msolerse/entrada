@@ -13,6 +13,7 @@ import { Motivo } from './_entities/Motivo';
 import { AlertType } from './_entities/Alert';
 import { AlertService } from './_services/alert.service';
 import { DatosArticuloProv } from './_entities/DatosArticuloProv';
+import { ArticuloDescService } from './_services/articuloDesc.service';
 
 
 @Injectable({
@@ -24,7 +25,8 @@ export class Tabla2Service {
    mensaje: string;
    codMotivo: string;
 
-   constructor(private http: HttpClient, private alert: AlertService) { }
+   constructor(private http: HttpClient, private alert: AlertService,
+               private ads: ArticuloDescService) { }
 
    public currPedido: string;
    public currAlbaran: string;
@@ -288,6 +290,9 @@ export class Tabla2Service {
                codError = 0;
             else
                codError = 4;
+
+
+           this.ads.changeMessage( descripcion );   
 
             datosArticulo = new DatosArticulo(
                codigo,
