@@ -9,7 +9,8 @@ import { Tabla2Service } from '../tabla2.service';
   selector: 'inline-edit',
   styleUrls: ['inline-edit.component.scss'],
   template: `
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" novalidate
+    #f="ngForm">
       <div class="mat-subheading-2">Modificar cantidad</div>
       
       <mat-form-field>
@@ -19,7 +20,7 @@ import { Tabla2Service } from '../tabla2.service';
 
       <mat-form-field   class="example-full-width">
       <mat-label>Motivo</mat-label>
-      <mat-select id="motivo" name="motivo" [(ngModel)]=data.motivo required>
+      <mat-select id="motivo" name="motivo" [(ngModel)]="motivo" required>
         <mat-option *ngFor="let motivo of motivos" [value]="motivo.value">
           {{motivo.viewValue | titlecase}}
         </mat-option>
@@ -28,7 +29,7 @@ import { Tabla2Service } from '../tabla2.service';
 
       <div class="actions">
         <button mat-button type="button" color="primary" (click)="onCancel()">CANCELAR</button>
-        <button mat-button type="submit" color="primary">GUARDAR</button>
+        <button mat-button type="submit" color="primary" [disabled]="f.invalid" >GUARDAR</button>
       </div>
     </form>
   `
