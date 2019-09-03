@@ -262,6 +262,8 @@ export class Tabla2Component {
   }
 
   goValidar() {
+
+    
     console.log("Grabando!");
   }
 }
