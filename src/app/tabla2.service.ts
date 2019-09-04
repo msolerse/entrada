@@ -39,6 +39,7 @@ export class Tabla2Service {
    public stocks: Stock[] = [];
    public currProveedor: string;
    public currDatosArticuloProv: DatosArticuloProv[];
+   public currTipoMov: string;
 
 
    obtenerPosiciones(idPedido: string, albaran: string,

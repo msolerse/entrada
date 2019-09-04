@@ -73,7 +73,9 @@ export class Tabla2Component {
       this.service.currCentro = this.codCentro;
       this.albaran = params["albaran"];
       this.tipoMov = params["tipoMov"];
+      this.service.currTipoMov = this.tipoMov;
       this.codProv = params['codProv'];
+     
 
       if (  this.tipoMov == '002')
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
@@ -205,13 +207,15 @@ export class Tabla2Component {
   }
 
 
-  update(el: Element, comment: number) {
+  update(el: Element, comment: string) {
     if (comment == null) { return; }
     // copy and mutate
     //const copy = this.dataSource.data().slice()
     const copy = this.entireDataSource.data().slice()
-    el.comment = comment;
+    console.log('update comment = '+ comment);
+    el.comment = +comment.split(';')[0];
     el.dif = el.comment - el.cantref ;
+    el.motivo = comment.split(';')[1];
     // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();
