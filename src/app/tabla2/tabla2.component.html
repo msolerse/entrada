@@ -2,14 +2,14 @@
  
 <div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" class="margin-container">
   
- <h2  class="mat-h2"> <mat-icon>list</mat-icon>  Pedido {{this.idPedido}}</h2>
+ <h2  class="mat-h2"> <mat-icon>local_shipping</mat-icon>  Pedido {{this.idPedido}}</h2>
 
 </div> 
 
 
-<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" class="margin-container">
+<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" class="margin-container aligned">
 
- <h3 *ngIf="showAlbaran" class="mat-h3">Albarán {{this.albaran}}</h3>
+ <h3 *ngIf="showAlbaran" class="mat-h3"><mat-icon>list</mat-icon>       Albarán {{this.albaran}}</h3>
 
 </div>
 <mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="margin-container example-headers-align mat-elevation-z3"> 
@@ -84,7 +84,7 @@
 
   <mat-form-field>
 
-    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar">
+    <input matInput id="filtrar" type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
 
   </mat-form-field>
 
@@ -128,14 +128,14 @@
 
 
       <ng-container matColumnDef="cantref">
-        <mat-header-cell class="duration-cell" *matHeaderCellDef> Cant.Ref.</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
+        <mat-header-cell class="duration-cell align-right" *matHeaderCellDef> Cant.Ref.</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
             <span class="mobile-label">Cant.Ref.:</span> {{element.cantref}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comment">
-        <mat-header-cell *matHeaderCellDef> Cant. </mat-header-cell>
-        <mat-cell class="duration-cell mat-typography text-color" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
+        <mat-header-cell *matHeaderCellDef class="duration-cell align-right"> Cant. </mat-header-cell>
+        <mat-cell class="duration-cell mat-typography text-color align-right" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
           <ng-container *ngIf="element.comment">
               <span class="mobile-label">Cantidad:</span>
             {{element.comment}}
@@ -155,8 +155,8 @@
       </ng-container>
 
       <ng-container matColumnDef="dif">
-        <mat-header-cell class="duration-cell" *matHeaderCellDef> Dif.</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
+        <mat-header-cell class="duration-cell  align-right" *matHeaderCellDef> Dif.</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
             <span class="mobile-label">Dif.:</span> {{element.dif}} </mat-cell>
       </ng-container>
 
@@ -193,8 +193,8 @@
 
 
   <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
-  <button class="botons example-full-width" mat-raised-button (click)="goBack()" >   Salir</button> 
-  <button class="botons example-full-width" mat-raised-button color="accent" (click)="goValidar()" > Validar</button> 
+  <button class="botons example-full-width" mat-raised-button (click)="goBack()" >   Salir   </button> 
+  <button class="botons example-full-width" mat-raised-button color="accent" (click)="goValidar()" >   Validar   </button> 
  
 </div>
 

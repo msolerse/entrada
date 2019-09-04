@@ -141,7 +141,8 @@ export class SeleccionComponent implements OnInit {
       this.model.observaciones = this.service.currObservaciones;
     }
 
-
+      //document.getElementById('documento').focus();
+   
   }
   onTipMovSelection($event) {
     console.log(" changed tipo Mov=" + this.tipoMov);

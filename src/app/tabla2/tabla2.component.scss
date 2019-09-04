@@ -97,15 +97,21 @@ mat-card-title {
   display: none;
 }
 
+.mat-column-motivo {
+  margin-left: 0px;
+}
+
+
 }
 
 
 .mat-column-name {
-  flex: 0 0 40%;
+  flex: 0 0 30%;
 }
 
 .mat-column-motivo {
   flex: 0 0 15%;
+  margin-left: 8px;
 }
 
 .make-gold {
@@ -124,4 +130,14 @@ mat-card-title {
 .example-headers-align .mat-expansion-panel-header-description {
   justify-content: space-between;
   align-items: center;
+}
+
+.material-icons {
+  vertical-align: middle
+}
+
+.align-right {
+
+  display: flex;
+  justify-content: flex-end;
 }

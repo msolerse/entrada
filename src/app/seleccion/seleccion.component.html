@@ -13,14 +13,22 @@
       <mat-label>Tipo movimiento</mat-label>
       <mat-select name="tipoMov" [(ngModel)]=tipoMov (ngModelChange)="onTipMovSelection()">
         <mat-option *ngFor="let mov of tiposMov" [value]="mov.tipMov">
-          {{mov.desTipMov }}
+          {{mov.desTipMov | titlecase }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
+        <mat-label>Tipo documento</mat-label>
+        <mat-select name="tipoDoc" [(ngModel)]=tipoDoc>
+          <mat-option *ngFor="let food of tiposRef" [value]="food.tipDocRef">
+            {{food.desDocRef}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
     <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
-      <input id="documento" matInput  placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
+      <input matInput  id="documento"  type="text" placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
       minlength="4">
 
     </mat-form-field>
@@ -32,14 +40,7 @@
       </div>
     </div>
 
-    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
-      <mat-label>Tipo documento</mat-label>
-      <mat-select name="tipoDoc" [(ngModel)]=tipoDoc>
-        <mat-option *ngFor="let food of tiposRef" [value]="food.tipDocRef">
-          {{food.desDocRef}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+   
 
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
       fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
@@ -80,8 +81,8 @@
   </mat-card-content>
   </mat-card>
   <mat-card>
-    <button mat-raised-button>Salir</button>
-    <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid ||f.form.controls.proveedor?.pending" (click)="goValidacion()">Posiciones</button>
+    <button mat-raised-button>  Salir  </button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="f.invalid ||f.form.controls.proveedor?.pending" (click)="goValidacion()">  Posiciones  </button>
    <!-- <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button> -->
   </mat-card> 
 

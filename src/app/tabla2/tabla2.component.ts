@@ -97,9 +97,13 @@ export class Tabla2Component {
         });
        }     
       }
+      else if ( this.idPedido == '0' 
+      )
+
+      { this.displayedColumns = ['codigo', 'name', 'symbol',  'comment',  'actionsColumn']; }
       else
        { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
-
+      
       if (this.codProv && ( this.codProv !== this.service.currProveedor ) ) {
        this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
         switch (reply.codigo) {
@@ -125,7 +129,7 @@ export class Tabla2Component {
       this.dataSource = new ExampleDataSource(this.posiciones);
       this.entireDataSource = new ExampleDataSource(this.posiciones);
 
-      if (this.idPedido == '0' ) {
+      if (this.idPedido == '0' && this.posiciones.length == 0 ) {
       this.isExpanded = true;
         }
 
@@ -142,6 +146,8 @@ export class Tabla2Component {
         { this.showAlbaran = true; }
     else
         {  this.showAlbaran = false; }
+
+    document.getElementById('filtrar').focus(); 
 
   }
 
