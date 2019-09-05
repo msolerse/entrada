@@ -1,6 +1,6 @@
 <form novalidate
       #f="ngForm">
-<h1 mat-dialog-title>Añadir posición</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
    
   <mat-form-field  class="example-full-width" >
@@ -35,7 +35,7 @@
  
   <mat-form-field  class="example-full-width">
       <mat-label>Cantidad</mat-label>
-    <input id="cantidad" matInput name="cantidad" placeholder="cantidad" [(ngModel)]="data.comment"
+    <input id="cantidad" matInput  cdkFocusInitial name="cantidad" placeholder="cantidad" [(ngModel)]="data.comment"
      required>
   </mat-form-field>   
 
@@ -61,7 +61,7 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="onNoClick()"  cdkFocusInitial>Cancelar</button>
+  <button mat-raised-button (click)="onNoClick()" >Cancelar</button>
   <button mat-raised-button [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid ||f.form.controls.codigo?.pending">Ok</button>
 </div>
 </form>

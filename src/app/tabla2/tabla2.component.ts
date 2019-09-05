@@ -25,7 +25,7 @@ export class Tabla2Component {
   motivos: Motivo[];
 
   posiciones: Element[];
- 
+
   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 
@@ -241,9 +241,14 @@ export class Tabla2Component {
 
   addRow(ean: string): void {
 
+    const dialogData: DialogData = { codigo: '12345', name: 'Pizza Fresca Buittoni Champis 500G',
+    symbol: 'CJ', tipoMov: '' , codCentro: '' , comment: 2 , motivo: '' ,  cancel: false };
+
+
     const dialogRef = this.dialog.open(AddRowDialog, {
       width: '400px',
-      data: { tipoMov: this.tipoMov, codCentro: this.codCentro }
+      data: { codigo: dialogData.codigo, name: dialogData.name,
+        symbol: dialogData.symbol, comment: dialogData.comment,  tipoMov: this.tipoMov, codCentro: this.codCentro }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -340,9 +345,10 @@ export interface Uni {
   templateUrl: 'add-row-dialog.html',
   styleUrls: ['./add-row-dialog.scss']
 })
-export class AddRowDialog {
+export class AddRowDialog implements OnInit {
 
   motivos: Motivo[];
+  title: string;
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -350,6 +356,16 @@ export class AddRowDialog {
     { value: 'RET', viewValue: 'RET' },
     { value: 'PAL', viewValue: 'PAL' },
   ];
+
+  ngOnInit() {
+    console.log( "data.codigo=" + this.data.codigo );
+    if ( this.data.codigo == '0'  ) 
+      {  this.title = "Añadir Posición"; }
+   else 
+      {  this.title = "Modificar Posición"   }
+
+    document.getElementById('cantidad').focus();
+  }
 
   constructor(
     public dialogRef: MatDialogRef<AddRowDialog>,
@@ -369,23 +385,5 @@ export class AddRowDialog {
   onNoClick(): void {
     this.dialogRef.close( 0 );
   }
-/* 
-  public changeCodigo() {
-    // this.countChange = this.countChange + 1;
-
-    this.service.obtenerArticulo(this.data.codigo, this.data.codCentro).subscribe(reply => {
-      switch (reply.codError) {
-        case 0:
-          this.alert.sendAlert(reply.mensaje, AlertType.Success);
-          this.data.name = reply.descripcion;
-          break;
-        default:
-          this.alert.sendAlert(reply.mensaje, AlertType.Error);
-          break;
-      }
-
-    });
-
-  } */
 
 }
