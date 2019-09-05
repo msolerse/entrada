@@ -225,6 +225,7 @@ export class Tabla2Component {
     // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();
+    document.getElementById('filtrar').focus(); 
   }
   remove(el: Element) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
@@ -238,7 +239,7 @@ export class Tabla2Component {
     //console.log( "adeu");
   }
 
-  addRow(): void {
+  addRow(ean: string): void {
 
     const dialogRef = this.dialog.open(AddRowDialog, {
       width: '400px',

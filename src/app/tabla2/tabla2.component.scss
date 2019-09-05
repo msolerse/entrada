@@ -64,8 +64,14 @@ mat-card-title {
     display: none;
   }
 
+  /* .mat-column-motivo {
+    margin-left: 0px;
+  } */
+  
+
+  
   .mat-select {
-    width: 170px;
+     width: 170px;
   }
 
   .mat-icon-button {
@@ -97,21 +103,24 @@ mat-card-title {
   display: none;
 }
 
-.mat-column-motivo {
-  margin-left: 0px;
 }
 
 
-}
+@media(min-width: 601px) {
 
+  .mat-column-motivo {
+    flex: 0 0 20%;
+     margin-left: 8px;
+  }
+}
 
 .mat-column-name {
   flex: 0 0 30%;
 }
 
 .mat-column-motivo {
-  flex: 0 0 15%;
-  margin-left: 8px;
+  flex: 0 0 20%;
+//  margin-left: 8px;
 }
 
 .make-gold {

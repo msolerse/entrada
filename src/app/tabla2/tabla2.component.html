@@ -84,7 +84,8 @@
 
   <mat-form-field>
 
-    <input matInput id="filtrar" type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
+    <input #filtrar matInput id="filtrar" type="text" (keyup.enter)="addRow(filtrar.value)" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
+
 
   </mat-form-field>
 
@@ -163,7 +164,7 @@
 
       <ng-container  matColumnDef="motivo">
           <mat-header-cell *matHeaderCellDef>Motivo</mat-header-cell>
-          <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label">Motivo:</span>
+          <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label mat-column-motivo">Motivo:</span>
   <mat-select  [(ngModel)]=element.motivo >
     <mat-option *ngFor="let motivo of motivos" [value]="motivo.value">
       {{motivo.viewValue | titlecase}}

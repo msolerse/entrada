@@ -53,8 +53,11 @@ export class InlineEditComponent {
     this.motivo = this._value2 = x;
   }
 
+
   private _value = '';
   private _value2 = '';
+
+  
   
 
   /** Form model for the input. */
