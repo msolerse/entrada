@@ -84,7 +84,7 @@
 
   <mat-form-field>
 
-    <input #filtrar matInput id="filtrar" type="text" (keyup.enter)="addRow(filtrar.value)" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
+    <input #filtrar matInput id="filtrar" type="text" (keyup.enter)="addRow(true, filtrar.value )" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
 
 
   </mat-form-field>
@@ -175,7 +175,7 @@
 
       <ng-container matColumnDef="actionsColumn">
         <mat-header-cell *matHeaderCellDef>
-          <button mat-icon-button color="primary" (click)="addRow()"><i class="fa fa-plus mat-icon"></i></button>
+          <button mat-icon-button color="primary" (click)="addRow( false, '' )"><i class="fa fa-plus mat-icon"></i></button>
         </mat-header-cell>
         <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label">Eliminar:</span>
           <button mat-icon-button color="warn" focusable="false" (click)="remove( element )">
@@ -199,7 +199,7 @@
  
 </div>
 
-<button *ngIf="idPedido != 0" class="btnCreate" mat-fab color="primary" (click)="addRow()"><mat-icon>add</mat-icon></button>
+<button *ngIf="idPedido != 0" class="btnCreate" mat-fab color="primary" (click)="addRow( false , '')"><mat-icon>add</mat-icon></button>
 
 
 

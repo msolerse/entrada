@@ -13,6 +13,7 @@ import { SearchArticuloService } from '../search-articulo/search-articulo.servic
 import { isUndefined } from 'util';
 import { ToolbarService } from '../_services/toolbar.service';
 import { ArticuloDescService } from '../_services/articuloDesc.service';
+import { element } from '@angular/core/src/render3';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class Tabla2Component {
   dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
   entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
 
-  displayedColumns: string[] ;
+  displayedColumns: string[];
   idPedido: string;
   albaran: string;
   codCentro: string;
@@ -54,18 +55,18 @@ export class Tabla2Component {
   ];
 
   constructor(private route: ActivatedRoute,
-              private router: Router, private service: Tabla2Service,
-              private alert: AlertService, public dialog: MatDialog,
-              private search: SearchArticuloService ,
-              private ts: ToolbarService,
-              private ads: ArticuloDescService) { }
+    private router: Router, private service: Tabla2Service,
+    private alert: AlertService, public dialog: MatDialog,
+    private search: SearchArticuloService,
+    private ts: ToolbarService,
+    private ads: ArticuloDescService) { }
 
 
   ngOnInit() {
 
     this.ads.changeMessage('');
-    this.ads.currentMessage.subscribe(message => 
-        this.newName = message);
+    this.ads.currentMessage.subscribe(message =>
+      this.newName = message);
     this.ts.changeMessage('Back');
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPedido = params["idPedido"];
@@ -75,79 +76,75 @@ export class Tabla2Component {
       this.tipoMov = params["tipoMov"];
       this.service.currTipoMov = this.tipoMov;
       this.codProv = params['codProv'];
-     
 
-      if (  this.tipoMov == '002')
-       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo' , 'actionsColumn'];
-      
-         if ( this.service.motivosMov.length != 0) {
-          this.motivos = this.service.motivosMov; }
-       else  {
-         this.service.obtenerMotivos().subscribe(data => {
 
-          switch (+data.codigo) {
+      if (this.tipoMov == '002') {
+        this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo', 'actionsColumn'];
+
+        if (this.service.motivosMov.length != 0) {
+          this.motivos = this.service.motivosMov;
+        }
+        else {
+          this.service.obtenerMotivos().subscribe(data => {
+
+            switch (+data.codigo) {
+              case 0:
+
+                this.motivos = data.motivosMov;
+                break;
+              default:
+                this.alert.sendAlert('Error al obtener los Motivos.', AlertType.Error);
+                break;
+            }
+          });
+        }
+      }
+      else if (this.idPedido == '0'
+      ) { this.displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn']; }
+      else { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
+
+      if (this.codProv && (this.codProv !== this.service.currProveedor)) {
+        this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
+          switch (reply.codigo) {
             case 0:
-              
-              this.motivos = data.motivosMov;
+              console.log("ws datos art prov ok");
               break;
+
             default:
-              this.alert.sendAlert('Error al obtener los Motivos.', AlertType.Error);
+              console.log("ws datos art prov no ok");
               break;
           }
         });
-       }     
       }
-      else if ( this.idPedido == '0' 
-      )
-
-      { this.displayedColumns = ['codigo', 'name', 'symbol',  'comment',  'actionsColumn']; }
-      else
-       { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
-      
-      if (this.codProv && ( this.codProv !== this.service.currProveedor ) ) {
-       this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
-        switch (reply.codigo) {
-          case 0:
-            console.log("ws datos art prov ok");
-            break;
-
-          default:
-            console.log("ws datos art prov no ok");
-            break;
-        }
-      });
-    }
 
     });
 
-    
-   
-    this.route.data
-    .subscribe((data: { crisis: Element[] }) => {
-      this.posiciones = data.crisis;
-     // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
-      this.dataSource = new ExampleDataSource(this.posiciones);
-      this.entireDataSource = new ExampleDataSource(this.posiciones);
 
-      if (this.idPedido == '0' && this.posiciones.length == 0 ) {
-      this.isExpanded = true;
+
+    this.route.data
+      .subscribe((data: { crisis: Element[] }) => {
+        this.posiciones = data.crisis;
+        // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
+        this.dataSource = new ExampleDataSource(this.posiciones);
+        this.entireDataSource = new ExampleDataSource(this.posiciones);
+
+        if (this.idPedido == '0' && this.posiciones.length == 0) {
+          this.isExpanded = true;
         }
 
-      if (this.search.codigo) {
-      this.newCodigo = this.search.codigo;
-      this.newName = this.search.nombre;
-      this.isExpanded = true;
-     // this.search.codigo = '';
-      this.search.nombre = '';
-    }
-  });
+        if (this.search.codigo) {
+          this.newCodigo = this.search.codigo;
+          this.newName = this.search.nombre;
+          this.isExpanded = true;
+          // this.search.codigo = '';
+          this.search.nombre = '';
+        }
+      });
 
-    if ( !!this.albaran && this.albaran !== 'undefined' )
-        { this.showAlbaran = true; }
-    else
-        {  this.showAlbaran = false; }
+    if (!!this.albaran && this.albaran !== 'undefined') { this.showAlbaran = true; }
+    else { this.showAlbaran = false; }
 
-    document.getElementById('filtrar').focus(); 
+    document.getElementById('filtrar').focus();
 
   }
 
@@ -170,12 +167,12 @@ export class Tabla2Component {
   }
 
   anyadir(f: any) {
-    
+
     this.addPosicion(this.newCodigo, this.newName, this.newSymbol, this.newComment, this.newMotivo);
     f.form.reset();
     this.newSymbol = 'UN';
     this.newSymbol = 'CJ';
-    console.log("this.newSymbol="+this.newSymbol);
+    console.log("this.newSymbol=" + this.newSymbol);
 
   }
 
@@ -218,14 +215,14 @@ export class Tabla2Component {
     // copy and mutate
     //const copy = this.dataSource.data().slice()
     const copy = this.entireDataSource.data().slice()
-    console.log('update comment = '+ comment);
+    console.log('update comment = ' + comment);
     el.comment = +comment.split(';')[0];
-    el.dif = el.comment - el.cantref ;
+    el.dif = el.comment - el.cantref;
     el.motivo = comment.split(';')[1];
     // this.dataSource.update(copy);
     this.entireDataSource.update(copy);
     this.service.currPosiciones = this.entireDataSource.data();
-    document.getElementById('filtrar').focus(); 
+    document.getElementById('filtrar').focus();
   }
   remove(el: Element) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
@@ -239,26 +236,54 @@ export class Tabla2Component {
     //console.log( "adeu");
   }
 
-  addRow(ean: string): void {
+  addRow( search: boolean, ean: string): void {
 
-    const dialogData: DialogData = { codigo: '12345', name: 'Pizza Fresca Buittoni Champis 500G',
-    symbol: 'CJ', tipoMov: '' , codCentro: '' , comment: 2 , motivo: '' ,  cancel: false };
+    if  ( (search) && (!(ean)) ) return;
+    let elem: Element;
+    let dialogData: DialogData;
+    let dialogRef;
+
+    if (ean) {
+      elem = this.entireDataSource.data().find(x => x.codigo === ean);
+
+      if (elem) {
+        // console.log("trobat ="+ JSON.stringify( elem));
+        dialogData = {
+          codigo: elem.codigo, name: elem.name,
+          symbol: elem.symbol, tipoMov: this.tipoMov, codCentro: this.codCentro,
+          comment: elem.comment, motivo: elem.motivo, cancel: false
+        }
+        dialogRef = this.dialog.open(AddRowDialog, {
+          width: '400px',
+          data: {
+            codigo: dialogData.codigo, name: dialogData.name,
+            symbol: dialogData.symbol, comment: dialogData.comment,
+            tipoMov: dialogData.tipoMov, codCentro: dialogData.codCentro,
+            motivo: dialogData.motivo
+          }
+        });
+      }
+    } else {
+      dialogRef = this.dialog.open(AddRowDialog, {
+        width: '400px',
+        data: { tipoMov: this.tipoMov, codCentro: this.codCentro }
+      });
+    }
 
 
-    const dialogRef = this.dialog.open(AddRowDialog, {
-      width: '400px',
-      data: { codigo: dialogData.codigo, name: dialogData.name,
-        symbol: dialogData.symbol, comment: dialogData.comment,  tipoMov: this.tipoMov, codCentro: this.codCentro }
-    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-      this.addPosicion(
-        result.codigo,
-        result.name,
-        result.symbol,
-        result.comment,
-        result.motivo); }
+        if (elem)
+          this.update(elem, result.comment + ';' + result.motivo);
+        else
+          this.addPosicion(
+            result.codigo,
+            result.name,
+            result.symbol,
+            result.comment,
+            result.motivo);
+      }
 
     });
 
@@ -279,7 +304,7 @@ export class Tabla2Component {
 
   goValidar() {
 
-    
+
     console.log("Grabando!");
   }
 }
@@ -358,13 +383,17 @@ export class AddRowDialog implements OnInit {
   ];
 
   ngOnInit() {
-    console.log( "data.codigo=" + this.data.codigo );
-    if ( this.data.codigo == '0'  ) 
-      {  this.title = "Añadir Posición"; }
-   else 
-      {  this.title = "Modificar Posición"   }
+    console.log("data.codigo=" + this.data.codigo);
+    if (this.data.codigo) {
+      this.title = "Modificar Posición"
+      document.getElementById('cantidad').focus();
+    }
+    else {
+      this.title = "Añadir Posición";
+    //  document.getElementById('codigo').focus();
+    }
 
-    document.getElementById('cantidad').focus();
+
   }
 
   constructor(
@@ -374,16 +403,16 @@ export class AddRowDialog implements OnInit {
     private alert: AlertService,
     private ads: ArticuloDescService) {
 
-      console.log("tipoMov= "+ data.tipoMov);
-      this.data.symbol = 'CJ';
-      this.motivos = this.service.motivosMov;
-       //this.ads.changeMessage('');
-      this.ads.currentMessage.subscribe(message => 
-        this.data.name = message);
-     }
+    console.log("tipoMov= " + data.tipoMov);
+    this.data.symbol = 'CJ';
+    this.motivos = this.service.motivosMov;
+    //this.ads.changeMessage('');
+    this.ads.currentMessage.subscribe(message =>
+      this.data.name = message);
+  }
 
   onNoClick(): void {
-    this.dialogRef.close( 0 );
+    this.dialogRef.close(0);
   }
 
 }
