@@ -18,9 +18,14 @@ export class ArticuloExistValidator implements AsyncValidator {
   validate(
     ctrl: AbstractControl
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-      if (ctrl.value == this.sas.codigo || ctrl.value == '12345') {
+      if (ctrl.value == this.sas.codigo ) {
        this.sas.codigo = '';
        return of(null); }
+      else if ( this.service.eanFiltered) {
+         console.log("estic a eanfiltered");
+        this.service.eanFiltered = false;
+        return of(null); 
+      }  
       else { 
     return this.service.obtenerArticulo(ctrl.value, this.service.currCentro).pipe(
       map(data => ( (data.codError == 4 ) ? { ArticuloExist: false } : null)),

@@ -35,7 +35,7 @@
  
   <mat-form-field  class="example-full-width">
       <mat-label>Cantidad</mat-label>
-    <input id="cantidad" matInput  cdkFocusInitial name="cantidad" placeholder="cantidad" [(ngModel)]="data.comment"
+    <input id="cantidad" matInput [attr.cdkFocusInitial]="focusCantidad ? '' : null" name="cantidad" placeholder="cantidad" [(ngModel)]="data.comment"
      required>
   </mat-form-field>   
 
@@ -61,7 +61,7 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="onNoClick()" >Cancelar</button>
-  <button mat-raised-button [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid ||f.form.controls.codigo?.pending">Ok</button>
+  <button mat-raised-button type="button" (click)="onNoClick()" >Cancelar</button>
+  <button mat-raised-button type="button" [mat-dialog-close]="data" color = "primary" [disabled]="f.invalid ||f.form.controls.codigo?.pending">Ok</button>
 </div>
 </form>

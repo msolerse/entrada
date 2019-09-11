@@ -41,6 +41,8 @@ export class Tabla2Service {
    public currDatosArticuloProv: DatosArticuloProv[];
    public currTipoMov: string;
 
+   public eanFiltered: boolean;
+
 
    obtenerPosiciones(idPedido: string, albaran: string,
                      codCentro: string): Observable<Element[]> {
@@ -388,10 +390,11 @@ export class Tabla2Service {
                let detalle = Array.from(item.children);
 
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+                if (codigo != '0') {
                   eansArticulo.push(new Ean(
                      detalle[0].innerHTML, //codigo
                      detalle[3].innerHTML, //Ean
-                  ));
+                  )); }
                this.eansArticulos.push(new Ean(
                   detalle[0].innerHTML, //codigo
                   detalle[3].innerHTML, //Ean
@@ -416,6 +419,9 @@ export class Tabla2Service {
             catchError(this.handleError)
          );
    }
+
+   
+
 
    obtenerStock(codigo: string,
                 codCentro: string): Observable<any> {

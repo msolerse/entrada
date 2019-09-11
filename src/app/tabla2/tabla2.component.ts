@@ -46,6 +46,7 @@ export class Tabla2Component {
 
   isExpanded: boolean;
   showAlbaran: boolean;
+  filtrarText: string = '';
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -78,7 +79,7 @@ export class Tabla2Component {
       this.codProv = params['codProv'];
 
 
-      if (this.tipoMov == '002') {
+      if (this.tipoMov == '002') { // distribucion plataforma, obtener motivos
         this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo', 'actionsColumn'];
 
         if (this.service.motivosMov.length != 0) {
@@ -101,7 +102,25 @@ export class Tabla2Component {
       }
       else if (this.idPedido == '0'
       ) { this.displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn']; }
-      else { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; }
+      else { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; 
+     }
+     
+     if (this.idPedido != '0' ) {
+         this.service.obtenerEans( '0', this.codCentro).subscribe(
+         reply => {
+          switch (reply.codigo) {
+            case 0:
+              console.log("Eans ok");
+              console.log(JSON.stringify(this.service.eansArticulos));
+              break;
+
+            default:
+              console.log("Eans no ok");
+              break;
+          }
+        });
+      }
+
 
       if (this.codProv && (this.codProv !== this.service.currProveedor)) {
         this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
@@ -236,7 +255,7 @@ export class Tabla2Component {
     //console.log( "adeu");
   }
 
-  addRow( search: boolean, ean: string): void {
+  addRow( search: boolean, ean: string, f2?: any): void {
 
     if  ( (search) && (!(ean)) ) return;
     let elem: Element;
@@ -244,7 +263,11 @@ export class Tabla2Component {
     let dialogRef;
 
     if (ean) {
-      elem = this.entireDataSource.data().find(x => x.codigo === ean);
+      if (ean.length >= 8) {
+         let codArt  = this.service.eansArticulos.find(x => x.ean === ean).codigo;
+         elem = this.entireDataSource.data().find(x => x.codigo === codArt );
+      }  else {
+      elem = this.entireDataSource.data().find(x => x.codigo === ean); }
 
       if (elem) {
         // console.log("trobat ="+ JSON.stringify( elem));
@@ -253,8 +276,11 @@ export class Tabla2Component {
           symbol: elem.symbol, tipoMov: this.tipoMov, codCentro: this.codCentro,
           comment: elem.comment, motivo: elem.motivo, cancel: false
         }
-        dialogRef = this.dialog.open(AddRowDialog, {
-          width: '400px',
+        //console.log("ean filtered true, name="+ dialogData.name );
+        this.service.eanFiltered = true;
+        this.ads.changeMessage(dialogData.name);
+        dialogRef = this.dialog.open(AddRowDialog, { disableClose: true,
+          width: '400px', 
           data: {
             codigo: dialogData.codigo, name: dialogData.name,
             symbol: dialogData.symbol, comment: dialogData.comment,
@@ -264,15 +290,21 @@ export class Tabla2Component {
         });
       }
     } else {
-      dialogRef = this.dialog.open(AddRowDialog, {
+     
+      this.ads.changeMessage('');
+      dialogRef = this.dialog.open(AddRowDialog, { disableClose: true,
         width: '400px',
-        data: { tipoMov: this.tipoMov, codCentro: this.codCentro }
+        data: {  tipoMov: this.tipoMov, codCentro: this.codCentro }
       });
     }
 
 
-
     dialogRef.afterClosed().subscribe(result => {
+      if (f2)
+      f2.form.reset();
+
+      this.doFilter('');
+      
       if (result) {
         if (elem)
           this.update(elem, result.comment + ';' + result.motivo);
@@ -283,10 +315,11 @@ export class Tabla2Component {
             result.symbol,
             result.comment,
             result.motivo);
-      }
+          }
 
     });
-
+    
+ 
   }
 
   public doFilter = (value: string) => {
@@ -382,15 +415,19 @@ export class AddRowDialog implements OnInit {
     { value: 'PAL', viewValue: 'PAL' },
   ];
 
+  focusCantidad: boolean;
+  
   ngOnInit() {
     console.log("data.codigo=" + this.data.codigo);
     if (this.data.codigo) {
       this.title = "Modificar Posición"
+     
       document.getElementById('cantidad').focus();
+      this.focusCantidad = true;
     }
     else {
       this.title = "Añadir Posición";
-    //  document.getElementById('codigo').focus();
+     // document.getElementById('codigo').focus();
     }
 
 
@@ -404,7 +441,7 @@ export class AddRowDialog implements OnInit {
     private ads: ArticuloDescService) {
 
     console.log("tipoMov= " + data.tipoMov);
-    this.data.symbol = 'CJ';
+    //this.data.symbol = 'CJ';
     this.motivos = this.service.motivosMov;
     //this.ads.changeMessage('');
     this.ads.currentMessage.subscribe(message =>

@@ -81,13 +81,14 @@
 
 <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px" >
 
-
+  <form novalidate  #f2="ngForm">
   <mat-form-field>
 
-    <input #filtrar matInput id="filtrar" type="text" (keyup.enter)="addRow(true, filtrar.value )" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
+    <input #filtrar matInput id="filtrar" name="filtrar" [ngModel]="filtrarText" type="text"(keyup.enter)="addRow(true, filtrar.value, f2 )" (keyup)="doFilter($event.target.value)" placeholder="Filtrar" >
 
 
   </mat-form-field>
+  </form>
 
   </div> <!--
  <div [ngClass.sm]="'myNarrowClass'"
