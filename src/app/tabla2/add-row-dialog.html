@@ -6,7 +6,7 @@
   <mat-form-field  class="example-full-width" >
       <mat-label>Código</mat-label>
      
-    <input id="codigo" matInput placeholder="código material"  name="codigo" [(ngModel)]="data.codigo" [ngModelOptions]="{ updateOn: 'blur' }"
+    <input id="codigo" matInput placeholder="código material"   name="codigo" [(ngModel)]="data.codigo" [ngModelOptions]="{ updateOn: 'blur' }" (keydown.enter)="$event.target.blur();"
     appArticuloExist required>
   </mat-form-field>  
   <div *ngIf="f.form.controls.codigo?.pending">Validando...</div>

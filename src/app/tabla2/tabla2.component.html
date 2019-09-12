@@ -31,7 +31,7 @@
   
   <mat-form-field fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
     <mat-label>Código</mat-label>
-  <input matInput placeholder="código material"  name="codigo" [(ngModel)]="newCodigo" [ngModelOptions]="{ updateOn: 'blur' }"
+  <input matInput placeholder="código material"  name="codigo" [(ngModel)]="newCodigo" [ngModelOptions]="{ updateOn: 'blur' }" (keydown.enter)="$event.target.blur();"
     appArticuloExist required>
   <button mat-icon-button matSuffix (click)="goSearchArticulo()" [attr.aria-label]="'Search'" [attr.aria-pressed]="hide">
       <mat-icon>search</mat-icon>

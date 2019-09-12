@@ -13,7 +13,8 @@ import { SearchArticuloService } from '../search-articulo/search-articulo.servic
 import { isUndefined } from 'util';
 import { ToolbarService } from '../_services/toolbar.service';
 import { ArticuloDescService } from '../_services/articuloDesc.service';
-import { element } from '@angular/core/src/render3';
+import { Ean } from '../_entities/Ean';
+//import { element } from '@angular/core/src/render3';
 
 
 @Component({
@@ -102,23 +103,24 @@ export class Tabla2Component {
       }
       else if (this.idPedido == '0'
       ) { this.displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn']; }
-      else { this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn']; 
-     }
-     
-     if (this.idPedido != '0' ) {
-         this.service.obtenerEans( '0', this.codCentro).subscribe(
-         reply => {
-          switch (reply.codigo) {
-            case 0:
-              console.log("Eans ok");
-              console.log(JSON.stringify(this.service.eansArticulos));
-              break;
+      else {
+        this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
+      }
 
-            default:
-              console.log("Eans no ok");
-              break;
-          }
-        });
+      if (this.idPedido != '0') {
+        this.service.obtenerEans('0', this.codCentro).subscribe(
+          reply => {
+            switch (reply.codigo) {
+              case 0:
+                console.log("Eans ok");
+                console.log(JSON.stringify(this.service.eansArticulos));
+                break;
+
+              default:
+                console.log("Eans no ok");
+                break;
+            }
+          });
       }
 
 
@@ -173,7 +175,7 @@ export class Tabla2Component {
     this.service.obtenerArticulo(this.newCodigo, this.codCentro).subscribe(reply => {
       switch (reply.codError) {
         case 0:
-          this.alert.sendAlert(reply.mensaje, AlertType.Success);
+          //this.alert.sendAlert(reply.mensaje, AlertType.Success);
           this.newName = reply.descripcion;
           break;
         default:
@@ -255,56 +257,96 @@ export class Tabla2Component {
     //console.log( "adeu");
   }
 
-  addRow( search: boolean, ean: string, f2?: any): void {
+  // upsert: if exists -> update, else -> insert
+  addRow(search: boolean, ean: string, f2?: any , okBack?: boolean, desc?: string): void {
 
-    if  ( (search) && (!(ean)) ) return;
+    if ((search) && (!(ean))) return;
+
     let elem: Element;
+    let elemEan: Ean;
     let dialogData: DialogData;
     let dialogRef;
+    let codArt: string;
 
     if (ean) {
-      if (ean.length >= 8) {
-         let codArt  = this.service.eansArticulos.find(x => x.ean === ean).codigo;
-         elem = this.entireDataSource.data().find(x => x.codigo === codArt );
-      }  else {
-      elem = this.entireDataSource.data().find(x => x.codigo === ean); }
 
-      if (elem) {
+      if (ean.length >= 8) {
+        //Es un ean 
+        // busqueda Ean en caché
+        elemEan = this.service.eansArticulos.find(x => x.ean === ean);
+        if (!(elemEan)) {
+          this.searchNewEan(ean, this.codCentro, f2);
+          return;
+        }
+
+        codArt = elemEan.codigo;
+        elem = this.entireDataSource.data().find(x => x.codigo === codArt);
+      } else { // Es un código de articulo
+        elem = this.entireDataSource.data().find(x => x.codigo === ean);
+      }
+
+      if (!(elem)) {
+        if (!(okBack)) {
+          this.searchNewEan(ean, this.codCentro, f2);
+          return;
+        }
+        else { // alta por scaneo
+          dialogData = {
+            codigo: ean, name: desc,
+            symbol: 'CJ', tipoMov: this.tipoMov, codCentro: this.codCentro,
+            comment: 0, motivo: '', cancel: false, title: 'Añadir Posición'
+          };
+          this.service.eanFiltered = true;
+          this.ads.changeMessage(dialogData.name);
+          dialogRef = this.dialog.open(AddRowDialog, {
+            disableClose: true,
+            width: '400px',
+            data: {
+              codigo: dialogData.codigo, name: dialogData.name,
+              symbol: dialogData.symbol, comment: dialogData.comment,
+              tipoMov: dialogData.tipoMov, codCentro: dialogData.codCentro,
+              motivo: dialogData.motivo, title: dialogData.title
+            }
+          });
+        }
+      }
+      else {
         // console.log("trobat ="+ JSON.stringify( elem));
         dialogData = {
           codigo: elem.codigo, name: elem.name,
           symbol: elem.symbol, tipoMov: this.tipoMov, codCentro: this.codCentro,
-          comment: elem.comment, motivo: elem.motivo, cancel: false
+          comment: elem.comment, motivo: elem.motivo, cancel: false, title: 'Modificar Posición'
         }
-        //console.log("ean filtered true, name="+ dialogData.name );
         this.service.eanFiltered = true;
         this.ads.changeMessage(dialogData.name);
-        dialogRef = this.dialog.open(AddRowDialog, { disableClose: true,
-          width: '400px', 
+        dialogRef = this.dialog.open(AddRowDialog, {
+          disableClose: true,
+          width: '400px',
           data: {
             codigo: dialogData.codigo, name: dialogData.name,
             symbol: dialogData.symbol, comment: dialogData.comment,
             tipoMov: dialogData.tipoMov, codCentro: dialogData.codCentro,
-            motivo: dialogData.motivo
+            motivo: dialogData.motivo, title: dialogData.title
           }
         });
       }
-    } else {
-     
+    } else { // botón alta de  posición
+
       this.ads.changeMessage('');
-      dialogRef = this.dialog.open(AddRowDialog, { disableClose: true,
+      dialogRef = this.dialog.open(AddRowDialog, {
+        disableClose: true,
         width: '400px',
-        data: {  tipoMov: this.tipoMov, codCentro: this.codCentro }
+        data: { tipoMov: this.tipoMov, codCentro: this.codCentro, title: 'Añadir Posición' }
       });
     }
 
 
     dialogRef.afterClosed().subscribe(result => {
       if (f2)
-      f2.form.reset();
+        f2.form.reset();
 
       this.doFilter('');
-      
+
       if (result) {
         if (elem)
           this.update(elem, result.comment + ';' + result.motivo);
@@ -315,11 +357,11 @@ export class Tabla2Component {
             result.symbol,
             result.comment,
             result.motivo);
-          }
+      }
 
     });
-    
- 
+
+
   }
 
   public doFilter = (value: string) => {
@@ -330,6 +372,25 @@ export class Tabla2Component {
     this.dataSource.update(copy);
   }
 
+  searchNewEan(ean: string, codCentro: string, f2?: any) {
+
+    let dialogRef;
+    let codArt: string;
+    let dialogData: DialogData;
+    this.service.obtenerArticulo(ean, this.codCentro).subscribe(
+      reply => {
+        switch (reply.codError) {
+          case 0:
+            this.addRow(true, +reply.codigo + '', f2, true, reply.descripcion );
+            // console.log("trobat ="+ JSON.stringify( elem));
+            break;
+          default:
+
+            this.alert.sendAlert('Ean no encontrado', AlertType.Error);
+            break;
+        }
+      });
+  }
 
   goBack() {
     this.router.navigate(['']);
@@ -391,6 +452,7 @@ export interface DialogData {
   comment: number;
   motivo: string;
   cancel: boolean;
+  title: string;
 }
 
 export interface Uni {
@@ -416,18 +478,19 @@ export class AddRowDialog implements OnInit {
   ];
 
   focusCantidad: boolean;
-  
+
   ngOnInit() {
     console.log("data.codigo=" + this.data.codigo);
+    this.title = this.data.title;
     if (this.data.codigo) {
-      this.title = "Modificar Posición"
-     
+ //     this.title = "Modificar Posición"
+
       document.getElementById('cantidad').focus();
       this.focusCantidad = true;
     }
     else {
-      this.title = "Añadir Posición";
-     // document.getElementById('codigo').focus();
+//      this.title = "Añadir Posición";
+      // document.getElementById('codigo').focus();
     }
 
 
