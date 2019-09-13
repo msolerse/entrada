@@ -25,10 +25,12 @@ export class TestResolverService implements Resolve<Element[]> {
     // tslint:disable-next-line: prefer-const
     let codCentro = route.paramMap.get('codcentro');
     let albaran = route.paramMap.get('albaran');
+    let tipoDoc = route.paramMap.get('tipoDoc');
    
 
-    console.log( 'this.ts.currPedido= ' +  this.ts.currPedido);
-    console.log( 'idPedido= ' +  idPedido);
+   // console.log( 'this.ts.currPedido= ' +  this.ts.currPedido);
+   // console.log( 'idPedido= ' +  idPedido);
+   console.log( 'tipoDoc= ' +  tipoDoc);
 
     if (idPedido != '0' && idPedido == this.ts.currPedido) {
 
@@ -36,7 +38,7 @@ export class TestResolverService implements Resolve<Element[]> {
     }  else {
       if (idPedido != '0') {
 
-        return this.ts.obtenerPosiciones(idPedido, codCentro, albaran).pipe(
+        return this.ts.obtenerPosiciones(idPedido, codCentro, albaran, tipoDoc).pipe(
           take(1),
           mergeMap(posiciones => {
             if (posiciones.length > 0) {

@@ -182,25 +182,25 @@ export class SeleccionService {
     <soapenv:Body>
        <urn:Z_GET_WERKS>
           <!--Optional:-->
-          <I_WERKS>?</I_WERKS>
+          <I_WERKS></I_WERKS>
           <!--Optional:-->
           <TO_RETURN>
              <!--Zero or more repetitions:-->
              <item>
-                <TYPE>?</TYPE>
-                <ID>?</ID>
-                <NUMBER>?</NUMBER>
-                <MESSAGE>?</MESSAGE>
-                <LOG_NO>?</LOG_NO>
-                <LOG_MSG_NO>?</LOG_MSG_NO>
-                <MESSAGE_V1>?</MESSAGE_V1>
-                <MESSAGE_V2>?</MESSAGE_V2>
-                <MESSAGE_V3>?</MESSAGE_V3>
-                <MESSAGE_V4>?</MESSAGE_V4>
-                <PARAMETER>?</PARAMETER>
-                <ROW>?</ROW>
-                <FIELD>?</FIELD>
-                <SYSTEM>?</SYSTEM>
+                <TYPE></TYPE>
+                <ID></ID>
+                <NUMBER></NUMBER>
+                <MESSAGE></MESSAGE>
+                <LOG_NO></LOG_NO>
+                <LOG_MSG_NO></LOG_MSG_NO>
+                <MESSAGE_V1></MESSAGE_V1>
+                <MESSAGE_V2></MESSAGE_V2>
+                <MESSAGE_V3></MESSAGE_V3>
+                <MESSAGE_V4></MESSAGE_V4>
+                <PARAMETER></PARAMETER>
+                <ROW></ROW>
+                <FIELD></FIELD>
+                <SYSTEM></SYSTEM>
              </item>
           </TO_RETURN>
        </urn:Z_GET_WERKS>
@@ -266,9 +266,9 @@ export class SeleccionService {
       <soapenv:Header/>
       <soapenv:Body>
          <urn:ZWD_MM_MATCH_CODE_PROV>
-            <I_CENTRO>0021</I_CENTRO>
+            <I_CENTRO>` + codCentro + `</I_CENTRO>
             <I_PARAM>
-               <VENDOR>4029</VENDOR>
+               <VENDOR>` + proveedor + `</VENDOR>
                <NAME></NAME>
                <NAME_2></NAME_2>
                <CITY></CITY>

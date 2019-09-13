@@ -167,36 +167,6 @@ export class SeleccionComponent implements OnInit {
 
   }
 
-
-  /* changeProveedor(f: any) {
-    this.service.obtenerProveedor(this.model.proveedor, this.codCentro).subscribe(reply => {
-      console.log("reply.codError="+ reply.codError);
-      console.log("reply.mensajeError="+ reply.mensajeError);
-      switch (reply.codError) {
-        case 0:
-          //this.alert.sendAlert(reply.mensaje, AlertType.Success);
-          this.nombre = reply.nombre;
-          this.service.obtenerArticulosProv(this.model.proveedor, this.codCentro).subscribe(reply => {
-            switch (reply.codigo) {
-              case 0:
-                console.log("ws datos art prov ok");
-                break;
-
-              default:
-                console.log("ws datos art prov no ok");
-                break;
-            }
-          });
-          break;
-        default:
-          this.alert.sendAlert(reply.mensajeError, AlertType.Error);
-          //this.model.proveedor = '';
-          f.form.controls.proveedor.reset();
-      }
-
-    });
-  } */
-
   goValidacion() {
     // guardar valores
 
@@ -215,7 +185,7 @@ export class SeleccionComponent implements OnInit {
       this.model.documento = '0';
     }
 
-    this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov, codProv: this.model.proveedor }]);
+    this.router.navigate(['tabla2', this.model.documento, this.codCentro, { albaran: this.model.albaran , tipoMov: this.tipoMov, codProv: this.model.proveedor, tipoDoc: this.tipoDoc }]);
   }
 
   goTest() {
