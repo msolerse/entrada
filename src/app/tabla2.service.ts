@@ -760,64 +760,79 @@ export class Tabla2Service {
 
     
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let url = 'http://localhost:8088/mockZWD_PDA_ENT_MERCANCIA_N'
       let body = `
-      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
-      <soapenv:Header/>
-      <soapenv:Body>
-         <urn:ZWD_MM_LIST_MAT_PROV>
-            <I_LIFNR>?</I_LIFNR>
-            <I_WERKS>?</I_WERKS>
-            <T_MATNR>
-               <!--Zero or more repetitions:-->
-               <item>
-                  <LGPBE>?</LGPBE>
-                  <MATNR>?</MATNR>
-                  <MEINS>?</MEINS>
-                  <MENGE_PL>?</MENGE_PL>
-                  <PRWOG>?</PRWOG>
-                  <PRWUG>?</PRWUG>
-                  <IDNLF>?</IDNLF>
-                  <IND>?</IND>
-                  <MAKTX>?</MAKTX>
-                  <SUMINISTRA_CASH>?</SUMINISTRA_CASH>
-                  <SUMINISTRA_CNTRO>?</SUMINISTRA_CNTRO>
-                  <PLATAFORMA>?</PLATAFORMA>
-                  <DESCR_PLATAFORMA>?</DESCR_PLATAFORMA>
-                  <PSEN_PRIOR>?</PSEN_PRIOR>
-                  <DEVOLUCION>?</DEVOLUCION>
-               </item>
-            </T_MATNR>
-            <!--Optional:-->
-            <T_MEINS>
-               <!--Zero or more repetitions:-->
-               <item>
-                  <MATNR>?</MATNR>
-                  <MEINS>?</MEINS>
-               </item>
-            </T_MEINS>
-            <T_RETURN>
-               <!--Zero or more repetitions:-->
-               <item>
-                  <TYPE>?</TYPE>
-                  <ID>?</ID>
-                  <NUMBER>?</NUMBER>
-                  <MESSAGE>?</MESSAGE>
-                  <LOG_NO>?</LOG_NO>
-                  <LOG_MSG_NO>?</LOG_MSG_NO>
-                  <MESSAGE_V1>?</MESSAGE_V1>
-                  <MESSAGE_V2>?</MESSAGE_V2>
-                  <MESSAGE_V3>?</MESSAGE_V3>
-                  <MESSAGE_V4>?</MESSAGE_V4>
-                  <PARAMETER>?</PARAMETER>
-                  <ROW>?</ROW>
-                  <FIELD>?</FIELD>
-                  <SYSTEM>?</SYSTEM>
-               </item>
-            </T_RETURN>
-         </urn:ZWD_MM_LIST_MAT_PROV>
-      </soapenv:Body>
-   </soapenv:Envelope>
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZwdPdaEntMercanciaN>
+         <ILifnr>${proveedor}</ILifnr>
+         <IWerks>${codCentro}</IWerks>
+         <TMatnr>
+            <!--Zero or more repetitions:-->
+            <item>
+               <Lgpbe></Lgpbe>
+               <Matnr></Matnr>
+               <Meins></Meins>
+               <MengePl></MengePl>
+               <Prwog></Prwog>
+               <Prwug></Prwug>
+               <Idnlf></Idnlf>
+               <Ind></Ind>
+               <Maktx></Maktx>
+               <SuministraCash></SuministraCash>
+               <SuministraCntro></SuministraCntro>
+               <Plataforma></Plataforma>
+               <DescrPlataforma></DescrPlataforma>
+               <PsenPrior></PsenPrior>
+               <Devolucion></Devolucion>
+            </item>
+         </TMatnr>
+         <ToEan>
+            <!--Zero or more repetitions:-->
+            <item>
+               <Mandt></Mandt>
+               <Matnr></Matnr>
+               <Meinh></Meinh>
+               <Lfnum></Lfnum>
+               <Ean11></Ean11>
+               <Eantp></Eantp>
+               <Hpean></Hpean>
+            </item>
+         </ToEan>
+         <ToReturn>
+            <!--Zero or more repetitions:-->
+            <item>
+               <Type></Type>
+               <Id></Id>
+               <Number></Number>
+               <Message></Message>
+               <LogNo></LogNo>
+               <LogMsgNo></LogMsgNo>
+               <MessageV1></MessageV1>
+               <MessageV2></MessageV2>
+               <MessageV3></MessageV3>
+               <MessageV4></MessageV4>
+               <Parameter></Parameter>
+               <Row></Row>
+               <Field></Field>
+               <System></System>
+            </item>
+         </ToReturn>
+         <ToUm>
+            <!--Zero or more repetitions:-->
+            <item>
+               <Matnr></Matnr>
+               <Meinh></Meinh>
+               <Mseh3></Mseh3>
+               <Mseht></Mseht>
+               <Umrez></Umrez>
+               <Umren></Umren>
+            </item>
+         </ToUm>
+      </urn:ZwdPdaEntMercanciaN>
+   </soapenv:Body>
+</soapenv:Envelope>
       `;
 
       return this.http.post(url, body, { responseType: 'text' })
@@ -828,7 +843,7 @@ export class Tabla2Service {
             let dom = x2js.xml2dom(data);
 
 
-            let itemsDOM = Array.from(dom.getElementsByTagName('T_MATNR')[0].children);
+            let itemsDOM = Array.from(dom.getElementsByTagName('TMatnr')[0].children);
 
             let articulosProv: DatosArticuloProv[] = [];
             itemsDOM.forEach(item => {
@@ -848,7 +863,7 @@ export class Tabla2Service {
             });
 
             let codigo;
-            let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('ToReturn')[0].children);
             itemsDOM2.forEach(item => {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
