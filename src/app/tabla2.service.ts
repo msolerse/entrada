@@ -861,6 +861,23 @@ export class Tabla2Service {
                      +detalle[5].innerHTML, //stock Minimo
                   ));
             });
+// eans
+
+           let itemsDOM3 = Array.from(dom.getElementsByTagName('ToEan')[0].children);
+
+            let eansArticulo: Ean[] = [];
+            itemsDOM3.forEach(item => {
+               let detalle = Array.from(item.children);
+
+               if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+               
+               this.eansArticulos.push(new Ean(
+                  detalle[1].innerHTML, //codigo
+                  detalle[4].innerHTML, //Ean
+               ));
+            });
+
+// return
 
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('ToReturn')[0].children);

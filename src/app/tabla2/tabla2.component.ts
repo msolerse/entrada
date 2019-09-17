@@ -211,6 +211,17 @@ export class Tabla2Component {
     } else {
       maxId = 10;
     }
+    // si es un ean , convertir a código interno
+    if (codigo.length >= 8) {
+      let elemEan: Ean;
+
+      elemEan = this.service.eansArticulos.find(x => x.ean === codigo);
+
+      if (elemEan) {
+        codigo = elemEan.codigo;
+      }
+    }
+
 
     this.entireDataSource.data().push({
       id: maxId,
@@ -258,7 +269,7 @@ export class Tabla2Component {
   }
 
   // upsert: if exists -> update, else -> insert
-  addRow(search: boolean, ean: string, f2?: any , okBack?: boolean, desc?: string): void {
+  addRow(search: boolean, ean: string, f2?: any, okBack?: boolean, desc?: string): void {
 
     if ((search) && (!(ean))) return;
 
@@ -381,7 +392,7 @@ export class Tabla2Component {
       reply => {
         switch (reply.codError) {
           case 0:
-            this.addRow(true, +reply.codigo + '', f2, true, reply.descripcion );
+            this.addRow(true, +reply.codigo + '', f2, true, reply.descripcion);
             // console.log("trobat ="+ JSON.stringify( elem));
             break;
           default:
@@ -483,13 +494,13 @@ export class AddRowDialog implements OnInit {
     console.log("data.codigo=" + this.data.codigo);
     this.title = this.data.title;
     if (this.data.codigo) {
- //     this.title = "Modificar Posición"
+      //     this.title = "Modificar Posición"
 
       document.getElementById('cantidad').focus();
       this.focusCantidad = true;
     }
     else {
-//      this.title = "Añadir Posición";
+      //      this.title = "Añadir Posición";
       // document.getElementById('codigo').focus();
     }
 
