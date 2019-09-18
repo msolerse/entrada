@@ -108,7 +108,8 @@ export class Tabla2Component {
       }
 
       if (this.idPedido != '0') {
-        this.service.obtenerEans('0', this.codCentro).subscribe(
+        this.service.eansArticulos = [];
+        this.service.obtenerEans('0', this.codCentro, this.service.currPosiciones).subscribe(
           reply => {
             switch (reply.codigo) {
               case 0:
@@ -408,9 +409,19 @@ export class Tabla2Component {
   }
 
   goValidar() {
-
-
     console.log("Grabando!");
+    this.service.validarEntrada().subscribe(data => {
+
+      switch (+data.codigo) {
+        case 0:
+
+          this.alert.sendAlert('Validacón efectuada correctamente.', AlertType.Success);
+          break;
+        default:
+          this.alert.sendAlert('Error en el proceso de validación.', AlertType.Error);
+          break;
+      }
+    });
   }
 }
 

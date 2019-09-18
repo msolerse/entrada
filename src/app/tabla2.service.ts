@@ -318,7 +318,7 @@ export class Tabla2Service {
    }
 
    obtenerEans(codigo: string,
-               codCentro: string): Observable<any> {
+               codCentro: string, pos?: Element[]): Observable<any> {
 
 
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
@@ -333,11 +333,15 @@ export class Tabla2Service {
             <!--Optional:-->
             <I_IDNLF></I_IDNLF>
             <!--Optional:-->
-            <I_MATNR>123</I_MATNR>
-            <I_WERKS>0021</I_WERKS>
+            <I_MATNR>${codigo}</I_MATNR>
+            <I_WERKS>${codCentro}</I_WERKS>
             <T_LIS_EAN>
-               <!--Zero or more repetitions:-->
-               <item>
+               <!--Zero or more repetitions:-->`;
+     
+      if ( codigo != '0' ) {
+         body +=
+            `
+            <item>
                   <MATNR></MATNR>
                   <MAKTX></MAKTX>
                   <MAKTM></MAKTM>
@@ -350,7 +354,30 @@ export class Tabla2Service {
                   <ALTERNATIVO></ALTERNATIVO>
                   <BORRADO></BORRADO>
                </item>
-            </T_LIS_EAN>
+        `; }
+        else {
+
+         pos.forEach( posi => {
+            body += `
+            <item>
+            <MATNR>>${posi.codigo}</MATNR>
+            <MAKTX></MAKTX>
+            <MAKTM></MAKTM>
+            <EAN11></EAN11>
+            <MEINH></MEINH>
+            <UMREZ></UMREZ>
+            <MEINS></MEINS>
+            <ERSDA></ERSDA>
+            <NUMTP></NUMTP>
+            <ALTERNATIVO></ALTERNATIVO>
+            <BORRADO></BORRADO>
+            </item>
+            `;
+          });
+      
+        }    
+
+            body += `</T_LIS_EAN>
             <T_RETURN>
                <!--Zero or more repetitions:-->
                <item>
@@ -436,12 +463,12 @@ export class Tabla2Service {
             <ILoadOtrosStocks>X</ILoadOtrosStocks>
             <!--Optional:-->
             <IOnlyMinimoMaximo></IOnlyMinimoMaximo>
-            <IWerks>0021</IWerks>
+            <IWerks>${codCentro}</IWerks>
             <TiMateriales>
                <!--Zero or more repetitions:-->
                <item>
                   <Mandt></Mandt>
-                  <Matnr>2813</Matnr>
+                  <Matnr>${codigo}</Matnr>
                   <Ersda></Ersda>
                   <Ernam></Ernam>
                   <Laeda></Laeda>
