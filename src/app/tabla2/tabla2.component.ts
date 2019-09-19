@@ -410,7 +410,7 @@ export class Tabla2Component {
 
   goValidar() {
     console.log("Grabando!");
-    this.service.validarEntrada().subscribe(data => {
+    /* this.service.validarEntrada().subscribe(data => {
 
       switch (+data.codigo) {
         case 0:
@@ -421,7 +421,7 @@ export class Tabla2Component {
           this.alert.sendAlert('Error en el proceso de validación.', AlertType.Error);
           break;
       }
-    });
+    }); */
   }
 }
 

@@ -26,7 +26,7 @@ export class Tabla2Service {
    codMotivo: string;
 
    constructor(private http: HttpClient, private alert: AlertService,
-               private ads: ArticuloDescService) { }
+      private ads: ArticuloDescService) { }
 
    public currPedido: string;
    public currAlbaran: string;
@@ -45,9 +45,9 @@ export class Tabla2Service {
 
 
    obtenerPosiciones(idPedido: string, albaran: string,
-                     codCentro: string, tipoDoc: string): Observable<Element[]> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
+      codCentro: string, tipoDoc: string, tipoMov: string): Observable<Element[]> {
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+      //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       <soapenv:Header/>
@@ -58,7 +58,7 @@ export class Tabla2Service {
                <DES_CENTRO></DES_CENTRO>
                <ALMACEN></ALMACEN>
                <FECHA_CONTAB></FECHA_CONTAB>
-               <CLASE_MOVIMIENTO></CLASE_MOVIMIENTO>
+               <CLASE_MOVIMIENTO>${tipoMov}</CLASE_MOVIMIENTO>
                <DES_TIPOMOV></DES_TIPOMOV>
                <PROVEEDOR></PROVEEDOR>
                <DESC_PROVEEDOR></DESC_PROVEEDOR>
@@ -193,11 +193,11 @@ export class Tabla2Service {
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
-         
+
             let itemsDOM = Array.from(dom.getElementsByTagName('T_POS')[0].children);
 
             let posiciones: Element[] = [];
-             
+
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0') {
@@ -215,32 +215,36 @@ export class Tabla2Service {
 
 
             const itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
+            this.codigo = '0';
             itemsDOM2.forEach(item => {
                const detalle2 = Array.from(item.children);
-               if ( detalle2[0].innerHTML == 'E' )
-                {   this.codigo = '4' ;
-                    this.mensaje = detalle2[3].innerHTML; 
-                    this.alert.sendAlert(this.mensaje, AlertType.Error);
-                     }
-                     else     {        this.codigo = '0'; 
-                                       this.currPedido = idPedido;
-                                       this.currPosiciones = posiciones;
-                     }
+               if (detalle2[0].innerHTML == 'E') {
+               this.codigo = '4';
+                  this.mensaje = detalle2[3].innerHTML;
+                  this.alert.sendAlert(this.mensaje, AlertType.Error);
+               }
+
+
             });
-           
-            return  posiciones;
-            
-            
+
+            if ((this.codigo == '0') && (posiciones.length > 0)) {
+
+               this.currPedido = idPedido;
+               this.currPosiciones = posiciones;
+            }
+            return posiciones;
+
+
          });
-         /* .pipe(
-            catchError(this.handleError)
-         ); */
+      /* .pipe(
+         catchError(this.handleError)
+      ); */
    }
 
    obtenerArticulo(idArticulo: string,
-                   codCentro: string): Observable<any> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
+      codCentro: string): Observable<any> {
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+      //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
@@ -249,7 +253,7 @@ export class Tabla2Service {
          <!--Optional:-->
          <IDNLF></IDNLF>
          <!--Optional:-->
-         <LIFNR>?</LIFNR>
+         <LIFNR></LIFNR>
          <!--Optional:-->
          <MATNR>${idArticulo}</MATNR>
          <UM>
@@ -277,7 +281,7 @@ export class Tabla2Service {
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
-         
+
 
             let codigo = dom.getElementsByTagName("MATNR")[0].innerHTML;
             let descripcion = dom.getElementsByTagName("MAKTX")[0].innerHTML;
@@ -287,15 +291,15 @@ export class Tabla2Service {
             let palet = dom.getElementsByTagName("PALET")[0].innerHTML;
 
             let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
-            console.log("codigo="+codigo);
-           
-            if (codigo != null && !(codigo.length == 0)) 
+            console.log("codigo=" + codigo);
+
+            if (codigo != null && !(codigo.length == 0))
                codError = 0;
             else
                codError = 4;
 
 
-           this.ads.changeMessage( descripcion );   
+            this.ads.changeMessage(descripcion);
 
             datosArticulo = new DatosArticulo(
                codigo,
@@ -318,11 +322,11 @@ export class Tabla2Service {
    }
 
    obtenerEans(codigo: string,
-               codCentro: string, pos?: Element[]): Observable<any> {
+      codCentro: string, pos?: Element[]): Observable<any> {
 
 
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       <soapenv:Header/>
@@ -332,13 +336,24 @@ export class Tabla2Service {
             <I_ALTERNATIVOS></I_ALTERNATIVOS>
             <!--Optional:-->
             <I_IDNLF></I_IDNLF>
-            <!--Optional:-->
+            <!--Optional:--> `;
+      if (codigo != '0') {
+         body +=
+            `
             <I_MATNR>${codigo}</I_MATNR>
             <I_WERKS>${codCentro}</I_WERKS>
             <T_LIS_EAN>
                <!--Zero or more repetitions:-->`;
-     
-      if ( codigo != '0' ) {
+      } else {
+         body +=
+            `
+   <I_MATNR></I_MATNR>
+   <I_WERKS>${codCentro}</I_WERKS>
+   <T_LIS_EAN>
+      <!--Zero or more repetitions:-->`;
+      }
+
+      if (codigo != '0') {
          body +=
             `
             <item>
@@ -354,13 +369,14 @@ export class Tabla2Service {
                   <ALTERNATIVO></ALTERNATIVO>
                   <BORRADO></BORRADO>
                </item>
-        `; }
-        else {
+        `;
+      }
+      else {
 
-         pos.forEach( posi => {
+         pos.forEach(posi => {
             body += `
             <item>
-            <MATNR>>${posi.codigo}</MATNR>
+            <MATNR>${posi.codigo}</MATNR>
             <MAKTX></MAKTX>
             <MAKTM></MAKTM>
             <EAN11></EAN11>
@@ -373,11 +389,11 @@ export class Tabla2Service {
             <BORRADO></BORRADO>
             </item>
             `;
-          });
-      
-        }    
+         });
 
-            body += `</T_LIS_EAN>
+      }
+
+      body += `</T_LIS_EAN>
             <T_RETURN>
                <!--Zero or more repetitions:-->
                <item>
@@ -404,7 +420,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+            console.log(data);
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -415,26 +431,30 @@ export class Tabla2Service {
             let eansArticulo: Ean[] = [];
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
+               console.log('detalle item ' + detalle[0].innerHTML + ' ' + detalle[3].innerHTML);
 
-               if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
-                if (codigo != '0') {
-                  eansArticulo.push(new Ean(
+               if ((detalle[0].innerHTML !== '') && (detalle[0].innerHTML !== '0')) {
+                //  if (codigo != '0') {
+                     eansArticulo.push(new Ean(
+                        detalle[0].innerHTML, //codigo
+                        detalle[3].innerHTML, //Ean
+                     ));
+                  //}
+                  this.eansArticulos.push(new Ean(
                      detalle[0].innerHTML, //codigo
                      detalle[3].innerHTML, //Ean
-                  )); }
-               this.eansArticulos.push(new Ean(
-                  detalle[0].innerHTML, //codigo
-                  detalle[3].innerHTML, //Ean
-               ));
+                  ));
+               }
             });
 
+            console.log(" Vaig a return ");
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
             itemsDOM2.forEach(item => {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
             });
-            //console.log( "codigo= " + codigo);
+            console.log("codigo= " + codigo);
 
 
             return {
@@ -447,297 +467,53 @@ export class Tabla2Service {
          );
    }
 
-   
+
 
 
    obtenerStock(codigo: string,
-                codCentro: string): Observable<any> {
+      codCentro: string): Observable<any> {
 
-      let url = 'http://localhost:8088/mockZ_GET_STOCK_MATERIALES'
+      //    let url = 'http://localhost:8088/mockZ_GET_STOCK_MATERIALES'
+      let url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_pda_stock_articulo/100/zwd_pda_stock_articulo/zwd_pda_stock_articulo';
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
-      <soapenv:Header/>
-      <soapenv:Body>
-         <urn:ZGetStockMateriales>
-            <!--Optional:-->
-            <ILoadOtrosStocks>X</ILoadOtrosStocks>
-            <!--Optional:-->
-            <IOnlyMinimoMaximo></IOnlyMinimoMaximo>
-            <IWerks>${codCentro}</IWerks>
-            <TiMateriales>
-               <!--Zero or more repetitions:-->
-               <item>
-                  <Mandt></Mandt>
-                  <Matnr>${codigo}</Matnr>
-                  <Ersda></Ersda>
-                  <Ernam></Ernam>
-                  <Laeda></Laeda>
-                  <Aenam></Aenam>
-                  <Vpsta></Vpsta>
-                  <Pstat></Pstat>
-                  <Lvorm></Lvorm>
-                  <Mtart></Mtart>
-                  <Mbrsh></Mbrsh>
-                  <Matkl></Matkl>
-                  <Bismt></Bismt>
-                  <Meins></Meins>
-                  <Bstme></Bstme>
-                  <Zeinr></Zeinr>
-                  <Zeiar></Zeiar>
-                  <Zeivr></Zeivr>
-                  <Zeifo></Zeifo>
-                  <Aeszn></Aeszn>
-                  <Blatt></Blatt>
-                  <Blanz></Blanz>
-                  <Ferth></Ferth>
-                  <Formt></Formt>
-                  <Groes></Groes>
-                  <Wrkst></Wrkst>
-                  <Normt></Normt>
-                  <Labor></Labor>
-                  <Ekwsl></Ekwsl>
-                  <Brgew></Brgew>
-                  <Ntgew></Ntgew>
-                  <Gewei></Gewei>
-                  <Volum></Volum>
-                  <Voleh></Voleh>
-                  <Behvo></Behvo>
-                  <Raube></Raube>
-                  <Tempb></Tempb>
-                  <Disst></Disst>
-                  <Tragr></Tragr>
-                  <Stoff></Stoff>
-                  <Spart></Spart>
-                  <Kunnr></Kunnr>
-                  <Eannr></Eannr>
-                  <Wesch></Wesch>
-                  <Bwvor></Bwvor>
-                  <Bwscl></Bwscl>
-                  <Saiso></Saiso>
-                  <Etiar></Etiar>
-                  <Etifo></Etifo>
-                  <Entar></Entar>
-                  <Ean11></Ean11>
-                  <Numtp></Numtp>
-                  <Laeng></Laeng>
-                  <Breit></Breit>
-                  <Hoehe></Hoehe>
-                  <Meabm></Meabm>
-                  <Prdha></Prdha>
-                  <Aeklk></Aeklk>
-                  <Cadkz></Cadkz>
-                  <Qmpur></Qmpur>
-                  <Ergew></Ergew>
-                  <Ergei></Ergei>
-                  <Ervol></Ervol>
-                  <Ervoe></Ervoe>
-                  <Gewto></Gewto>
-                  <Volto></Volto>
-                  <Vabme></Vabme>
-                  <Kzrev></Kzrev>
-                  <Kzkfg></Kzkfg>
-                  <Xchpf></Xchpf>
-                  <Vhart></Vhart>
-                  <Fuelg></Fuelg>
-                  <Stfak></Stfak>
-                  <Magrv></Magrv>
-                  <Begru></Begru>
-                  <Datab></Datab>
-                  <Liqdt></Liqdt>
-                  <Saisj></Saisj>
-                  <Plgtp></Plgtp>
-                  <Mlgut></Mlgut>
-                  <Extwg></Extwg>
-                  <Satnr></Satnr>
-                  <Attyp></Attyp>
-                  <Kzkup></Kzkup>
-                  <Kznfm></Kznfm>
-                  <Pmata></Pmata>
-                  <Mstae></Mstae>
-                  <Mstav></Mstav>
-                  <Mstde></Mstde>
-                  <Mstdv></Mstdv>
-                  <Taklv></Taklv>
-                  <Rbnrm></Rbnrm>
-                  <Mhdrz></Mhdrz>
-                  <Mhdhb></Mhdhb>
-                  <Mhdlp></Mhdlp>
-                  <Inhme></Inhme>
-                  <Inhal></Inhal>
-                  <Vpreh></Vpreh>
-                  <Etiag></Etiag>
-                  <Inhbr></Inhbr>
-                  <Cmeth></Cmeth>
-                  <Cuobf></Cuobf>
-                  <Kzumw></Kzumw>
-                  <Kosch></Kosch>
-                  <Sprof></Sprof>
-                  <Nrfhg></Nrfhg>
-                  <Mfrpn></Mfrpn>
-                  <Mfrnr></Mfrnr>
-                  <Bmatn></Bmatn>
-                  <Mprof></Mprof>
-                  <Kzwsm></Kzwsm>
-                  <Saity></Saity>
-                  <Profl></Profl>
-                  <Ihivi></Ihivi>
-                  <Iloos></Iloos>
-                  <Serlv></Serlv>
-                  <Kzgvh></Kzgvh>
-                  <Xgchp></Xgchp>
-                  <Kzeff></Kzeff>
-                  <Compl></Compl>
-                  <Iprkz></Iprkz>
-                  <Rdmhd></Rdmhd>
-                  <Przus></Przus>
-                  <MtposMara></MtposMara>
-                  <Bflme></Bflme>
-                  <Matfi></Matfi>
-                  <Cmrel></Cmrel>
-                  <Bbtyp></Bbtyp>
-                  <SledBbd></SledBbd>
-                  <GtinVariant></GtinVariant>
-                  <Gennr></Gennr>
-                  <Rmatp></Rmatp>
-                  <GdsRelevant></GdsRelevant>
-                  <Weora></Weora>
-                  <HutypDflt></HutypDflt>
-                  <Pilferable></Pilferable>
-                  <Whstc></Whstc>
-                  <Whmatgr></Whmatgr>
-                  <Hndlcode></Hndlcode>
-                  <Hazmat></Hazmat>
-                  <Hutyp></Hutyp>
-                  <TareVar></TareVar>
-                  <Maxc></Maxc>
-                  <MaxcTol></MaxcTol>
-                  <Maxl></Maxl>
-                  <Maxb></Maxb>
-                  <Maxh></Maxh>
-                  <MaxdimUom></MaxdimUom>
-                  <Herkl></Herkl>
-                  <Mfrgr></Mfrgr>
-                  <Qqtime></Qqtime>
-                  <Qqtimeuom></Qqtimeuom>
-                  <Qgrp></Qgrp>
-                  <Serial></Serial>
-                  <PsSmartform></PsSmartform>
-                  <Logunit></Logunit>
-                  <Cwqrel></Cwqrel>
-                  <Cwqproc></Cwqproc>
-                  <Cwqtolgr></Cwqtolgr>
-                  <Adprof></Adprof>
-                  <AnimalOrigin></AnimalOrigin>
-                  <TextileCompInd></TextileCompInd>
-                  <_-bev1_-luleinh></_-bev1_-luleinh>
-                  <_-bev1_-luldegrp></_-bev1_-luldegrp>
-                  <_-bev1_-nestruccat></_-bev1_-nestruccat>
-                  <_-dsd_-slToltyp></_-dsd_-slToltyp>
-                  <_-dsd_-svCntGrp></_-dsd_-svCntGrp>
-                  <_-dsd_-vcGroup></_-dsd_-vcGroup>
-                  <_-vso_-rTiltInd></_-vso_-rTiltInd>
-                  <_-vso_-rStackInd></_-vso_-rStackInd>
-                  <_-vso_-rBotInd></_-vso_-rBotInd>
-                  <_-vso_-rTopInd></_-vso_-rTopInd>
-                  <_-vso_-rStackNo></_-vso_-rStackNo>
-                  <_-vso_-rPalInd></_-vso_-rPalInd>
-                  <_-vso_-rPalOvrD></_-vso_-rPalOvrD>
-                  <_-vso_-rPalOvrW></_-vso_-rPalOvrW>
-                  <_-vso_-rPalBHt></_-vso_-rPalBHt>
-                  <_-vso_-rPalMinH></_-vso_-rPalMinH>
-                  <_-vso_-rTolBHt></_-vso_-rTolBHt>
-                  <_-vso_-rNoPGvh></_-vso_-rNoPGvh>
-                  <_-vso_-rQuanUnit></_-vso_-rQuanUnit>
-                  <_-vso_-rKzgvhInd></_-vso_-rKzgvhInd>
-                  <Packcode></Packcode>
-                  <DgPackStatus></DgPackStatus>
-                  <Mcond></Mcond>
-                  <Retdelc></Retdelc>
-                  <LoglevReto></LoglevReto>
-                  <Nsnid></Nsnid>
-                  <Imatn></Imatn>
-                  <Picnum></Picnum>
-                  <Bstat></Bstat>
-                  <ColorAtinn></ColorAtinn>
-                  <Size1Atinn></Size1Atinn>
-                  <Size2Atinn></Size2Atinn>
-                  <Color></Color>
-                  <Size1></Size1>
-                  <Size2></Size2>
-                  <FreeChar></FreeChar>
-                  <CareCode></CareCode>
-                  <BrandId></BrandId>
-                  <FiberCode1></FiberCode1>
-                  <FiberPart1></FiberPart1>
-                  <FiberCode2></FiberCode2>
-                  <FiberPart2></FiberPart2>
-                  <FiberCode3></FiberCode3>
-                  <FiberPart3></FiberPart3>
-                  <FiberCode4></FiberCode4>
-                  <FiberPart4></FiberPart4>
-                  <FiberCode5></FiberCode5>
-                  <FiberPart5></FiberPart5>
-                  <Fashgrd></Fashgrd>
-                  <Zzfraccionable></Zzfraccionable>
-                  <Zzobsequio></Zzobsequio>
-                  <Zzdenominacion></Zzdenominacion>
-                  <Zzcalibre></Zzcalibre>
-                  <Zzcategoria></Zzcategoria>
-                  <Zztipoalcohol></Zztipoalcohol>
-                  <Zzlitros></Zzlitros>
-                  <Zzgrados></Zzgrados>
-                  <Zzepigrafe></Zzepigrafe>
-                  <Zziddeposito></Zziddeposito>
-                  <Zzproddescat></Zzproddescat>
-                  <Zzraae></Zzraae>
-                  <Zzcomposicion></Zzcomposicion>
-                  <Zzdevol></Zzdevol>
-                  <Zzclasaran></Zzclasaran>
-                  <Zzpartent></Zzpartent>
-                  <Zzulitros></Zzulitros>
-                  <Zzugrados></Zzugrados>
-                  <ZzfactorNeto></ZzfactorNeto>
-                  <Zzlote></Zzlote>
-                  <ZzfecVolumetria></ZzfecVolumetria>
-                  <Zzaiem></Zzaiem>
-                  <Zzgrplato></Zzgrplato>
-                  <Zzpadre></Zzpadre>
-                  <Zzprioridad></Zzprioridad>
-                  <Zzagregar></Zzagregar>
-               </item>
-            </TiMateriales>
-            <ToStock>
-               <!--Zero or more repetitions:-->
-               <item>
-                  <Werks></Werks>
-                  <Lgort></Lgort>
-                  <Matnr></Matnr>
-                  <Labst></Labst>
-                  <StockCompra></StockCompra>
-                  <StockVenta></StockVenta>
-                  <Prwog></Prwog>
-                  <Prwug></Prwug>
-                  <UnidadBase></UnidadBase>
-                  <Sobst></Sobst>
-                  <StockSeguridad></StockSeguridad>
-                  <CoberturaObjetivo></CoberturaObjetivo>
-                  <StockActual></StockActual>
-                  <EntradasPrevistas></EntradasPrevistas>
-                  <StockPrevisto></StockPrevisto>
-                  <NecesidadReapro></NecesidadReapro>
-                  <Ciclo></Ciclo>
-                  <DescripcionCiclo></DescripcionCiclo>
-                  <StockEnCurso></StockEnCurso>
-                  <PuntoPedido></PuntoPedido>
-                  <StockTransito></StockTransito>
-                  <StockExpedido></StockExpedido>
-                  <StockProforma></StockProforma>
-                  <StockPedido></StockPedido>
-               </item>
-            </ToStock>
-         </urn:ZGetStockMateriales>
-      </soapenv:Body>
-   </soapenv:Envelope>
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ZwdPdaStockArticulo>
+         <ICentro>${codCentro}</ICentro>
+         <IMaterial>${codigo}</IMaterial>
+         <ToStock>
+            <!--Zero or more repetitions:-->
+            <item>
+               <Werks></Werks>
+               <Lgort></Lgort>
+               <Matnr></Matnr>
+               <Labst></Labst>
+               <StockCompra></StockCompra>
+               <StockVenta></StockVenta>
+               <Prwog></Prwog>
+               <Prwug></Prwug>
+               <UnidadBase></UnidadBase>
+               <Sobst></Sobst>
+               <StockSeguridad></StockSeguridad>
+               <CoberturaObjetivo></CoberturaObjetivo>
+               <StockActual></StockActual>
+               <EntradasPrevistas></EntradasPrevistas>
+               <StockPrevisto></StockPrevisto>
+               <NecesidadReapro></NecesidadReapro>
+               <Ciclo></Ciclo>
+               <DescripcionCiclo></DescripcionCiclo>
+               <StockEnCurso></StockEnCurso>
+               <PuntoPedido></PuntoPedido>
+               <StockTransito></StockTransito>
+               <StockExpedido></StockExpedido>
+               <StockProforma></StockProforma>
+               <StockPedido></StockPedido>
+            </item>
+         </ToStock>
+      </urn:ZwdPdaStockArticulo>
+   </soapenv:Body>
+</soapenv:Envelope>
       `;
 
       return this.http.post(url, body, { responseType: 'text' })
@@ -782,10 +558,10 @@ export class Tabla2Service {
    }
 
 
- obtenerArticulosProv(proveedor: string,
-                        codCentro: string): Observable<any> {
+   obtenerArticulosProv(proveedor: string,
+      codCentro: string): Observable<any> {
 
-    
+
       // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
       let url = 'http://localhost:8088/mockZWD_PDA_ENT_MERCANCIA_N'
       let body = `
@@ -876,7 +652,7 @@ export class Tabla2Service {
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
 
-                 if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
+               if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
                   articulosProv.push(new DatosArticuloProv(
                      detalle[1].innerHTML, //codigo
                      detalle[8].innerHTML, //descripcion
@@ -888,23 +664,23 @@ export class Tabla2Service {
                      +detalle[5].innerHTML, //stock Minimo
                   ));
             });
-// eans
+            // eans
 
-           let itemsDOM3 = Array.from(dom.getElementsByTagName('ToEan')[0].children);
+            let itemsDOM3 = Array.from(dom.getElementsByTagName('ToEan')[0].children);
 
             let eansArticulo: Ean[] = [];
             itemsDOM3.forEach(item => {
                let detalle = Array.from(item.children);
 
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0')
-               
-               this.eansArticulos.push(new Ean(
-                  detalle[1].innerHTML, //codigo
-                  detalle[4].innerHTML, //Ean
-               ));
+
+                  this.eansArticulos.push(new Ean(
+                     detalle[1].innerHTML, //codigo
+                     detalle[4].innerHTML, //Ean
+                  ));
             });
 
-// return
+            // return
 
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('ToReturn')[0].children);
@@ -927,8 +703,8 @@ export class Tabla2Service {
 
 
    obtenerMotivos(): Observable<any> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       <soapenv:Header/>
@@ -978,7 +754,7 @@ export class Tabla2Service {
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
 
-           //console.log(data);
+            //console.log(data);
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
@@ -995,7 +771,7 @@ export class Tabla2Service {
                   this.motivosMov.push(new Motivo(
                      detalle[3].innerHTML,
                      detalle[4].innerHTML,
-                     
+
                   ));
                }
             });

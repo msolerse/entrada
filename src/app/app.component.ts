@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.elem = document.documentElement;
-    this.openFullscreen();
+  //  this.openFullscreen();
   }
 
   openFullscreen() {

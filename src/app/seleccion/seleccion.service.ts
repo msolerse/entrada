@@ -36,8 +36,8 @@ export class SeleccionService {
 
 
    obtenerTiposMov(idProceso: string): Observable<any> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
    <soapenv:Header/>
@@ -174,8 +174,8 @@ export class SeleccionService {
 
 
    obtenerCentro(codCentro: string): Observable<any> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
     <soapenv:Header/>
@@ -259,8 +259,8 @@ export class SeleccionService {
    }
 
    obtenerProveedor(proveedor: string, codCentro: string): Observable<any> {
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+       let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       <soapenv:Header/>

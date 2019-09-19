@@ -14,13 +14,13 @@ export class LoaderInterceptor implements HttpInterceptor {
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log("loader es dispara");
+        //console.log("loader es dispara");
         this.loader.show();
 
         //return next.handle(req).finally(() => {
          //   this.loader.hide();
 
-         return next.handle(req).delay(1000).finally(() => {
+         return next.handle(req).finally(() => {
             this.loader.hide();
         });
     
