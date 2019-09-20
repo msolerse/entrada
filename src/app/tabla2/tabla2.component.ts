@@ -107,14 +107,16 @@ export class Tabla2Component {
         this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
       }
 
-      if (this.idPedido != '0') {
+      if ((this.idPedido != '0')  && (this.service.loadEans)) {
+        console.log('crido ws Eans');
         this.service.eansArticulos = [];
         this.service.obtenerEans('0', this.codCentro, this.service.currPosiciones).subscribe(
           reply => {
             switch (reply.codigo) {
               case 0:
                 console.log("Eans ok");
-                console.log(JSON.stringify(this.service.eansArticulos));
+                console.log( 'Eans plataforma length = '+this.service.eansArticulos.length);
+                //console.log(JSON.stringify(this.service.eansArticulos));
                 break;
 
               default:
@@ -124,12 +126,14 @@ export class Tabla2Component {
           });
       }
 
+      
 
       if (this.codProv && (this.codProv !== this.service.currProveedor)) {
         this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
           switch (reply.codigo) {
             case 0:
               console.log("ws datos art prov ok");
+              console.log( 'Eans proveedor length = '+this.service.eansArticulos.length);
               break;
 
             default:
@@ -194,6 +198,8 @@ export class Tabla2Component {
     f.form.reset();
     this.newSymbol = 'UN';
     this.newSymbol = 'CJ';
+    this.search.codigo = '';
+    this.search.nombre = '';
     console.log("this.newSymbol=" + this.newSymbol);
 
   }
@@ -405,23 +411,39 @@ export class Tabla2Component {
   }
 
   goBack() {
+    this.alert.validacionOk = false;
     this.router.navigate(['']);
   }
 
   goValidar() {
-    console.log("Grabando!");
-    /* this.service.validarEntrada().subscribe(data => {
+   
+    
+    this.service.validarEntrada( this.entireDataSource.data() ).subscribe(data => {
 
-      switch (+data.codigo) {
-        case 0:
+       data.returnMessages.forEach(ret => {
+            switch ( ret.tipo ) {
+               case 'E':
+                  this.alert.sendAlert( ret.mensaje , AlertType.Error);
+                 break;
+               case 'S':
+                  this.alert.validacionOk = true;
+                  this.alert.sendAlert( ret.mensaje , AlertType.Success);
+                 break;
+              default:
+                  this.alert.sendAlert( ret.mensaje , AlertType.Warning);
+                  break;
+            }
+    });
 
-          this.alert.sendAlert('Validacón efectuada correctamente.', AlertType.Success);
-          break;
-        default:
-          this.alert.sendAlert('Error en el proceso de validación.', AlertType.Error);
-          break;
+    if (this.alert.validacionOk) {
+        this.service.currPosiciones = [];
+        //this.service.eansArticulos = [];
+        this.service.currAlbaran = '';
+        this.service.currPedido = '';
+        this.service.currProveedor = '';
+        this.router.navigate(['']);
       }
-    }); */
+    });  
   }
 }
 

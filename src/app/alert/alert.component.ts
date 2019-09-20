@@ -27,8 +27,8 @@ export class AlertComponent implements OnInit, OnDestroy {
       this.alertas.push(alerta);
     });
 
-    this.subscription =  this.service.getAlert().debounceTime(5000).subscribe( 
-      () =>   this.alertas = []);
+    /* this.subscription =  this.service.getAlert().subscribe( 
+      () =>   this.alertas = []) */;
   }
 
   ngOnDestroy(): void {

@@ -45,8 +45,14 @@ export class SeleccionComponent implements OnInit {
 
   ngOnInit() {
 
+    
     this.ts.changeMessage('Menu');
-    console.log()
+
+    if (this.alert.validacionOk) {
+      console.log("iniciant , validacionOk es true");
+      this.initSeleccion();
+    }
+
     this.data.currentMessage.subscribe(message => 
     //  this. = message.split(';')[0];
       this.nombre = message.split(';')[1]);
@@ -148,18 +154,27 @@ export class SeleccionComponent implements OnInit {
     console.log(" changed tipo Mov=" + this.tipoMov);
     this.cargarTiposRef(this.tipoMov);
 
-    this.service.currAlbaran = '';
-    this.service.currDocumento = '';
-    this.service.currProveedor = '';
-    this.model.albaran = '';
-    this.model.documento = '';
-    this.model.proveedor = '';
-    this.nombre = '';
+    this.initSeleccion();
 
     if (this.tipoMov != '001')
       this.tipoDoc = this.tiposRef[0].tipDocRef;
 
       
+  }
+
+  initSeleccion() {
+
+    this.service.currAlbaran = '';
+    this.service.currDocumento = '';
+    this.service.currProveedor = '';
+    this.service.currNombre = '';
+    this.service.currObservaciones = '';
+    this.model.albaran = '';
+    this.model.documento = '';
+    this.model.proveedor = '';
+    this.nombre = '';
+    this.data.changeMessage('');
+
   }
 
   cargarTiposRef(tipMov: string) {

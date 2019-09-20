@@ -14,6 +14,7 @@ import { AlertType } from './_entities/Alert';
 import { AlertService } from './_services/alert.service';
 import { DatosArticuloProv } from './_entities/DatosArticuloProv';
 import { ArticuloDescService } from './_services/articuloDesc.service';
+import { ReturnMessage } from './_entities/ReturnMessage';
 
 
 @Injectable({
@@ -42,6 +43,7 @@ export class Tabla2Service {
    public currTipoMov: string;
 
    public eanFiltered: boolean;
+   public loadEans: boolean;
 
 
    obtenerPosiciones(idPedido: string, albaran: string,
@@ -219,7 +221,7 @@ export class Tabla2Service {
             itemsDOM2.forEach(item => {
                const detalle2 = Array.from(item.children);
                if (detalle2[0].innerHTML == 'E') {
-               this.codigo = '4';
+                  this.codigo = '4';
                   this.mensaje = detalle2[3].innerHTML;
                   this.alert.sendAlert(this.mensaje, AlertType.Error);
                }
@@ -420,7 +422,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            console.log(data);
+            //console.log(data);
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -431,14 +433,14 @@ export class Tabla2Service {
             let eansArticulo: Ean[] = [];
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
-               console.log('detalle item ' + detalle[0].innerHTML + ' ' + detalle[3].innerHTML);
+               //console.log('detalle item ' + detalle[0].innerHTML + ' ' + detalle[3].innerHTML);
 
                if ((detalle[0].innerHTML !== '') && (detalle[0].innerHTML !== '0')) {
-                //  if (codigo != '0') {
-                     eansArticulo.push(new Ean(
-                        detalle[0].innerHTML, //codigo
-                        detalle[3].innerHTML, //Ean
-                     ));
+                  //  if (codigo != '0') {
+                  eansArticulo.push(new Ean(
+                     detalle[0].innerHTML, //codigo
+                     detalle[3].innerHTML, //Ean
+                  ));
                   //}
                   this.eansArticulos.push(new Ean(
                      detalle[0].innerHTML, //codigo
@@ -447,14 +449,14 @@ export class Tabla2Service {
                }
             });
 
-            console.log(" Vaig a return ");
+            //console.log(" Vaig a return ");
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
             itemsDOM2.forEach(item => {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
             });
-            console.log("codigo= " + codigo);
+            //console.log("codigo= " + codigo);
 
 
             return {
@@ -562,8 +564,8 @@ export class Tabla2Service {
       codCentro: string): Observable<any> {
 
 
-      // let url = 'http://mar3prdd22.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_get_posiciones_entrada/100/zwd_get_posiciones_entrada/zwd_get_posiciones_entrada';
-      let url = 'http://localhost:8088/mockZWD_PDA_ENT_MERCANCIA_N'
+      let url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_pda_ent_mercancia_n/100/zwd_pda_ent_mercancia_n/zwd_pda_ent_mercancia_n';
+      //let url = 'http://localhost:8088/mockZWD_PDA_ENT_MERCANCIA_N'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
    <soapenv:Header/>
@@ -649,6 +651,7 @@ export class Tabla2Service {
             let itemsDOM = Array.from(dom.getElementsByTagName('TMatnr')[0].children);
 
             let articulosProv: DatosArticuloProv[] = [];
+            this.eansArticulos = [];
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
 
@@ -793,6 +796,260 @@ export class Tabla2Service {
          );
    }
 
+
+   validarEntrada(pos: Element[]): Observable<any> {
+
+      let DateObj = new Date();
+      let currDate = DateObj.getFullYear() + '-' + ('0' + (DateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + DateObj.getDate()).slice(-2);
+
+      console.log('currDate = ' + currDate);
+
+      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+
+      let body = `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
+      <soapenv:Header/>
+      <soapenv:Body>
+         <urn:ZWD_MM_GESTION_STOCKS>
+            <E_CABECERA>
+               <CENTRO>${this.currCentro}</CENTRO>
+               <DES_CENTRO></DES_CENTRO>
+               <ALMACEN>0001</ALMACEN>
+               <FECHA_CONTAB>${currDate}</FECHA_CONTAB>
+               <CLASE_MOVIMIENTO>${this.currTipoMov}</CLASE_MOVIMIENTO>
+               <DES_TIPOMOV></DES_TIPOMOV>
+               <PROVEEDOR>${this.currProveedor}</PROVEEDOR>
+               <DESC_PROVEEDOR></DESC_PROVEEDOR>
+               <NOTA_ENTREGA>${this.currAlbaran}</NOTA_ENTREGA>
+               <TIPO_DOC_REFER></TIPO_DOC_REFER>
+               <DES_TIPO_DOC_REF></DES_TIPO_DOC_REF>
+               <DOCUMENTO_REFER></DOCUMENTO_REFER>
+               <MOTIVO_PED></MOTIVO_PED>
+               <MOTIVO_MOV></MOTIVO_MOV>
+               <DES_MOTIVO_MOV></DES_MOTIVO_MOV>
+               <OBSERVACIONES></OBSERVACIONES>
+               <CENTRO_DES></CENTRO_DES>
+               <DES_CENTRO_DES></DES_CENTRO_DES>
+               <ALMACEN_DES></ALMACEN_DES>
+               <DOCUMENTO_MAT></DOCUMENTO_MAT>
+               <DOCUMENTO_MAT_AUX></DOCUMENTO_MAT_AUX>
+               <YEAR></YEAR>
+               <NOMBRE></NOMBRE>
+               <MATRICULA></MATRICULA>
+               <DOCUMENTO_REFER_ORIG></DOCUMENTO_REFER_ORIG>
+               <TIPO_DOC_REFER_ORIG></TIPO_DOC_REFER_ORIG>
+               <POSITIVO></POSITIVO>
+               <ES_SIN_CARGO></ES_SIN_CARGO>
+               <USUARIO></USUARIO>
+               <MERMA></MERMA>
+               <ES_ENTREGA_PARC></ES_ENTREGA_PARC>
+               <DOCUMENTO_REFER_PARENT></DOCUMENTO_REFER_PARENT>
+               <TIPO_DOC_REFER_PARENT></TIPO_DOC_REFER_PARENT>
+               <TIPED>6</TIPED>
+               <REF_VTA></REF_VTA>
+               <DOC_REFER_INTERNAL></DOC_REFER_INTERNAL>
+               <DOCUMENTO_REFER_REAL></DOCUMENTO_REFER_REAL>
+               <TIPO_DOC_REFER_REAL></TIPO_DOC_REFER_REAL>
+               <VALORACION></VALORACION>
+            </E_CABECERA>
+            <!--Optional:-->
+            <E_CABECERA_NOM>
+               <NOMBRE_PROV></NOMBRE_PROV>
+               <CALLE></CALLE>
+               <NUMERO_EDIF></NUMERO_EDIF>
+               <COD_POSTAL></COD_POSTAL>
+               <POBLACION></POBLACION>
+               <TELEFONO></TELEFONO>
+               <NIF></NIF>
+               <COD_PAIS></COD_PAIS>
+               <PAIS></PAIS>
+            </E_CABECERA_NOM>
+            <E_MATERIAL_PRIN>
+               <POSICION></POSICION>
+               <MATERIAL></MATERIAL>
+               <DESC_MATERIAL></DESC_MATERIAL>
+               <CANTIDAD></CANTIDAD>
+               <UNIDAD_MEDIDA></UNIDAD_MEDIDA>
+               <CANT_SIN_CARGO></CANT_SIN_CARGO>
+               <LOTE></LOTE>
+               <CANTIDAD_REFER></CANTIDAD_REFER>
+               <UN_MEDIDA_ENT></UN_MEDIDA_ENT>
+               <CANT_REFER_UMB></CANT_REFER_UMB>
+               <UXC></UXC>
+               <FRACCION></FRACCION>
+               <TOTAL></TOTAL>
+               <UMB></UMB>
+               <DIFERENCIA></DIFERENCIA>
+               <MOTIVO_PED></MOTIVO_PED>
+               <DES_MOTIVO_PED></DES_MOTIVO_PED>
+               <SOLICITANTE></SOLICITANTE>
+               <POS_PED_SC></POS_PED_SC>
+               <POS_PED_FRAC></POS_PED_FRAC>
+               <ES_CANT_NULA></ES_CANT_NULA>
+               <BOTON_X_LOTES></BOTON_X_LOTES>
+               <ICON_X_LOTES></ICON_X_LOTES>
+               <FACT_CONV></FACT_CONV>
+               <ACUMULADO></ACUMULADO>
+               <ANULA></ANULA>
+               <EXTRA></EXTRA>
+               <NEXTRA></NEXTRA>
+               <DISABLE></DISABLE>
+               <POS_MVT></POS_MVT>
+               <MOTIVO_MOV></MOTIVO_MOV>
+               <DES_MOTIVO_MOV></DES_MOTIVO_MOV>
+               <COLOR></COLOR>
+               <ES_SINCARGO></ES_SINCARGO>
+               <NTRGA_POSTERIOR></NTRGA_POSTERIOR>
+               <POS_ENTR_DISTB></POS_ENTR_DISTB>
+               <EAN_ALT></EAN_ALT>
+               <EAN11></EAN11>
+               <PRECIO_UNI></PRECIO_UNI>
+               <MON></MON>
+               <POSITIVO></POSITIVO>
+               <TOTAL_PRECIO></TOTAL_PRECIO>
+               <PMP_CESION></PMP_CESION>
+            </E_MATERIAL_PRIN>
+            <!--Optional:-->
+            <I_MOV_ADICIONAL></I_MOV_ADICIONAL>
+            <!--Optional:-->
+            <I_VALIDACION_ALT></I_VALIDACION_ALT>
+            <!--Optional:-->
+            <I_VIS></I_VIS>
+            <!--Optional:-->
+            <TO_RETURN>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <TYPE></TYPE>
+                  <ID></ID>
+                  <NUMBER></NUMBER>
+                  <MESSAGE></MESSAGE>
+                  <LOG_NO></LOG_NO>
+                  <LOG_MSG_NO></LOG_MSG_NO>
+                  <MESSAGE_V1></MESSAGE_V1>
+                  <MESSAGE_V2></MESSAGE_V2>
+                  <MESSAGE_V3></MESSAGE_V3>
+                  <MESSAGE_V4></MESSAGE_V4>
+                  <PARAMETER></PARAMETER>
+                  <ROW></ROW>
+                  <FIELD></FIELD>
+                  <SYSTEM></SYSTEM>
+               </item>
+            </TO_RETURN>
+            <!--Optional:-->
+            <T_LOTES>
+               <!--Zero or more repetitions:-->
+               <item>
+                  <POSICION></POSICION>
+                  <MATERIAL></MATERIAL>
+                  <CANTIDAD></CANTIDAD>
+                  <LOTE></LOTE>
+                  <UNIDAD></UNIDAD>
+                  <FECHA_CAD></FECHA_CAD>
+                  <FECHA_ENV></FECHA_ENV>
+                  <PESO></PESO>
+                  <UNIDAD_PESO></UNIDAD_PESO>
+                  <LOTES_AUTO></LOTES_AUTO>
+                  <CONV_UN_BASE></CONV_UN_BASE>
+               </item>
+            </T_LOTES>
+            <T_POS>
+               <!--Zero or more repetitions:-->   
+      `;
+
+      pos.forEach(posi => {
+         body += `
+            <item>
+               <POSICION></POSICION>
+               <MATERIAL>${posi.codigo}</MATERIAL>
+               <DESC_MATERIAL>${posi.name}</DESC_MATERIAL>
+               <CANTIDAD>${posi.comment}</CANTIDAD>
+               <UNIDAD_MEDIDA>${posi.symbol}</UNIDAD_MEDIDA>
+               <CANT_SIN_CARGO></CANT_SIN_CARGO>
+               <LOTE></LOTE>
+               <CANTIDAD_REFER></CANTIDAD_REFER>
+               <UN_MEDIDA_ENT>${posi.symbol}</UN_MEDIDA_ENT>
+               <CANT_REFER_UMB></CANT_REFER_UMB>
+               <UXC></UXC>
+               <FRACCION></FRACCION>
+               <TOTAL></TOTAL>
+               <UMB>${posi.symbol}</UMB>
+               <DIFERENCIA></DIFERENCIA>
+               <MOTIVO_PED></MOTIVO_PED>
+               <DES_MOTIVO_PED></DES_MOTIVO_PED>
+               <SOLICITANTE></SOLICITANTE>
+               <POS_PED_SC></POS_PED_SC>
+               <POS_PED_FRAC></POS_PED_FRAC>
+               <ES_CANT_NULA></ES_CANT_NULA>
+               <BOTON_X_LOTES></BOTON_X_LOTES>
+               <ICON_X_LOTES></ICON_X_LOTES>
+               <FACT_CONV></FACT_CONV>
+               <ACUMULADO></ACUMULADO>
+               <ANULA></ANULA>
+               <EXTRA></EXTRA>
+               <NEXTRA></NEXTRA>
+               <DISABLE></DISABLE>
+               <POS_MVT></POS_MVT>
+               <MOTIVO_MOV></MOTIVO_MOV>
+               <DES_MOTIVO_MOV></DES_MOTIVO_MOV>
+               <COLOR></COLOR>
+               <ES_SINCARGO></ES_SINCARGO>
+               <NTRGA_POSTERIOR></NTRGA_POSTERIOR>
+               <POS_ENTR_DISTB></POS_ENTR_DISTB>
+               <EAN_ALT></EAN_ALT>
+               <EAN11></EAN11>
+               <PRECIO_UNI></PRECIO_UNI>
+               <MON></MON>
+               <POSITIVO></POSITIVO>
+               <TOTAL_PRECIO></TOTAL_PRECIO>
+               <PMP_CESION></PMP_CESION>
+            </item>
+            `;
+      });
+
+
+
+      body += `
+      </T_POS>
+      </urn:ZWD_MM_GESTION_STOCKS>
+   </soapenv:Body>
+</soapenv:Envelope>
+      `;
+
+      return this.http.post(url, body, { responseType: 'text' })
+         .map(data => {
+            //console.log(data);
+            //let x2js = require('x2js');
+            let x2js = new X2JS();
+            let dom = x2js.xml2dom(data);
+            let returnMessages: ReturnMessage[] = [];
+
+
+            //console.log(" Vaig a return ");
+            let codigo;
+            let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
+            itemsDOM2.forEach(item => {
+               let detalle2 = Array.from(item.children);
+
+               if ((detalle2[0].innerHTML !== '') && (detalle2[0].innerHTML !== 'W')) {
+                  //  if (codigo != '0') {
+                  returnMessages.push(new ReturnMessage(
+                     detalle2[0].innerHTML, // tipo
+                     detalle2[3].innerHTML, // Mensaje
+                  ));
+               }
+
+            });
+            //console.log("codigo= " + codigo);
+
+            return {
+               returnMessages: returnMessages
+            };
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
+   }
 
 
 

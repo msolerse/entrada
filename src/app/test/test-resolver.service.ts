@@ -29,16 +29,17 @@ export class TestResolverService implements Resolve<Element[]> {
     let tipoDoc = route.paramMap.get('tipoDoc');
     let tipoMov = route.paramMap.get('tipoMov');
    
-
     console.log( 'this.ts.currPedido= ' +  this.ts.currPedido);
     console.log( 'idPedido= ' +  idPedido);
  
     if (idPedido != '0' && idPedido == this.ts.currPedido) {
        console.log( 'pedidos iguals');
+       this.ts.loadEans = false;
       return of(this.ts.currPosiciones);
     }  else {
       if (idPedido != '0') {
         console.log( 'crida a obtener posiciones' );
+        this.ts.loadEans = true;
         return this.ts.obtenerPosiciones(idPedido, albaran, codCentro,  tipoDoc, tipoMov).pipe(
           take(1),
           mergeMap(posiciones => {
@@ -56,11 +57,13 @@ export class TestResolverService implements Resolve<Element[]> {
         console.log( 'this.ts.currAlbaran= ' +  this.ts.currAlbaran);
         console.log( 'albaran= ' +  albaran);
         console.log('albaran igual , agafem posicions en memoria');
+        this.ts.loadEans = false;
 
         return of(this.ts.currPosiciones);
       } else {
         console.log('albaran diferent , inicialitzem posicions');
 
+        this.ts.loadEans = false;
         this.ts.currAlbaran = albaran;
         this.ts.currPedido = idPedido;
         this.emptyPosiciones.length = 0;
