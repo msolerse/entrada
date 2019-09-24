@@ -107,7 +107,7 @@ export class Tabla2Component {
         this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
       }
 
-      if ((this.idPedido != '0')  && (this.service.loadEans)) {
+      if ((this.idPedido != '0') && (this.service.loadEans)) {
         console.log('crido ws Eans');
         this.service.eansArticulos = [];
         this.service.obtenerEans('0', this.codCentro, this.service.currPosiciones).subscribe(
@@ -115,7 +115,7 @@ export class Tabla2Component {
             switch (reply.codigo) {
               case 0:
                 console.log("Eans ok");
-                console.log( 'Eans plataforma length = '+this.service.eansArticulos.length);
+                console.log('Eans plataforma length = ' + this.service.eansArticulos.length);
                 //console.log(JSON.stringify(this.service.eansArticulos));
                 break;
 
@@ -126,14 +126,14 @@ export class Tabla2Component {
           });
       }
 
-      
+
 
       if (this.codProv && (this.codProv !== this.service.currProveedor)) {
         this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
           switch (reply.codigo) {
             case 0:
               console.log("ws datos art prov ok");
-              console.log( 'Eans proveedor length = '+this.service.eansArticulos.length);
+              console.log('Eans proveedor length = ' + this.service.eansArticulos.length);
               break;
 
             default:
@@ -208,9 +208,11 @@ export class Tabla2Component {
     this.router.navigate(['search-articulo']);
   }
 
-  addPosicion(codigo: string, name: string, symbol: string, comment: number, motivo: string) {
+  addPosicion(codigo: string, name: string, symbol: string, comment: number, motivo: string, umb?: string) {
 
     let maxId: number;
+    let elemArt: DatosArticulo;
+    let factConv: number;
 
     if ((this.dataSource.data()) && (this.dataSource.data().length !== 0)) {
       //console.log("length="+this.dataSource.data().length);
@@ -229,16 +231,48 @@ export class Tabla2Component {
       }
     }
 
+    // umb
+    elemArt = this.service.datosArticulos.find(x => +x.codigo === +codigo);
+
+    if (elemArt) {
+      umb = elemArt.umb;
+      switch (symbol) {
+        case 'CJ':
+          factConv = elemArt.caja;
+          break;
+        case 'RET':
+          factConv = elemArt.retractil;
+          break;
+        case 'PAL':
+          factConv = elemArt.palet;
+          break;
+        case 'MAN':
+          factConv = elemArt.manto;
+          break;
+        default:
+          factConv = 1;
+          break;
+      }
+
+      console.log(JSON.stringify("elemArt trobat=" + elemArt));
+    } else {
+      console.log(JSON.stringify(this.service.datosArticulos));
+    }
 
     this.entireDataSource.data().push({
       id: maxId,
       codigo: codigo,
       name: name,
       symbol: symbol,
-      cantref: comment,
+      cantref: 0,
       comment: comment,
-      dif: 0,
-      motivo: motivo
+      dif: comment,
+      motivo: motivo,
+      cantrefUmb: 0,
+      umb: umb,
+      FactConv: factConv,
+      posRefer: '',
+      extra: 'X'
     });
 
     const copy = this.entireDataSource.data().filter(row => row);
@@ -263,14 +297,19 @@ export class Tabla2Component {
     this.service.currPosiciones = this.entireDataSource.data();
     document.getElementById('filtrar').focus();
   }
+
+  
   remove(el: Element) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
-    const copy = this.entireDataSource.data().filter(row => row != el);
-    //console.log("copy="+JSON.stringify(copy)) ;
 
-    this.dataSource.update(copy);
-    this.entireDataSource.update(copy);
-    this.service.currPosiciones = this.entireDataSource.data();
+    if (el.extra == 'X') {
+      const copy = this.entireDataSource.data().filter(row => row != el);
+      //console.log("copy="+JSON.stringify(copy)) ;
+
+      this.dataSource.update(copy);
+      this.entireDataSource.update(copy);
+      this.service.currPosiciones = this.entireDataSource.data();
+    }
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
   }
@@ -416,34 +455,37 @@ export class Tabla2Component {
   }
 
   goValidar() {
-   
-    
-    this.service.validarEntrada( this.entireDataSource.data() ).subscribe(data => {
 
-       data.returnMessages.forEach(ret => {
-            switch ( ret.tipo ) {
-               case 'E':
-                  this.alert.sendAlert( ret.mensaje , AlertType.Error);
-                 break;
-               case 'S':
-                  this.alert.validacionOk = true;
-                  this.alert.sendAlert( ret.mensaje , AlertType.Success);
-                 break;
-              default:
-                  this.alert.sendAlert( ret.mensaje , AlertType.Warning);
-                  break;
-            }
-    });
 
-    if (this.alert.validacionOk) {
+    this.service.validarEntrada(this.entireDataSource.data()).subscribe(data => {
+
+      data.returnMessages.forEach(ret => {
+        switch (ret.tipo) {
+          case 'E':
+            this.alert.sendAlert(ret.mensaje, AlertType.Error);
+            break;
+          case 'S':
+            this.alert.validacionOk = true;
+            this.alert.sendAlert(ret.mensaje, AlertType.Success);
+            break;
+          default:
+            this.alert.sendAlert(ret.mensaje, AlertType.Warning);
+            break;
+        }
+      });
+
+      if (this.alert.validacionOk) {
         this.service.currPosiciones = [];
         //this.service.eansArticulos = [];
         this.service.currAlbaran = '';
         this.service.currPedido = '';
         this.service.currProveedor = '';
+        this.service.tiped = '';
+        this.service.provCabeceraWs = '';
+        this.service.tipoDocRefer = '';
         this.router.navigate(['']);
       }
-    });  
+    });
   }
 }
 

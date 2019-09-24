@@ -125,7 +125,7 @@ mat-card-title {
 }
 
 .make-gold {
-  background-color: lightyellow;
+  background-color:  lightyellow;
 }
 
 .text-color {
@@ -150,4 +150,8 @@ mat-card-title {
 
   display: flex;
   justify-content: flex-end;
+}
+
+.disabled{
+   color: lightgrey;
 }

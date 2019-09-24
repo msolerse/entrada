@@ -8,6 +8,11 @@ export class Element {
     public comment?: number,
     public dif?: number,
     public motivo?: string,
+    public cantrefUmb?: number,
+    public umb?:  string,
+    public FactConv?: number,
+    public posRefer?: string,
+    public extra?: string
    )
 {  }
 }

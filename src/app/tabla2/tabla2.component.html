@@ -158,8 +158,18 @@
 
       <ng-container matColumnDef="dif">
         <mat-header-cell class="duration-cell  align-right" *matHeaderCellDef> Dif.</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
-            <span class="mobile-label">Dif.:</span> {{element.dif}} </mat-cell>
+        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [satPopoverAnchorFor]="pp" (click)="pp.open()">
+            <span class="mobile-label">Dif.:</span> {{element.dif}}
+          
+            <sat-popover #pp
+            hasBackdrop
+            xAlign="start"
+            yAlign="start"
+            (closed)="update(element, $event)">
+          <inline-edit [value]="element.comment" [value2]="element.motivo" ></inline-edit>
+        </sat-popover>
+          
+          </mat-cell>
       </ng-container>
 
 
@@ -179,7 +189,7 @@
           <button mat-icon-button color="primary" (click)="addRow( false, '' )"><i class="fa fa-plus mat-icon"></i></button>
         </mat-header-cell>
         <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label">Eliminar:</span>
-          <button mat-icon-button color="warn" focusable="false" (click)="remove( element )">
+          <button mat-icon-button  [disabled]="element.extra != 'X'"  color="warn" focusable="false" (click)="remove( element )">
               <mat-icon class="mat-18">delete</mat-icon>
               </button>
         </mat-cell>

@@ -16,7 +16,6 @@ import { DatosArticuloProv } from './_entities/DatosArticuloProv';
 import { ArticuloDescService } from './_services/articuloDesc.service';
 import { ReturnMessage } from './_entities/ReturnMessage';
 
-
 @Injectable({
    providedIn: 'root'
 })
@@ -41,6 +40,9 @@ export class Tabla2Service {
    public currProveedor: string;
    public currDatosArticuloProv: DatosArticuloProv[];
    public currTipoMov: string;
+   public tiped: string;
+   public provCabeceraWs:string;
+   public tipoDocRefer:string;
 
    public eanFiltered: boolean;
    public loadEans: boolean;
@@ -194,14 +196,29 @@ export class Tabla2Service {
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
+ 
 
+            this.tiped = dom.getElementsByTagName("TIPED")[0].innerHTML;
+            console.log("tiped = "+ this.tiped );
+            this.provCabeceraWs= dom.getElementsByTagName("PROVEEDOR")[0].innerHTML;
+            this.tipoDocRefer= dom.getElementsByTagName("TIPO_DOC_REFER")[0].innerHTML;
 
             let itemsDOM = Array.from(dom.getElementsByTagName('T_POS')[0].children);
 
             let posiciones: Element[] = [];
+            let factConv:  number;
 
             itemsDOM.forEach(item => {
+
                let detalle = Array.from(item.children);
+               let cant = +detalle[3].innerHTML;
+
+               factConv = +detalle[10].innerHTML;
+               if ( tipoMov == '003'  && cant != 0) {
+                  factConv =  factConv / cant  ;
+               }
+
+             
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0') {
                   posiciones.push(new Element(
                      Number(detalle[0].innerHTML),
@@ -210,7 +227,12 @@ export class Tabla2Service {
                      detalle[4].innerHTML,
                      +detalle[3].innerHTML,
                      +detalle[3].innerHTML,
-                     0, ''
+                     0, '',
+                     +detalle[9].innerHTML, //cantreferUmb
+                     detalle[13].innerHTML, // UMb
+                     factConv, // factConv
+                     detalle[35].innerHTML , //posrefer
+                     ''
                   ));
                }
             });
@@ -234,17 +256,19 @@ export class Tabla2Service {
                this.currPedido = idPedido;
                this.currPosiciones = posiciones;
             }
+
+            console.log(JSON.stringify(posiciones));
             return posiciones;
 
 
-         });
-      /* .pipe(
-         catchError(this.handleError)
-      ); */
+         })
+         .pipe(
+            catchError(this.handleError)
+         );
    }
 
    obtenerArticulo(idArticulo: string,
-      codCentro: string): Observable<any> {
+      codCentro: string, proveedor?: string): Observable<any> {
       let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
       //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -255,7 +279,7 @@ export class Tabla2Service {
          <!--Optional:-->
          <IDNLF></IDNLF>
          <!--Optional:-->
-         <LIFNR></LIFNR>
+         <LIFNR>${proveedor}</LIFNR>
          <!--Optional:-->
          <MATNR>${idArticulo}</MATNR>
          <UM>
@@ -291,6 +315,7 @@ export class Tabla2Service {
             let retractil = dom.getElementsByTagName("RETRACTIL")[0].innerHTML;
             let manto = dom.getElementsByTagName("MANTO")[0].innerHTML;
             let palet = dom.getElementsByTagName("PALET")[0].innerHTML;
+            let umb = dom.getElementsByTagName("UMB")[0].innerHTML;
 
             let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
             console.log("codigo=" + codigo);
@@ -310,6 +335,7 @@ export class Tabla2Service {
                +retractil,
                +manto,
                +palet,
+               umb,
                codError,
                mensajeError,
 
@@ -802,10 +828,30 @@ export class Tabla2Service {
       let DateObj = new Date();
       let currDate = DateObj.getFullYear() + '-' + ('0' + (DateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + DateObj.getDate()).slice(-2);
 
-      console.log('currDate = ' + currDate);
-
       let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
+
+      let tiped: string;
+      let proveedor: string;
+
+      console.log( JSON.stringify(pos));
+
+      switch (this.currTipoMov) {
+         case '001':
+            tiped = 
+            proveedor = this.currProveedor;
+            this.tipoDocRefer = '';
+            this.currPedido= '';
+             break;
+         case '002':
+               tiped = '006';
+               proveedor = this.provCabeceraWs;
+                break;  
+         case '003': case '004': 
+            tiped = this.tiped;
+            proveedor = this.provCabeceraWs;
+             break;           
+      }
 
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -819,12 +865,12 @@ export class Tabla2Service {
                <FECHA_CONTAB>${currDate}</FECHA_CONTAB>
                <CLASE_MOVIMIENTO>${this.currTipoMov}</CLASE_MOVIMIENTO>
                <DES_TIPOMOV></DES_TIPOMOV>
-               <PROVEEDOR>${this.currProveedor}</PROVEEDOR>
+               <PROVEEDOR>${proveedor}</PROVEEDOR>
                <DESC_PROVEEDOR></DESC_PROVEEDOR>
                <NOTA_ENTREGA>${this.currAlbaran}</NOTA_ENTREGA>
-               <TIPO_DOC_REFER></TIPO_DOC_REFER>
+               <TIPO_DOC_REFER>${this.tipoDocRefer}</TIPO_DOC_REFER>
                <DES_TIPO_DOC_REF></DES_TIPO_DOC_REF>
-               <DOCUMENTO_REFER></DOCUMENTO_REFER>
+               <DOCUMENTO_REFER>${this.currPedido}</DOCUMENTO_REFER>
                <MOTIVO_PED></MOTIVO_PED>
                <MOTIVO_MOV></MOTIVO_MOV>
                <DES_MOTIVO_MOV></DES_MOTIVO_MOV>
@@ -846,7 +892,7 @@ export class Tabla2Service {
                <ES_ENTREGA_PARC></ES_ENTREGA_PARC>
                <DOCUMENTO_REFER_PARENT></DOCUMENTO_REFER_PARENT>
                <TIPO_DOC_REFER_PARENT></TIPO_DOC_REFER_PARENT>
-               <TIPED>6</TIPED>
+               <TIPED>${tiped}</TIPED>
                <REF_VTA></REF_VTA>
                <DOC_REFER_INTERNAL></DOC_REFER_INTERNAL>
                <DOCUMENTO_REFER_REAL></DOCUMENTO_REFER_REAL>
@@ -958,9 +1004,15 @@ export class Tabla2Service {
       `;
 
       pos.forEach(posi => {
-         body += `
+
+         switch (this.currTipoMov) {
+            case '001':
+
+               let total = posi.comment * posi.FactConv;
+
+               body += `
             <item>
-               <POSICION></POSICION>
+               <POSICION>${posi.id}</POSICION>
                <MATERIAL>${posi.codigo}</MATERIAL>
                <DESC_MATERIAL>${posi.name}</DESC_MATERIAL>
                <CANTIDAD>${posi.comment}</CANTIDAD>
@@ -1005,9 +1057,64 @@ export class Tabla2Service {
                <PMP_CESION></PMP_CESION>
             </item>
             `;
+               break;
+
+         case '002': case '003': case '004': 
+               let cantidad = posi.comment * posi.FactConv;
+               let diferencia = cantidad -  posi.cantrefUmb ;
+               let factConv = 1;
+               let nextra = posi.extra == 'X'? '' : 'X';
+
+               body += `
+               <item>
+                  <POSICION>${posi.id}</POSICION>
+                  <MATERIAL>${posi.codigo}</MATERIAL>
+                  <DESC_MATERIAL>${posi.name}</DESC_MATERIAL>
+                  <CANTIDAD>${cantidad}</CANTIDAD>
+                  <UNIDAD_MEDIDA>${posi.umb}</UNIDAD_MEDIDA>
+                  <CANT_SIN_CARGO></CANT_SIN_CARGO>
+                  <LOTE></LOTE>
+                  <CANTIDAD_REFER>${posi.cantrefUmb}</CANTIDAD_REFER>
+                  <UN_MEDIDA_ENT>${posi.umb}</UN_MEDIDA_ENT>
+                  <CANT_REFER_UMB>${posi.cantrefUmb}</CANT_REFER_UMB>
+                  <UXC>${cantidad}</UXC>
+                  <FRACCION></FRACCION>
+                  <TOTAL>${cantidad}</TOTAL>
+                  <UMB>${posi.umb}</UMB>
+                  <DIFERENCIA>${diferencia}</DIFERENCIA>
+                  <MOTIVO_PED></MOTIVO_PED>
+                  <DES_MOTIVO_PED></DES_MOTIVO_PED>
+                  <SOLICITANTE></SOLICITANTE>
+                  <POS_PED_SC></POS_PED_SC>
+                  <POS_PED_FRAC></POS_PED_FRAC>
+                  <ES_CANT_NULA></ES_CANT_NULA>
+                  <BOTON_X_LOTES></BOTON_X_LOTES>
+                  <ICON_X_LOTES></ICON_X_LOTES>
+                  <FACT_CONV>${factConv}</FACT_CONV>
+                  <ACUMULADO></ACUMULADO>
+                  <ANULA></ANULA>
+                  <EXTRA>${posi.extra}</EXTRA>
+                  <NEXTRA>${nextra}</NEXTRA>
+                  <DISABLE></DISABLE>
+                  <POS_MVT></POS_MVT>
+                  <MOTIVO_MOV>${posi.motivo}</MOTIVO_MOV>
+                  <DES_MOTIVO_MOV></DES_MOTIVO_MOV>
+                  <COLOR></COLOR>
+                  <ES_SINCARGO></ES_SINCARGO>
+                  <NTRGA_POSTERIOR></NTRGA_POSTERIOR>
+                  <POS_ENTR_DISTB>${posi.posRefer}</POS_ENTR_DISTB>
+                  <EAN_ALT></EAN_ALT>
+                  <EAN11></EAN11>
+                  <PRECIO_UNI></PRECIO_UNI>
+                  <MON></MON>
+                  <POSITIVO></POSITIVO>
+                  <TOTAL_PRECIO></TOTAL_PRECIO>
+                  <PMP_CESION></PMP_CESION>
+               </item>
+               `;
+               break;
+         }
       });
-
-
 
       body += `
       </T_POS>
@@ -1015,6 +1122,7 @@ export class Tabla2Service {
    </soapenv:Body>
 </soapenv:Envelope>
       `;
+//console.log(body);
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
