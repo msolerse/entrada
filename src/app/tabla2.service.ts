@@ -41,8 +41,8 @@ export class Tabla2Service {
    public currDatosArticuloProv: DatosArticuloProv[];
    public currTipoMov: string;
    public tiped: string;
-   public provCabeceraWs:string;
-   public tipoDocRefer:string;
+   public provCabeceraWs: string;
+   public tipoDocRefer: string;
 
    public eanFiltered: boolean;
    public loadEans: boolean;
@@ -50,13 +50,30 @@ export class Tabla2Service {
 
    obtenerPosiciones(idPedido: string, albaran: string,
       codCentro: string, tipoDoc: string, tipoMov: string): Observable<Element[]> {
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+
+
       //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
+      let url: string;
+      let nombreFuncion: string;
+
+      console.log("tipoMov=" + tipoMov);
+
+      if (tipoMov == '004') {
+         url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+         nombreFuncion = 'ZWD_MM_GET_POS_DOCREF';
+      }
+      else {
+         url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+         nombreFuncion = 'ZWD_GET_POSICIONES_ENTRADA';
+      }
+
+      console.log("nombre funcion = " + nombreFuncion);
+
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
       <soapenv:Header/>
       <soapenv:Body>
-         <urn:ZWD_GET_POSICIONES_ENTRADA>
+         <urn:${nombreFuncion}>
             <E_CABECERA>
                <CENTRO>${codCentro}</CENTRO>
                <DES_CENTRO></DES_CENTRO>
@@ -185,7 +202,7 @@ export class Tabla2Service {
                   <PMP_CESION></PMP_CESION>
                </item>
             </T_POS>
-         </urn:ZWD_GET_POSICIONES_ENTRADA>
+         </urn:${nombreFuncion}>
       </soapenv:Body>
    </soapenv:Envelope>
       `;
@@ -196,17 +213,17 @@ export class Tabla2Service {
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
- 
+
 
             this.tiped = dom.getElementsByTagName("TIPED")[0].innerHTML;
-            console.log("tiped = "+ this.tiped );
-            this.provCabeceraWs= dom.getElementsByTagName("PROVEEDOR")[0].innerHTML;
-            this.tipoDocRefer= dom.getElementsByTagName("TIPO_DOC_REFER")[0].innerHTML;
+            console.log("tiped = " + this.tiped);
+            this.provCabeceraWs = dom.getElementsByTagName("PROVEEDOR")[0].innerHTML;
+            this.tipoDocRefer = dom.getElementsByTagName("TIPO_DOC_REFER")[0].innerHTML;
 
             let itemsDOM = Array.from(dom.getElementsByTagName('T_POS')[0].children);
 
             let posiciones: Element[] = [];
-            let factConv:  number;
+            let factConv: number;
 
             itemsDOM.forEach(item => {
 
@@ -214,11 +231,12 @@ export class Tabla2Service {
                let cant = +detalle[3].innerHTML;
 
                factConv = +detalle[10].innerHTML;
-               if ( tipoMov == '003'  && cant != 0) {
-                  factConv =  factConv / cant  ;
+               if (tipoMov == '003' && cant != 0) {
+                  factConv = factConv / cant;
                }
+               if (factConv == 0) { factConv = 1; }
+            
 
-             
                if (detalle[1].innerHTML !== '' && detalle[1].innerHTML !== '0') {
                   posiciones.push(new Element(
                      Number(detalle[0].innerHTML),
@@ -231,7 +249,7 @@ export class Tabla2Service {
                      +detalle[9].innerHTML, //cantreferUmb
                      detalle[13].innerHTML, // UMb
                      factConv, // factConv
-                     detalle[35].innerHTML , //posrefer
+                     detalle[35].innerHTML, //posrefer
                      ''
                   ));
                }
@@ -268,7 +286,17 @@ export class Tabla2Service {
    }
 
    obtenerArticulo(idArticulo: string,
-      codCentro: string, proveedor?: string): Observable<any> {
+      codCentro: string): Observable<any> {
+
+      let proveedor: string;
+
+      if (this.currTipoMov == '003' || this.currTipoMov == '002' || this.currTipoMov == '004')
+         proveedor = this.provCabeceraWs;
+      else
+         proveedor = '';
+
+      console.log("currTipoMov=" + this.currTipoMov);
+      console.log("proveedor = " + proveedor);
       let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
       //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -834,23 +862,27 @@ export class Tabla2Service {
       let tiped: string;
       let proveedor: string;
 
-      console.log( JSON.stringify(pos));
+      // console.log( JSON.stringify(pos));
 
       switch (this.currTipoMov) {
          case '001':
-            tiped = 
+            tiped = '006';
             proveedor = this.currProveedor;
             this.tipoDocRefer = '';
-            this.currPedido= '';
-             break;
+            this.currPedido = '';
+            break;
          case '002':
-               tiped = '006';
-               proveedor = this.provCabeceraWs;
-                break;  
-         case '003': case '004': 
             tiped = this.tiped;
             proveedor = this.provCabeceraWs;
-             break;           
+            break;
+         case '003':
+            tiped = '006';
+            proveedor = this.provCabeceraWs;
+            break;
+         case '004':
+            tiped = '007';
+            proveedor = this.provCabeceraWs;
+            break;
       }
 
       let body = `
@@ -1059,11 +1091,11 @@ export class Tabla2Service {
             `;
                break;
 
-         case '002': case '003': case '004': 
+            case '002': case '003': case '004':
                let cantidad = posi.comment * posi.FactConv;
-               let diferencia = cantidad -  posi.cantrefUmb ;
+               let diferencia = cantidad - posi.cantrefUmb;
                let factConv = 1;
-               let nextra = posi.extra == 'X'? '' : 'X';
+               let nextra = posi.extra == 'X' ? '' : 'X';
 
                body += `
                <item>
@@ -1122,7 +1154,7 @@ export class Tabla2Service {
    </soapenv:Body>
 </soapenv:Envelope>
       `;
-//console.log(body);
+      //console.log(body);
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {

@@ -78,6 +78,7 @@ export class Tabla2Component {
       this.tipoMov = params["tipoMov"];
       this.service.currTipoMov = this.tipoMov;
       this.codProv = params['codProv'];
+      console.log("this.service.currTipoMov=" + this.service.currTipoMov);
 
 
       if (this.tipoMov == '002') { // distribucion plataforma, obtener motivos
@@ -298,7 +299,7 @@ export class Tabla2Component {
     document.getElementById('filtrar').focus();
   }
 
-  
+
   remove(el: Element) {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
 
@@ -456,23 +457,37 @@ export class Tabla2Component {
 
   goValidar() {
 
+    let messageShowed: string = '';
+    let tipoShowed: string ='W';
 
     this.service.validarEntrada(this.entireDataSource.data()).subscribe(data => {
 
       data.returnMessages.forEach(ret => {
-        switch (ret.tipo) {
-          case 'E':
-            this.alert.sendAlert(ret.mensaje, AlertType.Error);
-            break;
-          case 'S':
-            this.alert.validacionOk = true;
-            this.alert.sendAlert(ret.mensaje, AlertType.Success);
-            break;
-          default:
-            this.alert.sendAlert(ret.mensaje, AlertType.Warning);
-            break;
+
+        messageShowed += ret.mensaje + '\n';
+
+        if (ret.tipo = 'E')
+        tipoShowed = 'E';
+
+        if  (tipoShowed == 'W') {
+            if (ret.tipo = 'S')
+              tipoShowed = 'S'; 
         }
       });
+
+      switch (tipoShowed) {
+        case 'E':
+          this.alert.sendAlert(messageShowed, AlertType.Error);
+          break;
+        case 'S':
+          this.alert.validacionOk = true;
+          this.alert.sendAlert(messageShowed, AlertType.Success);
+          break;
+        default:
+          this.alert.sendAlert(messageShowed, AlertType.Warning);
+          break;
+      }
+
 
       if (this.alert.validacionOk) {
         this.service.currPosiciones = [];

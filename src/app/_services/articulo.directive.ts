@@ -62,7 +62,8 @@ export class ArticuloExistValidator implements AsyncValidator {
         return of(null);
       }
       else {
-        return this.service.obtenerArticulo(ctrl.value, this.service.currCentro).pipe(
+        //console.log(" obtener articulo proveedor "+  this.service.currProveedor );
+        return this.service.obtenerArticulo(ctrl.value, this.service.currCentro ).pipe(
           map(data => ((data.codError == 4) ? { ArticuloExist: false } : null)),
           catchError(() => null)
         );
