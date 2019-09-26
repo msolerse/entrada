@@ -7,9 +7,16 @@ import { ArticuloComponent } from './articulo/articulo.component';
 import { SearchArticuloComponent } from './search-articulo/search-articulo.component';
 import { TestComponent } from './test/test.component';
 import { TestResolverService } from './test/test-resolver.service';
+import { AuthGuard } from './_guards/auth.guard';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: '', component: SeleccionComponent},
+  { 
+    path: 'login', 
+    component:  LoginComponent
+},
+  { path: '', component: SeleccionComponent, 
+  canActivate: [ AuthGuard ]},
   //{ path: 'tabla/:idPedido', component: TablaComponent},
   { path: 'tabla2/:idPedido/:codCentro', component: Tabla2Component,
   resolve: {

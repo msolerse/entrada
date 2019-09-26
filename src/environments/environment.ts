@@ -8,10 +8,10 @@ export const environment = {
   serviceCode: '100',
   version: "17.04.19" */
   production: false,
-  serviceUrl: 'http://mar3dev.miquel.es:8001/',
+  serviceUrl: 'http://gmr3qas.miquel.es:8003/',
   authUrl: 'http://10.100.46.161:8080/middleware/',
   authUser: '2156',
   authPassword: 'jenifer10',
-  serviceCode: '300',
+  serviceCode: '100',
   version: "17.04.19"
 };

@@ -10,7 +10,10 @@ export class ToolbarService {
   constructor() { }
 
   changeMessage(message: string) {
-    this.messageSource.next(message);
-  }
 
+    setTimeout(() => {
+    this.messageSource.next(message);
+     
+    });
+  }
 }

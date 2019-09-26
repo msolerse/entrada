@@ -16,10 +16,9 @@ export class HeadersInterceptor implements HttpInterceptor {
         if(!req.url.includes(environment.authUrl)){
             let user = this.credentials.user;
             let password = this.credentials.password;
-            if(req['url'].includes("entrada") || req['url'].includes("stock")
-            || req['url'].includes("mercancia")) {
-                user = "2156";// environment.authUser;
-                password = "jenifer10";// environment.authPassword
+            if (req['url'].includes('zmm_pda')) {
+                user =  environment.authUser;
+                password =  environment.authPassword;
             }
             newReq = req.clone({
                 setHeaders: {

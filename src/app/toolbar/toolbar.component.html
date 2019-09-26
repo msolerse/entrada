@@ -1,8 +1,10 @@
 
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches" >
 
-  <mat-toolbar color="primary" class="mat-elevation-z8" >
+
+  <mat-toolbar class="example-toolbar" color="primary" class="mat-elevation-z8" >
       <div *ngIf="icon == 'Menu'">
-    <button mat-icon-button (click)="start.open('mouse')">
+    <button mat-icon-button (click)="snav.toggle()" >
         <mat-icon>menu</mat-icon>    
     </button> </div>
     <div *ngIf="icon == 'Back'">
@@ -15,3 +17,34 @@
     <span class="example-fill-remaining-space"></span>
   
 </mat-toolbar>
+
+
+
+   <p> </p> 
+  <app-alert></app-alert>
+
+  
+   <mat-sidenav-container class="example-sidenav-container"
+   [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+        <mat-nav-list>
+            <a mat-list-item routerLink="/">
+                <mat-icon>library_books</mat-icon>
+                <span>Selección</span>
+            </a>
+  
+            <a mat-list-item routerLink="login">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Salir</span>
+            </a>
+        </mat-nav-list>
+      </mat-sidenav>
+
+  <div class="mat-app-background basic-container">
+  <router-outlet></router-outlet>
+</div> 
+  
+
+</mat-sidenav-container>
+</div> 

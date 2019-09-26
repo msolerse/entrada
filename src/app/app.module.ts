@@ -68,6 +68,9 @@ import { DataService } from './_services/data.service';
 import { ToolbarService } from './_services/toolbar.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ArticuloDescService } from './_services/articuloDesc.service';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './_guards/auth.guard';
+import { SapService } from './_services/sap.service';
 
 @NgModule({
   declarations: [
@@ -85,7 +88,8 @@ import { ArticuloDescService } from './_services/articuloDesc.service';
     TestComponent,
     ProveedorExistValidatorDirective,
     ArticuloExistValidatorDirective,
-    ToolbarComponent
+    ToolbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -102,6 +106,7 @@ import { ArticuloDescService } from './_services/articuloDesc.service';
      MatButtonModule,
      MatToolbarModule,
     FormsModule,
+    ReactiveFormsModule,
     MatTableModule,
    MatIconModule,
    MatDialogModule,
@@ -113,8 +118,8 @@ import { ArticuloDescService } from './_services/articuloDesc.service';
   ],
 entryComponents: [AddRowDialog],
   providers: [
-   // AuthGuard,
-   // SapService,
+    AuthGuard,
+    SapService,
     AlertService,
    httpInterceptorProviders,
    // DatePipe,
