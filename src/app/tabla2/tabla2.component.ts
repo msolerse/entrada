@@ -48,6 +48,7 @@ export class Tabla2Component {
   isExpanded: boolean;
   showAlbaran: boolean;
   filtrarText: string = '';
+  totalLength: number;
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -153,8 +154,9 @@ export class Tabla2Component {
         this.posiciones = data.crisis;
         // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
         console.log( 'començo a crear DataSource');
-        this.dataSource = new ExampleDataSource(this.posiciones);
+        this.dataSource = new ExampleDataSource(this.posiciones.slice(0, 10));
         this.entireDataSource = new ExampleDataSource(this.posiciones);
+        this.totalLength = this.posiciones.length;
         //this.dataSource.paginator = this.paginator;
         console.log( 'acabo de  crear DataSource');
 
@@ -456,6 +458,15 @@ export class Tabla2Component {
   goBack() {
     this.alert.validacionOk = false;
     this.router.navigate(['']);
+  }
+
+
+  changePage(e) {
+    console.log(event,'total length',this.totalLength);
+    let firstCut = e.pageIndex * e.pageSize;
+    let secondCut = firstCut + e.pageSize;
+    this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut));
+  
   }
 
   goValidar() {
