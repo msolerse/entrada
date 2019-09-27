@@ -35,6 +35,7 @@ export class TestResolverService implements Resolve<Element[]> {
     if (idPedido != '0' && idPedido == this.ts.currPedido) {
        console.log( 'pedidos iguals');
        this.ts.loadEans = false;
+       console.log( ' retorno posicions ');
       return of(this.ts.currPosiciones);
     }  else {
       if (idPedido != '0') {

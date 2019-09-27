@@ -28,8 +28,8 @@ export class Tabla2Component {
 
   posiciones: Element[];
 
-  dataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
-  entireDataSource: ExampleDataSource;// = new ExampleDataSource(initialData);
+  dataSource: ExampleDataSource;
+  entireDataSource: ExampleDataSource;
 
   displayedColumns: string[];
   idPedido: string;
@@ -152,8 +152,11 @@ export class Tabla2Component {
       .subscribe((data: { crisis: Element[] }) => {
         this.posiciones = data.crisis;
         // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
+        console.log( 'començo a crear DataSource');
         this.dataSource = new ExampleDataSource(this.posiciones);
         this.entireDataSource = new ExampleDataSource(this.posiciones);
+        //this.dataSource.paginator = this.paginator;
+        console.log( 'acabo de  crear DataSource');
 
         if (this.idPedido == '0' && this.posiciones.length == 0) {
           this.isExpanded = true;

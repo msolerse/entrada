@@ -71,6 +71,7 @@ import { ArticuloDescService } from './_services/articuloDesc.service';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { SapService } from './_services/sap.service';
+import {MatPaginator} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { SapService } from './_services/sap.service';
    HttpClientModule,
    FlexLayoutModule,
    Ng2SearchPipeModule,
-   MatExpansionModule
+   MatExpansionModule,
+   MatPaginatorModule
   ],
 entryComponents: [AddRowDialog],
   providers: [
