@@ -56,8 +56,8 @@ export class Tabla2Component {
   // MatPaginator Inputs
   //length = 1000;
   pageSize: number;
+  pageIndex: number;
   
-
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -160,6 +160,7 @@ export class Tabla2Component {
     if  (typeof this.service.pageIndex === "undefined") this.service.pageIndex = 0;
 
      this.pageSize = this.service.pageSize;
+     this.pageIndex = this.service.pageIndex;
 
     this.route.data
       .subscribe((data: { crisis: Element[] }) => {
@@ -169,7 +170,7 @@ export class Tabla2Component {
         this.dataSource = new MatTableDataSource<Element>(this.posiciones);
         this.dataSource.paginator = this.paginator;
        // this.entireDataSource = new ExampleDataSource(this.posiciones);
-       // this.totalLength = this.posiciones.length;
+         this.totalLength = this.posiciones.length;
         //this.dataSource.paginator = this.paginator;
         console.log( 'acabo de  crear DataSource');
 
@@ -296,7 +297,7 @@ export class Tabla2Component {
 
     this.posiciones = this.dataSource.data;
     this.service.currPosiciones = this.dataSource.data;
-
+    this.totalLength =  this.totalLength + 1;
   }
 
 
@@ -439,17 +440,8 @@ export class Tabla2Component {
   }
 
   public doFilter = (value: string) => {
-    // console.log (this.entireDataSource.data());
-    //this.dataSource.update(this.entireDataSource.data().filter(row => row));
-   // const copy = this.entireDataSource.data().filter(row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
-     // row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()));
-
+   
      this.dataSource.filter = value.trim().toLowerCase();
-
-     /*    this.posiciones.slice(firstCut, secondCut));
-      this.totalLength = this.length;
-      this.service.pageIndex = 0;
-      this.dataSource.update(copy.slice( 0, this.pageSize )); */
 
   }
 
@@ -483,6 +475,7 @@ export class Tabla2Component {
     this.service.pageSize = e.pageSize;
     this.pageSize = e.pagesize;
     this.service.pageIndex = e.pageIndex;
+    this.pageIndex = e.pageIndex;
    /*  let firstCut = e.pageIndex * e.pageSize;
     let secondCut = firstCut + e.pageSize;
     this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut)); */
@@ -610,6 +603,7 @@ export class AddRowDialog implements OnInit {
     { value: 'CJ', viewValue: 'CJ' },
     { value: 'RET', viewValue: 'RET' },
     { value: 'PAL', viewValue: 'PAL' },
+    { value: 'MAN', viewValue: 'MAN' },
   ];
 
   focusCantidad: boolean;
@@ -639,7 +633,8 @@ export class AddRowDialog implements OnInit {
     private ads: ArticuloDescService) {
 
     console.log("tipoMov= " + data.tipoMov);
-    //this.data.symbol = 'CJ';
+    if  ( this.data.symbol == '' || typeof( this.data.symbol ) == "undefined")
+        this.data.symbol = 'CJ';
     this.motivos = this.service.motivosMov;
     //this.ads.changeMessage('');
     this.ads.currentMessage.subscribe(message =>

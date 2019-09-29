@@ -202,7 +202,9 @@
   </mat-table>
 
   <mat-paginator #paginator 
+             [length]="totalLength"
              [pageSize]="pageSize" 
+             [pageIndex]="pageIndex"
              [pageSizeOptions]="[5, 7, 10, 20]"
              (page)="changePage($event)" showFirstLastButtons>
   </mat-paginator>
