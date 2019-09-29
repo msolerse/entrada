@@ -16,6 +16,7 @@ import { ArticuloDescService } from '../_services/articuloDesc.service';
 import { Ean } from '../_entities/Ean';
 import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatTable} from '@angular/material';
 
 
 
@@ -27,6 +28,7 @@ import {MatPaginator} from '@angular/material/paginator';
 export class Tabla2Component {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  
 
   motivos: Motivo[];
 
@@ -279,7 +281,7 @@ export class Tabla2Component {
       console.log(JSON.stringify(this.service.datosArticulos));
     }
 
-    this.dataSource.data.push({
+    this.service.currPosiciones.push({
       id: maxId,
       codigo: codigo,
       name: name,
@@ -295,9 +297,10 @@ export class Tabla2Component {
       extra: 'X'
     });
 
-    this.posiciones = this.dataSource.data;
-    this.service.currPosiciones = this.dataSource.data;
+    this.posiciones =  this.service.currPosiciones;
+    this.dataSource.data = this.service.currPosiciones;
     this.totalLength =  this.totalLength + 1;
+   // this.table.renderRows();
   }
 
 
@@ -327,6 +330,7 @@ export class Tabla2Component {
       this.dataSource.data = copy;
      // this.entireDataSource.update(copy);
       this.service.currPosiciones = this.dataSource.data;
+      this.totalLength =  this.totalLength - 1;
     }
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
