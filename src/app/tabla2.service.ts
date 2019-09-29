@@ -47,6 +47,9 @@ export class Tabla2Service {
    public eanFiltered: boolean;
    public loadEans: boolean;
 
+   public pageSize: number;
+   public pageIndex: number;
+
 
    obtenerPosiciones(idPedido: string, albaran: string,
       codCentro: string, tipoDoc: string, tipoMov: string): Observable<Element[]> {

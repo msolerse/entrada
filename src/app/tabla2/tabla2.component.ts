@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,7 +14,9 @@ import { isUndefined } from 'util';
 import { ToolbarService } from '../_services/toolbar.service';
 import { ArticuloDescService } from '../_services/articuloDesc.service';
 import { Ean } from '../_entities/Ean';
-//import { element } from '@angular/core/src/render3';
+import { MatTableDataSource } from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+
 
 
 @Component({
@@ -24,12 +26,14 @@ import { Ean } from '../_entities/Ean';
 })
 export class Tabla2Component {
 
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   motivos: Motivo[];
 
   posiciones: Element[];
 
-  dataSource: ExampleDataSource;
-  entireDataSource: ExampleDataSource;
+  dataSource: MatTableDataSource<Element>;
+  //entireDataSource: ExampleDataSource;
 
   displayedColumns: string[];
   idPedido: string;
@@ -49,6 +53,11 @@ export class Tabla2Component {
   showAlbaran: boolean;
   filtrarText: string = '';
   totalLength: number;
+  // MatPaginator Inputs
+  //length = 1000;
+  pageSize: number;
+  
+
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -147,16 +156,20 @@ export class Tabla2Component {
 
     });
 
+    if  (typeof this.service.pageSize === "undefined") this.service.pageSize = 5;
+    if  (typeof this.service.pageIndex === "undefined") this.service.pageIndex = 0;
 
+     this.pageSize = this.service.pageSize;
 
     this.route.data
       .subscribe((data: { crisis: Element[] }) => {
         this.posiciones = data.crisis;
         // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
         console.log( 'començo a crear DataSource');
-        this.dataSource = new ExampleDataSource(this.posiciones.slice(0, 10));
-        this.entireDataSource = new ExampleDataSource(this.posiciones);
-        this.totalLength = this.posiciones.length;
+        this.dataSource = new MatTableDataSource<Element>(this.posiciones);
+        this.dataSource.paginator = this.paginator;
+       // this.entireDataSource = new ExampleDataSource(this.posiciones);
+       // this.totalLength = this.posiciones.length;
         //this.dataSource.paginator = this.paginator;
         console.log( 'acabo de  crear DataSource');
 
@@ -220,9 +233,9 @@ export class Tabla2Component {
     let elemArt: DatosArticulo;
     let factConv: number;
 
-    if ((this.dataSource.data()) && (this.dataSource.data().length !== 0)) {
+    if ((this.dataSource.data) && (this.dataSource.data.length !== 0)) {
       //console.log("length="+this.dataSource.data().length);
-      maxId = Math.max.apply(Math, this.dataSource.data().map(o => o.id)) + 10;
+      maxId = Math.max.apply(Math, this.dataSource.data.map(o => o.id)) + 10;
     } else {
       maxId = 10;
     }
@@ -265,7 +278,7 @@ export class Tabla2Component {
       console.log(JSON.stringify(this.service.datosArticulos));
     }
 
-    this.entireDataSource.data().push({
+    this.dataSource.data.push({
       id: maxId,
       codigo: codigo,
       name: name,
@@ -281,10 +294,8 @@ export class Tabla2Component {
       extra: 'X'
     });
 
-    const copy = this.entireDataSource.data().filter(row => row);
-    this.dataSource.update(copy);
-    this.entireDataSource.update(copy);
-    this.service.currPosiciones = this.entireDataSource.data();
+    this.posiciones = this.dataSource.data;
+    this.service.currPosiciones = this.dataSource.data;
 
   }
 
@@ -293,14 +304,14 @@ export class Tabla2Component {
     if (comment == null) { return; }
     // copy and mutate
     //const copy = this.dataSource.data().slice()
-    const copy = this.entireDataSource.data().slice()
+    const copy = this.dataSource.data.slice();
     console.log('update comment = ' + comment);
     el.comment = +comment.split(';')[0];
     el.dif = el.comment - el.cantref;
     el.motivo = comment.split(';')[1];
     // this.dataSource.update(copy);
-    this.entireDataSource.update(copy);
-    this.service.currPosiciones = this.entireDataSource.data();
+   // this.dataSource.update(copy);
+    this.service.currPosiciones = this.dataSource.data;
     document.getElementById('filtrar').focus();
   }
 
@@ -309,12 +320,12 @@ export class Tabla2Component {
     //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
 
     if (el.extra == 'X') {
-      const copy = this.entireDataSource.data().filter(row => row != el);
+      const copy = this.dataSource.data.filter(row => row != el);
       //console.log("copy="+JSON.stringify(copy)) ;
 
-      this.dataSource.update(copy);
-      this.entireDataSource.update(copy);
-      this.service.currPosiciones = this.entireDataSource.data();
+      this.dataSource.data = copy;
+     // this.entireDataSource.update(copy);
+      this.service.currPosiciones = this.dataSource.data;
     }
     //console.log("json="+JSON.stringify(this.dataSource.data())) ;
     //console.log( "adeu");
@@ -343,9 +354,9 @@ export class Tabla2Component {
         }
 
         codArt = elemEan.codigo;
-        elem = this.entireDataSource.data().find(x => x.codigo === codArt);
+        elem = this.dataSource.data.find(x => x.codigo === codArt);
       } else { // Es un código de articulo
-        elem = this.entireDataSource.data().find(x => x.codigo === ean);
+        elem = this.dataSource.data.find(x => x.codigo === ean);
       }
 
       if (!(elem)) {
@@ -429,10 +440,17 @@ export class Tabla2Component {
 
   public doFilter = (value: string) => {
     // console.log (this.entireDataSource.data());
-    this.dataSource.update(this.entireDataSource.data().filter(row => row));
-    const copy = this.dataSource.data().filter(row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
-      row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()));
-    this.dataSource.update(copy);
+    //this.dataSource.update(this.entireDataSource.data().filter(row => row));
+   // const copy = this.entireDataSource.data().filter(row => row.name.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()) ||
+     // row.codigo.toLocaleLowerCase().includes(value.trim().toLocaleLowerCase()));
+
+     this.dataSource.filter = value.trim().toLowerCase();
+
+     /*    this.posiciones.slice(firstCut, secondCut));
+      this.totalLength = this.length;
+      this.service.pageIndex = 0;
+      this.dataSource.update(copy.slice( 0, this.pageSize )); */
+
   }
 
   searchNewEan(ean: string, codCentro: string, f2?: any) {
@@ -461,20 +479,22 @@ export class Tabla2Component {
   }
 
 
-  changePage(e) {
-    console.log(event,'total length',this.totalLength);
-    let firstCut = e.pageIndex * e.pageSize;
+   changePage(e) {
+    this.service.pageSize = e.pageSize;
+    this.pageSize = e.pagesize;
+    this.service.pageIndex = e.pageIndex;
+   /*  let firstCut = e.pageIndex * e.pageSize;
     let secondCut = firstCut + e.pageSize;
-    this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut));
+    this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut)); */
   
   }
-
+ 
   goValidar() {
 
     let messageShowed: string = '';
     let tipoShowed: string ='W';
 
-    this.service.validarEntrada(this.entireDataSource.data()).subscribe(data => {
+    this.service.validarEntrada(this.dataSource.data).subscribe(data => {
 
       data.returnMessages.forEach(ret => {
 
