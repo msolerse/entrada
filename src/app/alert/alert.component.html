@@ -2,7 +2,7 @@
 
   <div *ngFor="let alerta of alertas" class="justify-content-start">
       <div  (close)="alertas = []" class="alert {{getCss(alerta)}} alert-dismissible fade show" role="alert" >
-        {{alerta.mensaje}}
+        <div [innerHTML]="alerta.mensaje"></div>    
         <button type="button" (click)="removeAlerta(alerta)" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

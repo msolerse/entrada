@@ -233,10 +233,10 @@ export class Tabla2Service {
                let detalle = Array.from(item.children);
                let cant = +detalle[3].innerHTML;
 
-               factConv = +detalle[10].innerHTML;
-               if (tipoMov == '003' && cant != 0) {
+               factConv = +detalle[23].innerHTML;
+               /* if (tipoMov == '003' && cant != 0) {
                   factConv = factConv / cant;
-               }
+               } */
                if (factConv == 0) { factConv = 1; }
             
 
@@ -1095,10 +1095,12 @@ export class Tabla2Service {
                break;
 
             case '002': case '003': case '004':
-               let cantidad = posi.comment * posi.FactConv;
-               let diferencia = cantidad - posi.cantrefUmb;
+               let cantidad = +(posi.comment * posi.FactConv).toFixed(3);
+               let diferencia = +(cantidad - posi.cantrefUmb).toFixed(3);
                let factConv = 1;
                let nextra = posi.extra == 'X' ? '' : 'X';
+               if (this.currTipoMov != '002')
+                   { posi.motivo = ''; }
 
                body += `
                <item>
@@ -1157,7 +1159,7 @@ export class Tabla2Service {
    </soapenv:Body>
 </soapenv:Envelope>
       `;
-      //console.log(body);
+      console.log(body);
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {

@@ -311,7 +311,7 @@ export class Tabla2Component {
     const copy = this.dataSource.data.slice();
     console.log('update comment = ' + comment);
     el.comment = +comment.split(';')[0];
-    el.dif = el.comment - el.cantref;
+    el.dif = +(el.comment - el.cantref).toFixed(3);
     el.motivo = comment.split(';')[1];
     // this.dataSource.update(copy);
    // this.dataSource.update(copy);
@@ -495,16 +495,19 @@ export class Tabla2Component {
 
       data.returnMessages.forEach(ret => {
 
-        messageShowed += ret.mensaje + '\n';
+        messageShowed += ret.mensaje + '<br><br>';
 
-        if (ret.tipo = 'E')
-        tipoShowed = 'E';
-
-        if  (tipoShowed == 'W') {
-            if (ret.tipo = 'S')
-              tipoShowed = 'S'; 
-        }
       });
+
+      console.log("messageShowed="+  messageShowed);
+      console.log( JSON.stringify( data.returnMessages));
+      
+      if ( data.returnMessages.some(el => ( el.tipo === 'S'|| el.tipo === 'I' ))) 
+          { tipoShowed = 'S' }
+       else  if ( data.returnMessages.some(el => el.tipo === 'E')) 
+          { tipoShowed = 'E' }
+       else   
+          { tipoShowed = 'W' };
 
       switch (tipoShowed) {
         case 'E':
