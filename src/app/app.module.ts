@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { TablaComponent } from './tabla/tabla.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
@@ -59,7 +58,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSortModule } from "@angular/material/sort";
 import { SearchArticuloComponent } from './search-articulo/search-articulo.component';
 // search module
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+//import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { AlertComponent } from './alert/alert.component';
 import { TestComponent } from './test/test.component';
 import { ProveedorExistValidatorDirective } from './_services/proveedor.directive';
@@ -76,7 +75,6 @@ import {MatPaginator} from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AppComponent,
-    TablaComponent,
     SeleccionComponent,
     Tabla2Component,
     LoaderComponent,
@@ -114,7 +112,7 @@ import {MatPaginator} from '@angular/material/paginator';
    SatPopoverModule,
    HttpClientModule,
    FlexLayoutModule,
-   Ng2SearchPipeModule,
+   //Ng2SearchPipeModule,
    MatExpansionModule,
    MatPaginatorModule
   ],

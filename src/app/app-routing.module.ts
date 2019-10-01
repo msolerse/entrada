@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SeleccionComponent } from './seleccion/seleccion.component';
-import { TablaComponent } from './tabla/tabla.component';
 import { Tabla2Component } from './tabla2/tabla2.component';
 import { ArticuloComponent } from './articulo/articulo.component';
 import { SearchArticuloComponent } from './search-articulo/search-articulo.component';
