@@ -19,7 +19,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != '001'">
         <mat-label>Tipo documento</mat-label>
         <mat-select name="tipoDoc" [(ngModel)]=tipoDoc>
           <mat-option *ngFor="let food of tiposRef" [value]="food.tipDocRef">
@@ -28,7 +28,7 @@
         </mat-select>
       </mat-form-field>
 
-    <mat-form-field class="example-full-width" *ngIf="tipoMov != 001">
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != '001'">
       <input matInput  id="documento"  type="text" placeholder="Documento" name="documento" [(ngModel)]="model.documento" required
       minlength="4">
 
@@ -44,7 +44,7 @@
    
 
     <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
-      fxLayoutAlign="flex-start" *ngIf="tipoMov == 001">
+      fxLayoutAlign="flex-start" *ngIf="tipoMov == '001'">
       <mat-form-field class="example-full-width" *ngIf="tipoMov == 001" fxFlex="0 1 calc(25% - 5px)"
         fxFlex.lt-sm="100%">
         <input id="proveedor" matInput placeholder="Proveedor"  name="proveedor" [(ngModel)]="model.proveedor"   [ngModelOptions]="{ updateOn: 'blur' }"
@@ -66,7 +66,7 @@
         <input matInput readonly placeholder="Nombre"  name="nombre" [(ngModel)]="nombre">
       </mat-form-field>
     </div>
-    <mat-form-field class="example-full-width" *ngIf="tipoMov != 002">
+    <mat-form-field class="example-full-width" *ngIf="tipoMov != '002'">
       <input id="albaran" matInput  placeholder="Albarán"  name="albaran" [(ngModel)]="model.albaran" required>
     </mat-form-field>
     <div *ngIf="f.form.controls.albaran?.invalid && (f.form.controls.albaran?.dirty || f.form.controls.albaran?.touched)" class="alert alert-danger">

@@ -32,7 +32,7 @@ import { AppMaterialModules } from './material.module';
 import { Tabla2Component } from './tabla2/tabla2.component';
 import { LoaderComponent } from './loader/loader.component';
 import { Tabla2Service } from './tabla2.service';
-import { HeaderComponent } from './header/header.component';
+//import { HeaderComponent } from './header/header.component';
 
 //import { AuthGuard } from './_guards/auth.guard';
 
@@ -71,6 +71,8 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { SapService } from './_services/sap.service';
 import {MatPaginator} from '@angular/material/paginator';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,7 @@ import {MatPaginator} from '@angular/material/paginator';
     SeleccionComponent,
     Tabla2Component,
     LoaderComponent,
-    HeaderComponent,
+    //HeaderComponent,
     InlineEditComponent,
     AddRowDialog,
     ArticuloComponent,
@@ -114,7 +116,8 @@ import {MatPaginator} from '@angular/material/paginator';
    FlexLayoutModule,
    //Ng2SearchPipeModule,
    MatExpansionModule,
-   MatPaginatorModule
+   MatPaginatorModule,
+   ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
 entryComponents: [AddRowDialog],
   providers: [

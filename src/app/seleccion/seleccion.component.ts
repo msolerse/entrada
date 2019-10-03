@@ -150,7 +150,7 @@ export class SeleccionComponent implements OnInit {
       //document.getElementById('documento').focus();
    
   }
-  onTipMovSelection($event) {
+  onTipMovSelection() {
     console.log(" changed tipo Mov=" + this.tipoMov);
     this.cargarTiposRef(this.tipoMov);
 

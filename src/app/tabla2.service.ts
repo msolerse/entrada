@@ -15,6 +15,7 @@ import { AlertService } from './_services/alert.service';
 import { DatosArticuloProv } from './_entities/DatosArticuloProv';
 import { ArticuloDescService } from './_services/articuloDesc.service';
 import { ReturnMessage } from './_entities/ReturnMessage';
+import { environment } from '../environments/environment';
 
 @Injectable({
    providedIn: 'root'
@@ -62,11 +63,11 @@ export class Tabla2Service {
       console.log("tipoMov=" + tipoMov);
 
       if (tipoMov == '004') {
-         url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+         url = environment.serviceUrl + '/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+ environment.serviceCode + '/zwd_cabecera_entrada/zwd_cabecera_entrada';
          nombreFuncion = 'ZWD_MM_GET_POS_DOCREF';
       }
       else {
-         url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+         url =  environment.serviceUrl + '/sap/bc/srt/rfc/sap/zco_pda_entrada/' + environment.serviceCode+'/zco_pda_entrada/zco_pda_entrada';
          nombreFuncion = 'ZWD_GET_POSICIONES_ENTRADA';
       }
 
@@ -300,7 +301,7 @@ export class Tabla2Service {
 
       console.log("currTipoMov=" + this.currTipoMov);
       console.log("proveedor = " + proveedor);
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zco_pda_entrada/100/zco_pda_entrada/zco_pda_entrada';
+      let url = environment.serviceUrl +'/sap/bc/srt/rfc/sap/zco_pda_entrada/'+environment.serviceCode+'/zco_pda_entrada/zco_pda_entrada';
       //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -384,7 +385,7 @@ export class Tabla2Service {
       codCentro: string, pos?: Element[]): Observable<any> {
 
 
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      let url= environment.serviceUrl+'/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+environment.serviceCode+'/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -533,7 +534,7 @@ export class Tabla2Service {
       codCentro: string): Observable<any> {
 
       //    let url = 'http://localhost:8088/mockZ_GET_STOCK_MATERIALES'
-      let url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_pda_stock_articulo/100/zwd_pda_stock_articulo/zwd_pda_stock_articulo';
+      let url = environment.serviceUrl +'/sap/bc/srt/rfc/sap/zwd_pda_stock_articulo/'+environment.serviceCode+'/zwd_pda_stock_articulo/zwd_pda_stock_articulo';
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
    <soapenv:Header/>
@@ -621,7 +622,7 @@ export class Tabla2Service {
       codCentro: string): Observable<any> {
 
 
-      let url = 'http://gmr3qas:8003/sap/bc/srt/rfc/sap/zwd_pda_ent_mercancia_n/100/zwd_pda_ent_mercancia_n/zwd_pda_ent_mercancia_n';
+      let url = environment.serviceUrl +'/sap/bc/srt/rfc/sap/zwd_pda_ent_mercancia_n/'+ environment.serviceCode+'/zwd_pda_ent_mercancia_n/zwd_pda_ent_mercancia_n';
       //let url = 'http://localhost:8088/mockZWD_PDA_ENT_MERCANCIA_N'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:soap:functions:mc-style">
@@ -763,7 +764,7 @@ export class Tabla2Service {
 
 
    obtenerMotivos(): Observable<any> {
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      let url =  environment.serviceUrl +'/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+environment.serviceCode+'/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -859,7 +860,7 @@ export class Tabla2Service {
       let DateObj = new Date();
       let currDate = DateObj.getFullYear() + '-' + ('0' + (DateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + DateObj.getDate()).slice(-2);
 
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      let url =  environment.serviceUrl +'/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+environment.serviceCode+'/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
 
       let tiped: string;

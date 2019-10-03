@@ -1,6 +1,6 @@
 
  
-<div *ngIf="idPedido != 0" fxLayout fxLayoutAlign="start center" class="margin-container">
+<div *ngIf="idPedido != '0'" fxLayout fxLayoutAlign="start center" class="margin-container">
   
  <h2  class="mat-h2"> <mat-icon>local_shipping</mat-icon>  Pedido {{this.idPedido}}</h2>
 
@@ -97,8 +97,8 @@
    > -->
 
    <div class="example-container margin-container mat-elevation-z8">
-  <mat-table #table  [dataSource]="dataSource"  
-  [class.isMobile]="isMobile">
+  <mat-table #table  [dataSource]="dataSource" >
+ <!--  [class.isMobile]="isMobile"> -->
             
 
       <ng-container matColumnDef="codigo">
@@ -220,7 +220,7 @@
  
 </div>
 
-<button *ngIf="idPedido != 0" class="btnCreate" mat-fab color="primary" (click)="addRow( false , '')"><mat-icon>add</mat-icon></button>
+<button *ngIf="idPedido != '0'" class="btnCreate" mat-fab color="primary" (click)="addRow( false , '')"><mat-icon>add</mat-icon></button>
 
 
 

@@ -1,9 +1,12 @@
 export const environment = {
   production: true,
-  serviceUrl: 'http://gmgestionmuelles.miquel.es:8008/api/',
+  //serviceUrl: 'http://gmgestionmuelles.miquel.es:8008/api/',
+
+  serviceUrl: 'http://gmr3qas.miquel.es:8003/',
+  //serviceUrl: 'http://gmgestionmuellespre.miquel.es/api/',
   authUrl: 'http://10.100.46.161:8080/middleware/',
-  authUser: 'PRTBATCH3',
-  authPassword: 'MRPsys2018',
+  authUser: '2156',
+  authPassword: 'jenifer10',
   serviceCode: '100',
-  version: "17.04.19"
+  version: "02.10.19"
 };

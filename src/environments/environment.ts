@@ -13,5 +13,5 @@ export const environment = {
   authUser: '2156',
   authPassword: 'jenifer10',
   serviceCode: '100',
-  version: "17.04.19"
+  version: "02.10.19"
 };

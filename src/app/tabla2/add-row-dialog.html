@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <mat-form-field  *ngIf="data.tipoMov == 002" class="example-full-width">
+  <mat-form-field  *ngIf="data.tipoMov == '002'" class="example-full-width">
     <mat-label>Motivo</mat-label>
     <mat-select id="motivo" name="motivo" [(ngModel)]=data.motivo required>
       <mat-option *ngFor="let motivo of motivos" [value]="motivo.value">

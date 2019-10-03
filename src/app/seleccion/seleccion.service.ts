@@ -11,6 +11,7 @@ import { DatosCentro } from '../_entities/DatosCentro';
 import { DatosProveedor } from '../_entities/DatosProveedor'; 2
 import { DatosArticuloProv } from '../_entities/DatosArticuloProv';
 import { DataService } from '../_services/data.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
    providedIn: 'root'
@@ -36,7 +37,7 @@ export class SeleccionService {
 
 
    obtenerTiposMov(idProceso: string): Observable<any> {
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      let url =  environment.serviceUrl + '/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+ environment.serviceCode + '/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -174,7 +175,7 @@ export class SeleccionService {
 
 
    obtenerCentro(codCentro: string): Observable<any> {
-      let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+      let url = environment.serviceUrl + '/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+ environment.serviceCode + '/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -259,7 +260,7 @@ export class SeleccionService {
    }
 
    obtenerProveedor(proveedor: string, codCentro: string): Observable<any> {
-       let url = 'http://gmr3qas.miquel.es:8003/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/100/zwd_cabecera_entrada/zwd_cabecera_entrada';
+       let url = environment.serviceUrl + '/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+ environment.serviceCode + '/zwd_cabecera_entrada/zwd_cabecera_entrada';
       //let url = 'http://localhost:8088/mockZWD_CABECERA_ENTRADA'
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">

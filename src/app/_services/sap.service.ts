@@ -46,7 +46,6 @@ export class SapService {
   }
 
 
-
   login(login: LoginViewModel): Observable<boolean> {
 
     console.log('user='+login.user );
