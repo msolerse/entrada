@@ -9,6 +9,7 @@ export const environment = {
   version: "17.04.19" */
   production: false,
   serviceUrl: 'http://gmr3qas.miquel.es:8003/',
+  //serviceUrl: 'http://gmgestionmuellespre.miquel.es/api/',
   authUrl: 'http://10.100.46.161:8080/middleware/',
   authUser: '2156',
   authPassword: 'jenifer10',
