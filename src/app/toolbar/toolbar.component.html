@@ -3,26 +3,27 @@
 
 
   <mat-toolbar class="example-toolbar" color="primary" class="mat-elevation-z8" >
-      <div *ngIf="icon == 'Menu'">
+     <!--  <div *ngIf="icon == 'Menu'"> -->
     <button mat-icon-button (click)="snav.toggle()" >
         <mat-icon>menu</mat-icon>    
-    </button> </div>
-    <div *ngIf="icon == 'Back'">
-          <button mat-icon-button (click)="goBack()">
+    </button> 
+    <!--  </div>
+    <div *ngIf="icon == 'Back'"> -->
+        <!--   <button mat-icon-button (click)="goBack()">
               <mat-icon>arrow_back</mat-icon>    
-          </button> </div>
+          </button> </div> -->
     <span>{{title}}</span>
 
     <!-- This fills the remaining space of the current row -->
  
     <span class="example-fill-remaining-space"></span>
-    <span> <img  src="../assets/logo_negativo_gm_peq4.png"></span>
+   <!--  <span> <img  src="../assets/logo_negativo_gm_peq4.png"></span> -->
   
 </mat-toolbar>
 
 
 
-   <p> </p> 
+   <!-- <p> </p>  -->
   <app-alert></app-alert>
 
   

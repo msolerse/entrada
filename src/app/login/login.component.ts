@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   }
 
   redirect(){
-    this.alert.sendAlert('Entrada correcta', AlertType.Success);
+   // this.alert.sendAlert('Entrada correcta', AlertType.Success);
     let redirect = this.service.redirectUrl ? this.service.redirectUrl : '';
     this.router.navigate([redirect]);
   }
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
       if(this.service.isLoggedIn) {
         this.credentials.user = this.usuari;
         this.credentials.password = this.contrasenya;
-        this.alert.sendAlert('Entrada correcta', AlertType.Success);
+        //this.alert.sendAlert('Entrada correcta', AlertType.Success);
         let redirect = this.service.redirectUrl ? this.service.redirectUrl : '';
         this.router.navigate([redirect]);
       }

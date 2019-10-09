@@ -81,10 +81,10 @@
     </mat-form-field>
   </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card class="button-row-bottom" >
       <div fxLayout="row wrap"  fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
-      fxLayoutAlign="flex-start"  style="padding-top: 20px">
-    <button fxFlex="0 1 calc(50% - 5px)"   mat-raised-button>  Salir  </button>
+      fxLayoutAlign="flex-start" >
+    <button fxFlex="0 1 calc(50% - 5px)"   mat-raised-button routerLink="login">  Salir  </button>
     <button fxFlex="0 1 calc(50% - 5px)"   mat-raised-button type="submit" color="primary" [disabled]="f.invalid ||f.form.controls.proveedor?.pending" (click)="goValidacion()">  Posiciones  </button>
     </div>
    <!-- <button mat-raised-button  color="accent" [disabled]="f.invalid" (click)="goTest()">Test</button> -->
