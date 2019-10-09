@@ -43,13 +43,8 @@ export class ArticuloComponent implements OnInit {
     this.ts.changeMessage('Back');
     this.routingSubscription = this.route.params.subscribe(params => {
       this.idPosicion = params["idPosicion"];
-      console.log("this.service.currPedido=" + this.service.currPedido);
-      //console.log("this.service.currPosiciones="+JSON.stringify( this.service.currPosiciones) );
-
+      
       this.posicion = this.service.currPosiciones.filter(row => row.id == this.idPosicion)[0];
-
-      console.log("codigo =" + this.posicion.codigo);
-      console.log("datos articulos =" + JSON.stringify(this.service.datosArticulos));
 
       this.datosArticulo = this.service.datosArticulos.filter(row => +row.codigo == +this.posicion.codigo)[0];
       if (!(this.datosArticulo))
@@ -58,7 +53,7 @@ export class ArticuloComponent implements OnInit {
             case 0:
               //this.alert.sendAlert(reply.mensaje, AlertType.Success);
               this.datosArticulo = reply;
-              console.log("caja = " + this.datosArticulo.caja + "manto = " + this.datosArticulo.manto);
+        
               break;
             default:
               this.alert.sendAlert(reply.mensaje, AlertType.Error);
@@ -86,7 +81,7 @@ export class ArticuloComponent implements OnInit {
         switch (+data.codigo) {
           case 0:
             this.stockArticulo = data.stock;
-            console.log(JSON.stringify(this.service.stock));
+            
             break;
           default:
             this.alert.sendAlert('Error al obtener los stocks.', AlertType.Error);
@@ -108,7 +103,7 @@ export class ArticuloComponent implements OnInit {
         switch (+data.codigo) {
           case 0:
             this.eansArticulo = data.eansArticulo;
-            console.log(JSON.stringify(this.service.eansArticulos));
+
             break;
           default:
             this.alert.sendAlert('Error al obtener los Eans.', AlertType.Error);

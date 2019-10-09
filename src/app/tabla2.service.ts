@@ -60,8 +60,6 @@ export class Tabla2Service {
       let url: string;
       let nombreFuncion: string;
 
-      console.log("tipoMov=" + tipoMov);
-
       if (tipoMov == '004') {
          url = environment.serviceUrl + '/sap/bc/srt/rfc/sap/zwd_cabecera_entrada/'+ environment.serviceCode + '/zwd_cabecera_entrada/zwd_cabecera_entrada';
          nombreFuncion = 'ZWD_MM_GET_POS_DOCREF';
@@ -71,7 +69,6 @@ export class Tabla2Service {
          nombreFuncion = 'ZWD_GET_POSICIONES_ENTRADA';
       }
 
-      console.log("nombre funcion = " + nombreFuncion);
 
       let body = `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:sap-com:document:sap:rfc:functions">
@@ -213,14 +210,14 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+           
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
 
             this.tiped = dom.getElementsByTagName("TIPED")[0].innerHTML;
-            console.log("tiped = " + this.tiped);
+          
             this.provCabeceraWs = dom.getElementsByTagName("PROVEEDOR")[0].innerHTML;
             this.tipoDocRefer = dom.getElementsByTagName("TIPO_DOC_REFER")[0].innerHTML;
 
@@ -279,7 +276,7 @@ export class Tabla2Service {
                this.currPosiciones = posiciones;
             }
 
-            console.log(JSON.stringify(posiciones));
+           
             return posiciones;
 
 
@@ -299,8 +296,6 @@ export class Tabla2Service {
       else
          proveedor = '';
 
-      console.log("currTipoMov=" + this.currTipoMov);
-      console.log("proveedor = " + proveedor);
       let url = environment.serviceUrl +'/sap/bc/srt/rfc/sap/zco_pda_entrada/'+environment.serviceCode+'/zco_pda_entrada/zco_pda_entrada';
       //let url = 'http://localhost:8088/mockZCO_PDA_ENTRADA'
       let body = `
@@ -332,7 +327,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+          
             var datosArticulo;
             var codError;
             //let x2js = require('x2js');
@@ -350,7 +345,7 @@ export class Tabla2Service {
             let umb = dom.getElementsByTagName("UMB")[0].innerHTML;
 
             let mensajeError = dom.getElementsByTagName("ERROR")[0].innerHTML;
-            console.log("codigo=" + codigo);
+           
 
             if (codigo != null && !(codigo.length == 0))
                codError = 0;
@@ -480,7 +475,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+           
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -491,8 +486,7 @@ export class Tabla2Service {
             let eansArticulo: Ean[] = [];
             itemsDOM.forEach(item => {
                let detalle = Array.from(item.children);
-               //console.log('detalle item ' + detalle[0].innerHTML + ' ' + detalle[3].innerHTML);
-
+              
                if ((detalle[0].innerHTML !== '') && (detalle[0].innerHTML !== '0')) {
                   //  if (codigo != '0') {
                   eansArticulo.push(new Ean(
@@ -507,15 +501,14 @@ export class Tabla2Service {
                }
             });
 
-            //console.log(" Vaig a return ");
+           
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('T_RETURN')[0].children);
             itemsDOM2.forEach(item => {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
             });
-            //console.log("codigo= " + codigo);
-
+            
 
             return {
                codigo: codigo,
@@ -578,7 +571,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+           
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -603,9 +596,6 @@ export class Tabla2Service {
             });
 
             this.stocks.push(this.stock);
-
-            //console.log( "codigo= " + codigo);
-
 
             return {
                codigo: codigo,
@@ -700,7 +690,7 @@ export class Tabla2Service {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+            
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
@@ -749,7 +739,7 @@ export class Tabla2Service {
                let detalle2 = Array.from(item.children);
                codigo = +detalle2[2].innerHTML;
             });
-            //console.log( "codigo= " + codigo);
+           
             this.currProveedor = proveedor;
             this.currDatosArticuloProv = articulosProv;
             return {
@@ -815,7 +805,7 @@ export class Tabla2Service {
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
 
-            //console.log(data);
+            
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
 
@@ -866,7 +856,6 @@ export class Tabla2Service {
       let tiped: string;
       let proveedor: string;
 
-      // console.log( JSON.stringify(pos));
 
       switch (this.currTipoMov) {
          case '001':
@@ -1160,18 +1149,16 @@ export class Tabla2Service {
    </soapenv:Body>
 </soapenv:Envelope>
       `;
-      console.log(body);
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+            
             //let x2js = require('x2js');
             let x2js = new X2JS();
             let dom = x2js.xml2dom(data);
             let returnMessages: ReturnMessage[] = [];
 
 
-            //console.log(" Vaig a return ");
             let codigo;
             let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
             itemsDOM2.forEach(item => {
@@ -1186,8 +1173,7 @@ export class Tabla2Service {
                }
 
             });
-            //console.log("codigo= " + codigo);
-
+            
             return {
                returnMessages: returnMessages
             };

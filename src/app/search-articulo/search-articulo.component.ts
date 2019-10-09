@@ -60,7 +60,7 @@ export class SearchArticuloComponent implements OnInit {
 };
 
   getRecord(row) {
-    //console.log("man clickat"+ row.codigo);
+    
     this.search.codigo = row.codigo;
     this.search.nombre = row.nombre;
     this.location.back();

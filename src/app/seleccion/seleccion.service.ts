@@ -151,7 +151,7 @@ export class SeleccionService {
                }
             });
 
-            //console.log( JSON.stringify(this.tiposRef));
+         
 
             let itemsDOM2 = Array.from(dom.getElementsByTagName('TO_RETURN')[0].children);
             itemsDOM2.forEach(item => {
@@ -211,7 +211,7 @@ export class SeleccionService {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+          
             var datosCentro;
             var mensajeError;
 
@@ -231,9 +231,7 @@ export class SeleccionService {
             let nombre = dom.getElementsByTagName("WERKS_DESC")[0].innerHTML;
             let canal = dom.getElementsByTagName("VTWEG")[0].innerHTML;
 
-            //console.log("codigo=" + codigo);
-            //console.log("nombre=" + nombre);
-            //console.log("codError=" + codError);
+          
 
             if (sinCentro === 'X') {
                mensajeError = "Usuario sin centro asignado";
@@ -249,8 +247,6 @@ export class SeleccionService {
             );
 
             this.currDatosCentro = datosCentro;
-
-            // console.log("datoscentro=" + JSON.stringify(datosCentro));
 
             return datosCentro;
          })
@@ -355,7 +351,7 @@ export class SeleccionService {
 
       return this.http.post(url, body, { responseType: 'text' })
          .map(data => {
-            //console.log(data);
+           
             var datosProv;
             var mensajeError;
             var codError;
@@ -392,7 +388,7 @@ export class SeleccionService {
                mensajeError
             );
 
-            console.log(JSON.stringify(datosProv));
+         
 
             this.currNombre = nombre;
 

@@ -48,8 +48,6 @@ export class SapService {
 
   login(login: LoginViewModel): Observable<boolean> {
 
-    console.log('user='+login.user );
-    console.log('password='+login.password );
 
     let url = environment.serviceUrl + 'sap/bc/srt/rfc/sap/zmm_pda/' + environment.serviceCode + '/zmm_pda/zmm_pda';
     let body = `

@@ -213,10 +213,10 @@
 </div>
 <!--</div > -->
 
-
-  <div fxLayout fxLayoutAlign="center center" style="padding-top: 10px">
-  <button class="botons example-full-width" mat-raised-button (click)="goBack()" >   Salir   </button> 
-  <button class="botons example-full-width" mat-raised-button color="accent" (click)="goValidar()" >   Validar   </button> 
+<div fxLayout="row wrap"  fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
+fxLayoutAlign="flex-start"  style="padding-top: 20px">
+  <button  fxFlex="0 1 calc(50% - 5px)"   mat-raised-button (click)="goBack()" >   Salir   </button> 
+  <button  fxFlex="0 1 calc(50% - 5px)"   mat-raised-button color="accent" (click)="goValidar()" >   Validar   </button> 
  
 </div>
 

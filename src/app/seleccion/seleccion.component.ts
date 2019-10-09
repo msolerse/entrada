@@ -49,7 +49,7 @@ export class SeleccionComponent implements OnInit {
     this.ts.changeMessage('Menu');
 
     if (this.alert.validacionOk) {
-      console.log("iniciant , validacionOk es true");
+     
       this.initSeleccion();
     }
 
@@ -58,15 +58,15 @@ export class SeleccionComponent implements OnInit {
       this.nombre = message.split(';')[1]);
     let params = new URLSearchParams(location.search);
     let idCentro = params.get("idCentro");
-    //console.log("idCentro=" + idCentro);
+    
 
     if (this.service.currDatosCentro) {
-      //console.log("ja tenim el centre"+ JSON.stringify(this.service.currDatosCentro) );
+     
       this.codCentro = this.service.currDatosCentro.codigo;
       this.descCentro = this.service.currDatosCentro.nombre;
     }
     else {
-      //console.log("cridem ws centre");
+     
       this.service.obtenerCentro(idCentro).subscribe(data => {
 
         switch (+data.codError) {
@@ -85,11 +85,11 @@ export class SeleccionComponent implements OnInit {
     }
 
     if (this.service.tiposMov.length != 0) {
-      //console.log('ja està ple tipos mov');
+    
       this.tiposMov = this.service.tiposMov;
       this.tiposRef = this.service.tiposRef;
     } else {
-      //console.log('cridem wd tipos mov');
+    
       this.service.obtenerTiposMov(this.idProceso).subscribe(data => {
 
         switch (+data.codigo) {
@@ -111,9 +111,6 @@ export class SeleccionComponent implements OnInit {
       });
     }
 
-    console.log('currDocumento=' + this.service.currDocumento);
-    //console.log('currTipoMov='+this.service.currTipoMov);
-    //console.log('currAlbaran='+this.service.currAlbaran);
 
     if (this.service.currDocumento) {
       this.model.documento = this.service.currDocumento;
@@ -147,11 +144,10 @@ export class SeleccionComponent implements OnInit {
       this.model.observaciones = this.service.currObservaciones;
     }
 
-      //document.getElementById('documento').focus();
    
   }
   onTipMovSelection() {
-    console.log(" changed tipo Mov=" + this.tipoMov);
+
     this.cargarTiposRef(this.tipoMov);
 
     this.initSeleccion();
@@ -193,10 +189,10 @@ export class SeleccionComponent implements OnInit {
     this.service.currAlbaran = this.model.albaran;
     this.service.currObservaciones = this.model.observaciones;
 
-    console.log("tipoMov=" + this.tipoMov);
+    
 
     if (this.tipoMov == '001') {
-      console.log("canvio document a 0");
+     
       this.model.documento = '0';
     }
 

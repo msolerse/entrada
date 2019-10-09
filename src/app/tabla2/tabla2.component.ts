@@ -90,7 +90,6 @@ export class Tabla2Component {
       this.tipoMov = params["tipoMov"];
       this.service.currTipoMov = this.tipoMov;
       this.codProv = params['codProv'];
-      console.log("this.service.currTipoMov=" + this.service.currTipoMov);
 
 
       if (this.tipoMov == '002') { // distribucion plataforma, obtener motivos
@@ -121,15 +120,13 @@ export class Tabla2Component {
       }
 
       if ((this.idPedido != '0') && (this.service.loadEans)) {
-        console.log('crido ws Eans');
+       
         this.service.eansArticulos = [];
         this.service.obtenerEans('0', this.codCentro, this.service.currPosiciones).subscribe(
           reply => {
             switch (reply.codigo) {
               case 0:
-                console.log("Eans ok");
-                console.log('Eans plataforma length = ' + this.service.eansArticulos.length);
-                //console.log(JSON.stringify(this.service.eansArticulos));
+                
                 break;
 
               default:
@@ -145,8 +142,7 @@ export class Tabla2Component {
         this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
           switch (reply.codigo) {
             case 0:
-              console.log("ws datos art prov ok");
-              console.log('Eans proveedor length = ' + this.service.eansArticulos.length);
+             
               break;
 
             default:
@@ -167,14 +163,14 @@ export class Tabla2Component {
     this.route.data
       .subscribe((data: { crisis: Element[] }) => {
         this.posiciones = data.crisis;
-        // console.log( 'this.posiciones '+JSON.stringify(this.posiciones) );
-        console.log( 'començo a crear DataSource');
+      
+       
         this.dataSource = new MatTableDataSource<Element>(this.posiciones);
         this.dataSource.paginator = this.paginator;
        // this.entireDataSource = new ExampleDataSource(this.posiciones);
          this.totalLength = this.posiciones.length;
         //this.dataSource.paginator = this.paginator;
-        console.log( 'acabo de  crear DataSource');
+       
 
         if (this.idPedido == '0' && this.posiciones.length == 0) {
           this.isExpanded = true;
@@ -222,7 +218,6 @@ export class Tabla2Component {
     this.newSymbol = 'CJ';
     this.search.codigo = '';
     this.search.nombre = '';
-    console.log("this.newSymbol=" + this.newSymbol);
 
   }
 
@@ -237,7 +232,7 @@ export class Tabla2Component {
     let factConv: number;
 
     if ((this.dataSource.data) && (this.dataSource.data.length !== 0)) {
-      //console.log("length="+this.dataSource.data().length);
+     
       maxId = Math.max.apply(Math, this.dataSource.data.map(o => o.id)) + 10;
     } else {
       maxId = 10;
@@ -276,9 +271,9 @@ export class Tabla2Component {
           break;
       }
 
-      console.log(JSON.stringify("elemArt trobat=" + elemArt));
+      
     } else {
-      console.log(JSON.stringify(this.service.datosArticulos));
+      
     }
 
     this.service.currPosiciones.push({
@@ -309,7 +304,6 @@ export class Tabla2Component {
     // copy and mutate
     //const copy = this.dataSource.data().slice()
     const copy = this.dataSource.data.slice();
-    console.log('update comment = ' + comment);
     el.comment = +comment.split(';')[0];
     el.dif = +(el.comment - el.cantref).toFixed(3);
     el.motivo = comment.split(';')[1];
@@ -321,19 +315,17 @@ export class Tabla2Component {
 
 
   remove(el: Element) {
-    //console.log("inicial="+JSON.stringify(this.dataSource.data())) ;
 
     if (el.extra == 'X') {
       const copy = this.dataSource.data.filter(row => row != el);
-      //console.log("copy="+JSON.stringify(copy)) ;
+    
 
       this.dataSource.data = copy;
      // this.entireDataSource.update(copy);
       this.service.currPosiciones = this.dataSource.data;
       this.totalLength =  this.totalLength - 1;
     }
-    //console.log("json="+JSON.stringify(this.dataSource.data())) ;
-    //console.log( "adeu");
+    
   }
 
   // upsert: if exists -> update, else -> insert
@@ -390,7 +382,7 @@ export class Tabla2Component {
         }
       }
       else {
-        // console.log("trobat ="+ JSON.stringify( elem));
+        
         dialogData = {
           codigo: elem.codigo, name: elem.name,
           symbol: elem.symbol, tipoMov: this.tipoMov, codCentro: this.codCentro,
@@ -459,7 +451,7 @@ export class Tabla2Component {
         switch (reply.codError) {
           case 0:
             this.addRow(true, +reply.codigo + '', f2, true, reply.descripcion);
-            // console.log("trobat ="+ JSON.stringify( elem));
+          
             break;
           default:
 
@@ -499,8 +491,6 @@ export class Tabla2Component {
 
       });
 
-      console.log("messageShowed="+  messageShowed);
-      console.log( JSON.stringify( data.returnMessages));
       
       if ( data.returnMessages.some(el => ( el.tipo === 'S'|| el.tipo === 'I' ))) 
           { tipoShowed = 'S' }
@@ -616,7 +606,7 @@ export class AddRowDialog implements OnInit {
   focusCantidad: boolean;
 
   ngOnInit() {
-    console.log("data.codigo=" + this.data.codigo);
+  
     this.title = this.data.title;
     if (this.data.codigo) {
       //     this.title = "Modificar Posición"
@@ -639,7 +629,6 @@ export class AddRowDialog implements OnInit {
     private alert: AlertService,
     private ads: ArticuloDescService) {
 
-    console.log("tipoMov= " + data.tipoMov);
     if  ( this.data.symbol == '' || typeof( this.data.symbol ) == "undefined")
         this.data.symbol = 'CJ';
     this.motivos = this.service.motivosMov;
