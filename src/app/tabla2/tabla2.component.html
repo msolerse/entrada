@@ -96,7 +96,10 @@
      [ngClass.gt-md]="'container-table'"
    > -->
 
-   <div class="example-container margin-container mat-elevation-z8">
+  <!--  <div class="example-container margin-container mat-elevation-z8"> -->
+    
+  <div [ngClass.sm] ="{'example-container':true ,'margin-container':true, 'mat-elevation-z8':false}" 
+  [ngClass.gt-sm] ="{'example-container':true ,'margin-container':true, 'mat-elevation-z8':true} ">
   <mat-table #table  [dataSource]="dataSource" >
  <!--  [class.isMobile]="isMobile"> -->
             
