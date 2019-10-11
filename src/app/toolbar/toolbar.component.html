@@ -1,8 +1,10 @@
 
-<div class="example-container" [class.example-is-mobile]="mobileQuery.matches" >
+<!-- <div class="example-container" [class.example-is-mobile]="mobileQuery.matches" > -->
 
+<div class="example-container" >
 
-  <mat-toolbar class="example-toolbar" color="primary" class="mat-elevation-z8" >
+  <!--   <mat-toolbar class="example-toolbar" color="primary" class="mat-elevation-z8" > -->
+   <mat-toolbar class="example-toolbar" color="primary"  >
      <!--  <div *ngIf="icon == 'Menu'"> -->
     <button mat-icon-button (click)="snav.toggle()" >
         <mat-icon>menu</mat-icon>    
@@ -22,13 +24,12 @@
 </mat-toolbar>
 
 
-
    <!-- <p> </p>  -->
-  <app-alert></app-alert>
+
 
   
    <mat-sidenav-container class="example-sidenav-container"
-   [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+   [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
       <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
                    [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
         <mat-nav-list>
@@ -50,4 +51,5 @@
   
 
 </mat-sidenav-container>
-</div> 
+<app-alert></app-alert>
+

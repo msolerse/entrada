@@ -1,15 +1,15 @@
 
  
-<div *ngIf="idPedido != '0'" fxLayout fxLayoutAlign="start center" class="margin-container">
+<div *ngIf="idPedido != '0'" fxLayout fxLayoutAlign="start center" class="margin-container2">
   
- <h2  class="mat-h2"> <mat-icon>local_shipping</mat-icon>  Pedido {{this.idPedido}}</h2>
+ <h2  class="mat-h2"  style="padding-left: 20px"> <mat-icon>local_shipping</mat-icon>  Pedido {{this.idPedido}}</h2>
 
 </div> 
 
 
-<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" class="margin-container aligned">
+<div *ngIf="showAlbaran" fxLayout fxLayoutAlign="start center" class="margin-container2 aligned">
 
- <h3 *ngIf="showAlbaran" class="mat-h3"><mat-icon>list</mat-icon>       Albarán {{this.albaran}}</h3>
+ <h3 *ngIf="showAlbaran" class="mat-h3"  style="padding-left: 20px" ><mat-icon>list</mat-icon>       Albarán {{this.albaran}}</h3>
 
 </div>
 <mat-expansion-panel [expanded]='isExpanded' *ngIf= "idPedido=='0'" class="margin-container example-headers-align mat-elevation-z3"> 
@@ -98,8 +98,7 @@
 
   <!--  <div class="example-container margin-container mat-elevation-z8"> -->
     
-  <div [ngClass.sm] ="{'example-container':true ,'margin-container':true, 'mat-elevation-z8':false}" 
-  [ngClass.gt-sm] ="{'example-container':true ,'margin-container':true, 'mat-elevation-z8':true} ">
+    <div class="example-container margin-container">
   <mat-table #table  [dataSource]="dataSource" >
  <!--  [class.isMobile]="isMobile"> -->
             
@@ -191,11 +190,22 @@
         <mat-header-cell *matHeaderCellDef>
           <button mat-icon-button color="primary" (click)="addRow( false, '' )"><i class="fa fa-plus mat-icon"></i></button>
         </mat-header-cell>
-        <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label">Eliminar:</span>
+        <mat-cell class="duration-cell mat-typography" *matCellDef="let element"> <span class="mobile-label">Acción:</span>
           <button mat-icon-button  [disabled]="element.extra != 'X'"  color="warn" focusable="false" (click)="remove( element )">
               <mat-icon class="mat-18">delete</mat-icon>
               </button>
-        </mat-cell>
+              <button mat-icon-button  style="padding-left: 5px" color="warn" focusable="false"  [satPopoverAnchorFor]="pp" (click)="pp.open()">
+                <mat-icon class="mat-18">edit</mat-icon>
+                </button>
+      
+        <sat-popover #pp
+        hasBackdrop
+        xAlign="start"
+        yAlign="start"
+        (closed)="update(element, $event)">
+      <inline-edit [value]="element.comment" [value2]="element.motivo" ></inline-edit>
+    </sat-popover>
+  </mat-cell>
       </ng-container> 
   
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -223,7 +233,7 @@ fxLayoutAlign="flex-start"  style="padding-top: 20px">
  
 </div>
 
-<button *ngIf="idPedido != '0'" class="btnCreate" mat-fab color="primary" (click)="addRow( false , '')"><mat-icon>add</mat-icon></button>
+ <button *ngIf="idPedido != '0'" class="btnCreate" mat-fab color="primary" (click)="addRow( false , '')"><mat-icon>add</mat-icon></button> 
 
 
 

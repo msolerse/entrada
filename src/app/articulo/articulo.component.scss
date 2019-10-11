@@ -14,19 +14,27 @@
   margin-left: 20px;
 }
 
+@media(min-width: 600px) {
+  mat-card {
+    margin: 20px;
+  
+  }
+}
+
   @media(max-width: 600px) {
 
     .articulo-image {
       max-width: 100px;
     }
-  }
+
 
    mat-card {
-    margin: 20px;
+    margin: 0px;
    //  padding: 20px;
     // width: 100%;
   }
 
+}
   mat-card-title {
     font-size: larger
   }

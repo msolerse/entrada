@@ -1,3 +1,4 @@
+@import '~@angular/material/theming';
 
 
 .mat-cell {
@@ -25,9 +26,13 @@
  
 }
 
+
+@media(min-width: 600px) {
 .margin-container { 
   margin-left: 20px;
   margin-right: 20px;
+  @include mat-elevation(4);
+ }
 }
 
 .mat-row {
@@ -51,8 +56,10 @@
 .btnCreate {
   position: fixed;
   right: 20px;
-  top: 80px;
+  top: 60px;
 }
+
+
 
 @media(max-width: 600px) {
   .mobile-label {
@@ -76,7 +83,7 @@
   }
 
   .mat-icon-button {
-    width: 20px;
+    width: 40px;
     padding: 0px 0px 0px 0px;
   }
 
@@ -123,6 +130,7 @@
   flex: 0 0 20%;
 //  margin-left: 8px;
 }
+
 
 .make-gold {
   background-color:  lightyellow;
