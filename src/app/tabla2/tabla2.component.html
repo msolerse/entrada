@@ -227,9 +227,9 @@
 <!--</div > -->
 
 <div fxLayout="row wrap"  fxLayoutGap="5px" fxLayoutGap.lt-sm='5px'
-fxLayoutAlign="flex-start"  style="padding-top: 20px">
-  <button  fxFlex="0 1 calc(50% - 5px)"   mat-raised-button (click)="goBack()" >   Salir   </button> 
-  <button  fxFlex="0 1 calc(50% - 5px)"   mat-raised-button color="accent" (click)="goValidar()" >   Validar   </button> 
+fxLayoutAlign.lt-sm="flex-start" fxLayoutAlign.gt-sm="center center" style="padding-top: 20px">
+  <button  fxFlex.lt-sm ="0 1 calc(50% - 5px)"   mat-raised-button (click)="goBack()" >   Salir   </button> 
+  <button  fxFlex.lt-sm="0 1 calc(50% - 5px)"   mat-raised-button color="accent" (click)="goValidar()" >   Validar   </button> 
  
 </div>
 
