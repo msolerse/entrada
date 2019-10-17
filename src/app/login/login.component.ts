@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, OnInit, Input,  Inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,14 +30,34 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private alert: AlertService,
-    private credentials: CredentialsService
+    private credentials: CredentialsService,
+    @Inject(DOCUMENT) private document: any
   ) { 
     this.createForm();
   }
 
+  elem;
+
+    
   ngOnInit() {
+    this.elem = document.documentElement;
     this.service.logout();
    
+  }
+
+  openFullscreen() {
+    if (this.elem.requestFullscreen) {
+      this.elem.requestFullscreen();
+    } else if (this.elem.mozRequestFullScreen) {
+      /* Firefox */
+      this.elem.mozRequestFullScreen();
+    } else if (this.elem.webkitRequestFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.elem.webkitRequestFullscreen();
+    } else if (this.elem.msRequestFullscreen) {
+      /* IE/Edge */
+      this.elem.msRequestFullscreen();
+    }
   }
 
   redirect(){
@@ -52,6 +73,7 @@ export class LoginComponent implements OnInit {
         this.credentials.password = this.contrasenya;
         //this.alert.sendAlert('Entrada correcta', AlertType.Success);
         let redirect = this.service.redirectUrl ? this.service.redirectUrl : '';
+        this.openFullscreen();
         this.router.navigate([redirect]);
       }
       else{
