@@ -51,12 +51,12 @@ export class LoginComponent implements OnInit {
     } else if (this.elem.mozRequestFullScreen) {
       /* Firefox */
       this.elem.mozRequestFullScreen();
-    } else if (this.elem.webkitRequestFullscreen) {
+    } else if (this.elem.webkitRequestFullScreen) {
       /* Chrome, Safari and Opera */
-      this.elem.webkitRequestFullscreen();
+      this.elem.webkitRequestFullScreen();
     } else if (this.elem.msRequestFullscreen) {
       /* IE/Edge */
-      this.elem.msRequestFullscreen();
+      this.elem.msRequestFullScreen();
     }
   }
 

@@ -23,7 +23,8 @@ export class HeadersInterceptor implements HttpInterceptor {
             newReq = req.clone({
                 setHeaders: {
                     'Authorization': "Basic " + btoa(`${user}:${password}`),
-                    'Content-Type': 'text/xml'
+                    'Content-Type': 'text/xml',
+                    'Accept-Language': 'es-ES'
                 }
             });
         }
