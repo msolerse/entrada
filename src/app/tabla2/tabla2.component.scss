@@ -33,6 +33,17 @@
   margin-right: 20px;
   @include mat-elevation(8);
  }
+
+ .mat-table mat-header-row,
+.mat-table mat-row {
+  padding: 0 24px 0 0;
+}
+
+.mat-table mat-header-cell,
+.mat-table mat-cell {
+  padding: 0 0 0 24px;
+}
+
 }
 
 .mat-row {
@@ -117,20 +128,47 @@
 @media(min-width: 601px) {
 
   .mat-column-motivo {
-    flex: 0 0 20%;
+    flex: 0 0 10%;
      margin-left: 8px;
   }
+}
+
+.mat-column-codigo {
+  flex: 0 0 10%;
 }
 
 .mat-column-name {
   flex: 0 0 30%;
 }
 
+.mat-column-cantref {
+  flex: 0 0 7%;
+}
+
+.mat-column-symbolref {
+  flex: 0 0 7%;
+}
+
+.mat-column-comment {
+  flex: 0 0 7%;
+}
+
+.mat-column-symbol {
+  flex: 0 0 7%;
+}
+
+.mat-column-dif {
+  flex: 0 0 7%;
+}
+
 .mat-column-motivo {
-  flex: 0 0 20%;
+  flex: 0 0 15%;
 //  margin-left: 8px;
 }
 
+.mat-column-actions {
+  flex: 0 0 10%;
+}
 
 .make-gold {
   background-color:  lightyellow;

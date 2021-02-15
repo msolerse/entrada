@@ -124,19 +124,43 @@
 
       </ng-container>
 
-      <ng-container matColumnDef="symbol">
-        <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
-            <span class="mobile-label">Unidad:</span> {{element.symbol}} </mat-cell>
-      </ng-container>
-
-
+       <!-- cantidad de referencia -->
       <ng-container matColumnDef="cantref">
         <mat-header-cell class="duration-cell align-right" *matHeaderCellDef> Cant.Ref.</mat-header-cell>
-        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [routerLink]="['/articulo', element.id]">
-            <span class="mobile-label">Cant.Ref.:</span> {{element.cantref}} </mat-cell>
+        <mat-cell  class="duration-cell mat-typography align-right" *matCellDef="let element"  [satPopoverAnchorFor]="pr" (click)="pr.open()">
+            <span class="mobile-label">Cant.Ref.:</span> {{element.cantref}} 
+          
+            <sat-popover #pr
+            hasBackdrop
+            xAlign="start"
+            yAlign="start"
+            (closed)="update(element, $event)"
+            (opened)="getunidades(element, $event)">
+          <inline-edit  [value1]="element.codigo" [value]="element.comment" [value2]="element.motivo" [value3]="element.symbol" [value4]="unidadesart" ></inline-edit>
+        </sat-popover>
+          
+          </mat-cell>
       </ng-container>
 
+   <!-- unidad de referencia --> 
+   <ng-container matColumnDef="symbolref">
+    <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
+    <mat-cell  class="duration-cell mat-typography " *matCellDef="let element"   [satPopoverAnchorFor]="psr" (click)="psr.open()">
+        <span class="mobile-label">Uni.Ref:</span> {{element.symbolref}}
+
+          
+        <sat-popover #psr
+        hasBackdrop
+        xAlign="start"
+        yAlign="start"
+        (closed)="update(element, $event)"
+        (opened)="getunidades(element, $event)">
+      <inline-edit  [value1]="element.codigo" [value]="element.comment" [value2]="element.motivo" [value3]="element.symbol"[value4]="unidadesart" ></inline-edit>
+    </sat-popover>
+  </mat-cell>
+  </ng-container>
+
+       <!-- cantidad de entrada -->
       <ng-container matColumnDef="comment">
         <mat-header-cell *matHeaderCellDef class="duration-cell align-right"> Cant. </mat-header-cell>
         <mat-cell class="duration-cell mat-typography text-color align-right" *matCellDef="let element" [satPopoverAnchorFor]="p" (click)="p.open()">
@@ -152,11 +176,31 @@
               hasBackdrop
               xAlign="start"
               yAlign="start"
-              (closed)="update(element, $event)">
-            <inline-edit [value]="element.comment" [value2]="element.motivo" ></inline-edit>
+              (closed)="update(element, $event)"
+              (opened)="getunidades(element, $event)">
+            <inline-edit [value1]="element.codigo" [value]="element.comment"  [value2]="element.motivo" [value3]="element.symbol" [value4]="unidadesart" ></inline-edit>
           </sat-popover>
         </mat-cell>
       </ng-container>
+
+       <!-- unidad de entrada --> 
+      <ng-container matColumnDef="symbol">
+        <mat-header-cell class="duration-cell" *matHeaderCellDef> Ump</mat-header-cell>
+        <mat-cell  class="duration-cell mat-typography  text-color" *matCellDef="let element"   [satPopoverAnchorFor]="ps" (click)="ps.open()">
+            <span class="mobile-label">Unidad:</span> {{element.symbol}}
+
+              
+            <sat-popover #ps
+            hasBackdrop
+            xAlign="start"
+            yAlign="start"
+            (closed)="update(element, $event)"
+            (opened)="getunidades(element, $event)">
+          <inline-edit  [value1]="element.codigo" [value]="element.comment" [value2]="element.motivo" [value3]="element.symbol" [value4]="unidadesart" ></inline-edit>
+        </sat-popover>
+      </mat-cell>
+      </ng-container>
+
 
       <ng-container matColumnDef="dif">
         <mat-header-cell class="duration-cell  align-right" *matHeaderCellDef> Dif.</mat-header-cell>
@@ -167,8 +211,9 @@
             hasBackdrop
             xAlign="start"
             yAlign="start"
-            (closed)="update(element, $event)">
-          <inline-edit [value]="element.comment" [value2]="element.motivo" ></inline-edit>
+            (closed)="update(element, $event)"
+            (opened)="getunidades(element, $event)">
+          <inline-edit  [value1]="element.codigo" [value]="element.comment" [value2]="element.motivo" [value3]="element.symbol" [value4]="unidadesart" ></inline-edit>
         </sat-popover>
           
           </mat-cell>
@@ -202,8 +247,9 @@
         hasBackdrop
         xAlign="start"
         yAlign="start"
-        (closed)="update(element, $event)">
-      <inline-edit [value]="element.comment" [value2]="element.motivo" ></inline-edit>
+        (closed)="update(element, $event)"
+        (opened)="getunidades(element, $event)">
+      <inline-edit  [value1]="element.codigo" [value]="element.comment" [value2]="element.motivo" [value3]="element.symbol" [value4]="unidadesart"></inline-edit>
     </sat-popover>
   </mat-cell>
       </ng-container> 
@@ -218,7 +264,7 @@
              [length]="totalLength"
              [pageSize]="pageSize" 
              [pageIndex]="pageIndex"
-             [pageSizeOptions]="[5, 7, 10, 20]"
+             [pageSizeOptions]="[ 7, 10, 20]"
              (page)="changePage($event)" showFirstLastButtons>
   </mat-paginator>
 

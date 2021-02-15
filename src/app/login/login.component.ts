@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
         this.credentials.password = this.contrasenya;
         //this.alert.sendAlert('Entrada correcta', AlertType.Success);
         let redirect = this.service.redirectUrl ? this.service.redirectUrl : '';
-        this.openFullscreen();
+        //this.openFullscreen(); COMENTAT
         this.router.navigate([redirect]);
       }
       else{

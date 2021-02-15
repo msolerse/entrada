@@ -15,10 +15,9 @@ import { ToolbarService } from '../_services/toolbar.service';
 import { ArticuloDescService } from '../_services/articuloDesc.service';
 import { Ean } from '../_entities/Ean';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTable} from '@angular/material';
-
-
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable } from '@angular/material';
+import { Unidades } from '../_entities/Unidades';
 
 @Component({
   selector: 'app-tabla2',
@@ -27,8 +26,8 @@ import {MatTable} from '@angular/material';
 })
 export class Tabla2Component {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
 
   motivos: Motivo[];
 
@@ -59,7 +58,8 @@ export class Tabla2Component {
   //length = 1000;
   pageSize: number;
   pageIndex: number;
-  
+  unidadesart: Unidades[] = [];
+  datosArticulo: DatosArticulo;
 
   unis: Uni[] = [
     { value: 'UN', viewValue: 'UN' },
@@ -93,7 +93,7 @@ export class Tabla2Component {
 
 
       if (this.tipoMov == '002') { // distribucion plataforma, obtener motivos
-        this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'motivo', 'actionsColumn'];
+        this.displayedColumns = ['codigo', 'name', 'cantref', 'symbolref', 'comment', 'symbol', 'dif', 'motivo', 'actionsColumn'];
 
         if (this.service.motivosMov.length != 0) {
           this.motivos = this.service.motivosMov;
@@ -116,17 +116,17 @@ export class Tabla2Component {
       else if (this.idPedido == '0'
       ) { this.displayedColumns = ['codigo', 'name', 'symbol', 'comment', 'actionsColumn']; }
       else {
-        this.displayedColumns = ['codigo', 'name', 'symbol', 'cantref', 'comment', 'dif', 'actionsColumn'];
+        this.displayedColumns = ['codigo', 'name', 'cantref', 'symbolref', 'comment', 'symbol', 'dif', 'actionsColumn'];
       }
 
       if ((this.idPedido != '0') && (this.service.loadEans)) {
-       
+
         this.service.eansArticulos = [];
         this.service.obtenerEans('0', this.codCentro, this.service.currPosiciones).subscribe(
           reply => {
             switch (reply.codigo) {
               case 0:
-                
+
                 break;
 
               default:
@@ -142,7 +142,7 @@ export class Tabla2Component {
         this.service.obtenerArticulosProv(this.codProv, this.codCentro).subscribe(reply => {
           switch (reply.codigo) {
             case 0:
-             
+
               break;
 
             default:
@@ -154,23 +154,23 @@ export class Tabla2Component {
 
     });
 
-    if  (typeof this.service.pageSize === "undefined") this.service.pageSize = 5;
-    if  (typeof this.service.pageIndex === "undefined") this.service.pageIndex = 0;
+    if (typeof this.service.pageSize === "undefined") this.service.pageSize = 7;
+    if (typeof this.service.pageIndex === "undefined") this.service.pageIndex = 0;
 
-     this.pageSize = this.service.pageSize;
-     this.pageIndex = this.service.pageIndex;
+    this.pageSize = this.service.pageSize;
+    this.pageIndex = this.service.pageIndex;
 
     this.route.data
       .subscribe((data: { crisis: Element[] }) => {
         this.posiciones = data.crisis;
-      
-       
+
+
         this.dataSource = new MatTableDataSource<Element>(this.posiciones);
         this.dataSource.paginator = this.paginator;
-       // this.entireDataSource = new ExampleDataSource(this.posiciones);
-         this.totalLength = this.posiciones.length;
+        // this.entireDataSource = new ExampleDataSource(this.posiciones);
+        this.totalLength = this.posiciones.length;
         //this.dataSource.paginator = this.paginator;
-       
+
 
         if (this.idPedido == '0' && this.posiciones.length == 0) {
           this.isExpanded = true;
@@ -232,7 +232,7 @@ export class Tabla2Component {
     let factConv: number;
 
     if ((this.dataSource.data) && (this.dataSource.data.length !== 0)) {
-     
+
       maxId = Math.max.apply(Math, this.dataSource.data.map(o => o.id)) + 10;
     } else {
       maxId = 10;
@@ -271,15 +271,16 @@ export class Tabla2Component {
           break;
       }
 
-      
+
     } else {
-      
+
     }
 
     this.service.currPosiciones.push({
       id: maxId,
       codigo: codigo,
       name: name,
+      symbolref: symbol,
       symbol: symbol,
       cantref: 0,
       comment: comment,
@@ -292,40 +293,146 @@ export class Tabla2Component {
       extra: 'X'
     });
 
-    this.posiciones =  this.service.currPosiciones;
+    this.posiciones = this.service.currPosiciones;
     this.dataSource.data = this.service.currPosiciones;
-    this.totalLength =  this.totalLength + 1;
-   // this.table.renderRows();
+    this.totalLength = this.totalLength + 1;
+    // this.table.renderRows();
   }
 
 
   update(el: Element, comment: string) {
+    console.log("update " + el.codigo);
     if (comment == null) { return; }
     // copy and mutate
-    //const copy = this.dataSource.data().slice()
     const copy = this.dataSource.data.slice();
     el.comment = +comment.split(';')[0];
-    el.dif = +(el.comment - el.cantref).toFixed(3);
     el.motivo = comment.split(';')[1];
+    let newSymbol = comment.split(';')[2];
+
+    if (el.symbol == newSymbol) { // no se ha cambiado la unida
+      this.updateDif(el);
+    } else { // se ha cambiado unidad, hay que actulizar el fact. onversión
+      el.symbol = newSymbol;
+      let elemArt = this.service.datosArticulos.find(x => +x.codigo === +el.codigo);
+
+      if (elemArt) {
+        this.datosArticulo = elemArt;
+        this.unidadesart = elemArt.unidades;
+        this.updateFactConv(el);
+        this.updateDif(el);
+      }
+      else {
+        this.service.obtenerArticulo(el.codigo, this.service.currCentro).subscribe(
+          reply => {
+
+            switch (reply.datosArticulo.codError) {
+              case 0:
+
+                this.datosArticulo = reply.datosArticulo;
+                this.unidadesart = reply.datosArticulo.unidades;
+                this.updateFactConv(el);
+                this.updateDif(el);
+
+                //console.log(  reply.datosArticulo.codError + ' '+reply.datosArticulo.mensajeError );
+                break;
+              default:
+
+                console.log(reply.datosArticulo.codError + ' ' + reply.datosArticulo.mensajeError);
+                this.alert.sendAlert(reply.datosArticulo.mensajeError, AlertType.Error);
+                break;
+            }
+          });
+      }
+    }
+  }
+
+  updateDif(el: Element) {
+
+
+    el.dif = +((el.comment * el.FactConv) - el.cantrefUmb).toFixed(3);
+
+
     // this.dataSource.update(copy);
-   // this.dataSource.update(copy);
+    // this.dataSource.update(copy);
     this.service.currPosiciones = this.dataSource.data;
     document.getElementById('filtrar').focus();
   }
 
+  updateFactConv(el: Element) {
+    switch (el.symbol) {
+      case 'CJ':
+        el.FactConv = this.datosArticulo.caja;
+        break;
+      case 'RET':
+        el.FactConv = this.datosArticulo.retractil;
+        break;
+      case 'PAL':
+        el.FactConv = this.datosArticulo.palet;
+        break;
+      case 'MAN':
+        el.FactConv = this.datosArticulo.manto;
+        break;
+      default:
+        el.FactConv = 1;
+        break;
+    }
+  }
+
+  readArticle(codigo: string) {
+
+    let elemArt = this.service.datosArticulos.find(x => +x.codigo === +codigo);
+
+    if (elemArt) {
+      this.datosArticulo = elemArt;
+      this.unidadesart = elemArt.unidades;
+    }
+    else {
+      this.service.obtenerArticulo(codigo, this.service.currCentro).subscribe(
+        reply => {
+
+          switch (reply.datosArticulo.codError) {
+            case 0:
+
+              this.datosArticulo = reply.datosArticulo;
+              this.unidadesart = reply.datosArticulo.unidades;
+
+              //console.log(  reply.datosArticulo.codError + ' '+reply.datosArticulo.mensajeError );
+              break;
+            default:
+
+              console.log(reply.datosArticulo.codError + ' ' + reply.datosArticulo.mensajeError);
+              this.alert.sendAlert(reply.datosArticulo.mensajeError, AlertType.Error);
+              break;
+          }
+        });
+    }
+
+
+
+  }
+
+  getunidades(el: Element) {
+    console.log('get unidades' + el.codigo + ' ' + this.service.currCentro);
+
+    this.unidadesart = [
+      { value: el.symbol, viewValue: el.symbol }
+    ];
+
+    this.readArticle(el.codigo);
+  }
 
   remove(el: Element) {
 
     if (el.extra == 'X') {
       const copy = this.dataSource.data.filter(row => row != el);
-    
+
 
       this.dataSource.data = copy;
-     // this.entireDataSource.update(copy);
+      // this.entireDataSource.update(copy);
       this.service.currPosiciones = this.dataSource.data;
-      this.totalLength =  this.totalLength - 1;
+      this.totalLength = this.totalLength - 1;
     }
-    
+
   }
 
   // upsert: if exists -> update, else -> insert
@@ -382,7 +489,7 @@ export class Tabla2Component {
         }
       }
       else {
-        
+
         dialogData = {
           codigo: elem.codigo, name: elem.name,
           symbol: elem.symbol, tipoMov: this.tipoMov, codCentro: this.codCentro,
@@ -436,8 +543,8 @@ export class Tabla2Component {
   }
 
   public doFilter = (value: string) => {
-   
-     this.dataSource.filter = value.trim().toLowerCase();
+
+    this.dataSource.filter = value.trim().toLowerCase();
 
   }
 
@@ -448,10 +555,11 @@ export class Tabla2Component {
     let dialogData: DialogData;
     this.service.obtenerArticulo(ean, this.codCentro).subscribe(
       reply => {
-        switch (reply.codError) {
+
+        switch (reply.datosArticulo.codError) {
           case 0:
-            this.addRow(true, +reply.codigo + '', f2, true, reply.descripcion);
-          
+            this.addRow(true, +reply.datosArticulo.codigo + '', f2, true, reply.datosArticulo.descripcion);
+
             break;
           default:
 
@@ -467,21 +575,22 @@ export class Tabla2Component {
   }
 
 
-   changePage(e) {
+  changePage(e) {
+    console.log('pageSize=' + e.pageSize);
     this.service.pageSize = e.pageSize;
     this.pageSize = e.pagesize;
     this.service.pageIndex = e.pageIndex;
     this.pageIndex = e.pageIndex;
-   /*  let firstCut = e.pageIndex * e.pageSize;
-    let secondCut = firstCut + e.pageSize;
-    this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut)); */
-  
+    /*  let firstCut = e.pageIndex * e.pageSize;
+     let secondCut = firstCut + e.pageSize;
+     this.dataSource =new ExampleDataSource( this.posiciones.slice(firstCut, secondCut)); */
+
   }
- 
+
   goValidar() {
 
     let messageShowed: string = '';
-    let tipoShowed: string ='W';
+    let tipoShowed: string = 'W';
 
     this.service.validarEntrada(this.dataSource.data).subscribe(data => {
 
@@ -491,13 +600,10 @@ export class Tabla2Component {
 
       });
 
-      
-      if ( data.returnMessages.some(el => ( el.tipo === 'S'|| el.tipo === 'I' ))) 
-          { tipoShowed = 'S' }
-       else  if ( data.returnMessages.some(el => el.tipo === 'E')) 
-          { tipoShowed = 'E' }
-       else   
-          { tipoShowed = 'W' };
+
+      if (data.returnMessages.some(el => (el.tipo === 'S' || el.tipo === 'I'))) { tipoShowed = 'S' }
+      else if (data.returnMessages.some(el => el.tipo === 'E')) { tipoShowed = 'E' }
+      else { tipoShowed = 'W' };
 
       switch (tipoShowed) {
         case 'E':
@@ -595,18 +701,19 @@ export class AddRowDialog implements OnInit {
   motivos: Motivo[];
   title: string;
 
-  unis: Uni[] = [
+  unis: Uni[];
+  /*= [
     { value: 'UN', viewValue: 'UN' },
     { value: 'CJ', viewValue: 'CJ' },
     { value: 'RET', viewValue: 'RET' },
     { value: 'PAL', viewValue: 'PAL' },
     { value: 'MAN', viewValue: 'MAN' },
-  ];
+  ];*/
 
   focusCantidad: boolean;
 
   ngOnInit() {
-  
+
     this.title = this.data.title;
     if (this.data.codigo) {
       //     this.title = "Modificar Posición"
@@ -629,9 +736,10 @@ export class AddRowDialog implements OnInit {
     private alert: AlertService,
     private ads: ArticuloDescService) {
 
-    if  ( this.data.symbol == '' || typeof( this.data.symbol ) == "undefined")
-        this.data.symbol = 'CJ';
+    if (this.data.symbol == '' || typeof (this.data.symbol) == "undefined")
+      this.data.symbol = 'CJ';
     this.motivos = this.service.motivosMov;
+    this.unis = this.service.unidades;
     //this.ads.changeMessage('');
     this.ads.currentMessage.subscribe(message =>
       this.data.name = message);

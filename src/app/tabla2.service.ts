@@ -16,6 +16,7 @@ import { DatosArticuloProv } from './_entities/DatosArticuloProv';
 import { ArticuloDescService } from './_services/articuloDesc.service';
 import { ReturnMessage } from './_entities/ReturnMessage';
 import { environment } from '../environments/environment';
+import { Unidades} from './_entities/Unidades';
 
 @Injectable({
    providedIn: 'root'
@@ -50,6 +51,7 @@ export class Tabla2Service {
 
    public pageSize: number;
    public pageIndex: number;
+   public unidades: Unidades[] = [];
 
 
    obtenerPosiciones(idPedido: string, albaran: string,
@@ -244,6 +246,7 @@ export class Tabla2Service {
                      detalle[1].innerHTML,
                      detalle[2].innerHTML,
                      detalle[4].innerHTML,
+                     detalle[4].innerHTML,
                      +detalle[3].innerHTML,
                      +detalle[3].innerHTML,
                      0, '',
@@ -355,6 +358,24 @@ export class Tabla2Service {
 
             this.ads.changeMessage(descripcion);
 
+
+                // obtener unidades
+                let itemsDOM3 = Array.from(dom.getElementsByTagName('UM')[0].children);
+
+                let units = [];
+                itemsDOM3.forEach(item => {
+                   let detalle3 = Array.from(item.children);
+                 
+    
+                   if ((detalle3[1].innerHTML !== '') && (detalle3[1].innerHTML !== '0')) {
+    
+                      units.push(new Unidades(
+                         detalle3[1].innerHTML,
+                         detalle3[1].innerHTML
+                      ));
+                   }
+                });
+
             datosArticulo = new DatosArticulo(
                codigo,
                descripcion,
@@ -363,13 +384,23 @@ export class Tabla2Service {
                +manto,
                +palet,
                umb,
+               units,
                codError,
-               mensajeError,
-
+               mensajeError
             );
 
             this.datosArticulos.push(datosArticulo);
-            return datosArticulo;
+
+        
+
+           
+           // return datosArticulo;
+
+             return {
+               datosArticulo: datosArticulo
+            }; 
+
+
          })
          .pipe(
             catchError(this.handleError)

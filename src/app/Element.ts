@@ -3,6 +3,7 @@ export class Element {
     public id: number,
     public codigo: string,
     public name: string,
+    public symbolref: string,
     public symbol: string,
     public cantref?: number,
     public comment?: number,
